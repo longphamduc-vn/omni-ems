@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+
+# Database files (automatically generated on first run from schema.sql & seed.sql)
+mock-server/db/ems.db
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & temporary files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp

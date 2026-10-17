@@ -1,0 +1,180 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LG Display EMS Core Data APIs",
+    "description": "Danh sách 8 API lấy dữ liệu nghiệp vụ chính của hệ thống LG Display EMS (Spare Parts, RFQ, Inventory, PO, Codes, Factories). Đã loại bỏ các API log, menu, layout.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://ems.lgdisplay.com:9000",
+      "description": "Production Nexacro EMS"
+    },
+    {
+      "url": "http://localhost:9000",
+      "description": "Local Simulation Mock Server"
+    }
+  ],
+  "paths": {
+    "/emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn": {
+      "post": {
+        "summary": "1. Tra cứu trạng thái tồn kho phụ tùng",
+        "description": "Lấy số lượng tồn kho (onhand), phân bổ (allocated), khả dụng (available), đơn giá mới/sửa chữa của linh kiện.",
+        "requestBody": {
+          "content": {
+            "text/xml": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nexacro Dataset: ds_result (38 cột)"
+          }
+        }
+      }
+    },
+    "/emsspareparts/sp101/sp120Nav/RetEstimateRequestList.lgdn": {
+      "post": {
+        "summary": "2. Danh sách yêu cầu báo giá linh kiện (RFQ)",
+        "description": "Lấy danh sách RFQ báo giá nhà cung cấp, chi phí dự kiến, liên kết Work Order, mã PR/PO.",
+        "requestBody": {
+          "content": {
+            "text/xml": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nexacro Dataset: ds_list (63 cột)"
+          }
+        }
+      }
+    },
+    "/emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn": {
+      "post": {
+        "summary": "3. Chi tiết linh kiện & định mức kho",
+        "description": "Lấy thông số kỹ thuật (ds_Item), định mức tồn kho tối ưu (ds_Inv) và thống kê xuất dùng bình quân (ds_Summary).",
+        "requestBody": {
+          "content": {
+            "text/xml": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nexacro Datasets: ds_Item, ds_Inv, ds_Summary"
+          }
+        }
+      }
+    },
+    "/emsspareparts/sp302/sp335Nav/TargetStockSearchList.lgdn": {
+      "post": {
+        "summary": "4. Danh sách tồn kho an toàn & tối ưu (Target Stock)",
+        "description": "Lấy 93 chỉ số định mức tồn kho tối ưu, thời gian lead time, buffer days.",
+        "requestBody": {
+          "content": {
+            "text/xml": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nexacro Dataset: ds_StockInfomation (93 cột)"
+          }
+        }
+      }
+    },
+    "/emscom/popupNav/retrieveItem.lgdn": {
+      "post": {
+        "summary": "5. Tra cứu danh mục linh kiện (Popup Item Search)",
+        "description": "Tìm kiếm linh kiện theo mã Item, mô tả, Maker, Model.",
+        "requestBody": {
+          "content": {
+            "text/xml": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nexacro Dataset: ds_List"
+          }
+        }
+      }
+    },
+    "/emscom/popupNav/retrieveItemPoStatusList.lgdn": {
+      "post": {
+        "summary": "6. Lịch sử đơn mua hàng PO linh kiện (Popup Item PO)",
+        "description": "Lấy lịch sử và tiến độ các đơn đặt hàng PO của linh kiện phụ tùng.",
+        "requestBody": {
+          "content": {
+            "text/xml": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nexacro Dataset: ds_Rtn"
+          }
+        }
+      }
+    },
+    "/emscom/codeNav/retComCodeList.lgdn": {
+      "post": {
+        "summary": "7. Từ điển danh mục mã dùng chung (Common Codes)",
+        "description": "Lấy danh mục mã Dropdown/Enum (loại linh kiện Q/C, trạng thái báo giá, đơn vị xưởng).",
+        "requestBody": {
+          "content": {
+            "text/xml": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nexacro Datasets: ds_output0, ds_output1..."
+          }
+        }
+      }
+    },
+    "/emswonew/wn90/wn900Nav/retFactoryList.lgdn": {
+      "post": {
+        "summary": "8. Danh mục nhà máy / cơ sở sản xuất (Factory List)",
+        "description": "Lấy danh sách các nhà máy và cơ sở sản xuất trực thuộc (LGDVH, HW, M06 Paju).",
+        "requestBody": {
+          "content": {
+            "text/xml": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nexacro Dataset: ds_cbo_factory"
+          }
+        }
+      }
+    }
+  }
+}

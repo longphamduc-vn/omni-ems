@@ -1,0 +1,19 @@
+{
+  "name": "@omni-ems/api-sdk",
+  "version": "1.0.0",
+  "description": "Standardized Nexacro API Client & Services for LG Display EMS",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "ems",
+    "lg-display",
+    "nexacro",
+    "spareparts",
+    "workorder"
+  ],
+  "author": "Omni-EMS Team",
+  "license": "ISC"
+}

@@ -1,13 +1,101 @@
 # TÀI LIỆU SƠ ĐỒ THIẾT KẾ & VẬN HÀNH WORKFLOW ENGINE
 ## (PlantUML Architecture, Concurrency & 360° Data Fusion Diagrams)
 
-Tài liệu này tổng hợp **6 sơ đồ PlantUML** toàn diện mô tả toàn bộ kiến trúc phân tầng, cơ chế điều phối tuần tự 8 bước (Sequential Orchestration), kỹ thuật phân biệt **Batch Mode (Single HTTP)** vs **Loop Mode (Bounded Concurrency Semaphore)**, cơ chế tự phục hồi (**Self-Healing Circuit Breaker**) và kiến trúc **Data Fusion 360°** hợp nhất 6 API Nexacro sản xuất (`t1.txt`).
+Tài liệu này tổng hợp **7 sơ đồ PlantUML** (đã xuất ra ảnh PNG chất lượng cao) mô tả toàn bộ cơ chế vận hành tổng quát của Workflow Engine, kiến trúc phân tầng, cơ chế điều phối tuần tự 8 bước (Sequential Orchestration), kỹ thuật phân biệt **Batch Mode (Single HTTP)** vs **Loop Mode (Bounded Concurrency Semaphore)**, cơ chế tự phục hồi (**Self-Healing Circuit Breaker**) và kiến trúc **Data Fusion 360°** hợp nhất 6 API Nexacro sản xuất (`t1.txt`).
+
+> **Vị trí ảnh xuất ra:**
+> - Linux/WSL: `/home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/*.png`
+> - Windows: `\\wsl.localhost\Ubuntu\home\longp\projects\company\omni-ems\workflow-engine\docs\diagrams\`
+
+---
+
+## 0. Sơ Đồ Cách Thức Hoạt Động Tổng Quát Của Workflow Engine (Generic Lifecycle)
+
+- File nguồn: [`docs/diagrams/00_general_workflow_operating_flow.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/00_general_workflow_operating_flow.puml)
+- Ảnh xuất ra: [`docs/diagrams/General_Workflow_Operating_Flow.png`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/General_Workflow_Operating_Flow.png)
+
+```plantuml
+@startuml General_Workflow_Operating_Flow
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam roundcorner 8
+skinparam shadowing false
+skinparam ArrowColor #2563EB
+skinparam ArrowThickness 1.5
+
+title Cách Thức Hoạt Động Tổng Quát Của Workflow Engine
+
+|#EFF6FF| 1. Client & API Layer |
+|#FEF3C7| 2. Core Engine & DataContext |
+|#F3E8FF| 3. Step Adapters (Plugins) |
+|#ECFDF5| 4. External Services & Resilience |
+
+|1. Client & API Layer|
+start
+:Client gửi **POST /api/v1/workflows/execute**\n{ workflow_id, inputs };
+:FastAPI Router nhận & Pydantic xác thực schema;
+
+|2. Core Engine & DataContext|
+:Load định nghĩa workflow (**YAML**);\n(Metadata, Globals, Steps, Response);
+:Khởi tạo **DataContext (State Bus)**:\n- **$inputs**: Tham số đầu vào\n- **$globals**: Dữ liệu dùng chung / Dict cache\n- **$steps**: Trạng thái và kết quả từng bước;
+
+while (Còn bước tiếp theo trong **steps: [...]**?) is (Có)
+  :Đọc cấu hình **step_id** & kiểm tra điều kiện (condition);
+  :Phân giải tham số từ DataContext\n($inputs, $globals, $steps.<prev>.output);
+
+  |3. Step Adapters (Plugins)|
+  if (Loại Step (type) là gì?) then (sub_workflow)
+    :Gọi **SubworkflowAdapter**;
+    :Thực thi workflow con (kế thừa context);
+  elseif (http) then
+    if (Chế độ HTTP?) then (batch / single)
+      :Render Jinja2 template cho N items;
+      |4. External Services & Resilience|
+      :Gửi **1 HTTP Request duy nhất**;
+      :Nhận phản hồi & Parse XML/JSON;
+    else (loop)
+      |3. Step Adapters (Plugins)|
+      :Lấy danh sách từ **loop_over**;
+      :Khởi tạo **asyncio.Semaphore(max_concurrency)**;
+      |4. External Services & Resilience|
+      :Phát N HTTP Requests song song;
+      :Gộp kết quả qua **asyncio.gather()**;
+    endif
+  else (jsonata)
+    |3. Step Adapters (Plugins)|
+    :Gọi **JsonataAdapter**;
+    :Đọc dữ liệu từ $steps;
+    :Biến đổi, tính toán, join mảng & map từ điển;
+  endif
+
+  |4. External Services & Resilience|
+  if (Gặp lỗi HTTP 401 hoặc Session Hết Hạn?) then (Có)
+    :Kích hoạt **Self-Healing Circuit Breaker**;
+    :Xóa TTLCache & Chạy lại sub-flow Auth;
+    :Thử lại bước hiện tại (Max Retry: 1);
+  else (Thành công)
+  endif
+
+  |2. Core Engine & DataContext|
+  :Lưu kết quả vào DataContext:\n**$steps.<step_id> = { status, output, metadata }**;
+endwhile (Hết các bước)
+
+:Áp dụng **response template** lên DataContext\n(Đóng gói dữ liệu đầu ra chuẩn hóa);
+:Ghi nhận telemetry (execution_time_ms, metrics);
+
+|1. Client & API Layer|
+:Trả về **HTTP 200 JSON Response**\n{ status: COMPLETED, execution_time_ms, data };
+stop
+
+@enduml
+```
 
 ---
 
 ## 1. Sơ Đồ Kiến Trúc Phân Tầng & Thành Phần (Architecture & Components)
 
-File nguồn: [`docs/diagrams/01_architecture_component.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/01_architecture_component.puml)
+- File nguồn: [`docs/diagrams/01_architecture_component.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/01_architecture_component.puml)
+- Ảnh xuất ra: [`docs/diagrams/Architecture_Component_Diagram.png`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/Architecture_Component_Diagram.png)
 
 ```plantuml
 @startuml Architecture_Component_Diagram

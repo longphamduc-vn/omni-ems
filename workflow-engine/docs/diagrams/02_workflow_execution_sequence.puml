@@ -77,10 +77,10 @@ Engine -> Ctx : set_step("fetch_target_stock_metrics", SUCCESS)
 Engine -> Http : Step 6 (Loop over items)
 par Concurrently (Semaphore = 5)
     Http -> Legacy : POST /retrieveItem.lgdn (Item 1)
-    Legacy --> Http : XML (Popup Master & CAD)
-and
+    Legacy --> Http : XML
+else
     Http -> Legacy : POST /retrieveItem.lgdn (Item 2)
-    Legacy --> Http : XML (Popup Master & CAD)
+    Legacy --> Http : XML
 end
 Http -> Parser : Parse & gather
 Parser --> Engine : raw_flattened
@@ -90,10 +90,10 @@ Engine -> Ctx : set_step("fetch_item_popup_master", SUCCESS)
 Engine -> Http : Step 7 (Loop over items)
 par Concurrently (Semaphore = 5)
     Http -> Legacy : POST /retrieveItemInfoDetail.lgdn (Item 1)
-    Legacy --> Http : XML (Tech Specs & MTBF)
-and
+    Legacy --> Http : XML
+else
     Http -> Legacy : POST /retrieveItemInfoDetail.lgdn (Item 2)
-    Legacy --> Http : XML (Tech Specs & MTBF)
+    Legacy --> Http : XML
 end
 Http -> Parser : Parse & gather
 Parser --> Engine : raw_flattened

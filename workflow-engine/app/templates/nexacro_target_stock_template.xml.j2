@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">658359</Parameter>
+		<Parameter id="_ems_organizationId">{{ inputs.get('organizationId', '28753') }}</Parameter>
+		<Parameter id="_ems_language">EN</Parameter>
+	</Parameters>
+	<Dataset id="ds_search">
+		<ColumnInfo>
+			<Column id="organizationId" type="STRING" size="256" />
+			<Column id="userId" type="STRING" size="256" />
+			<Column id="itemYn" type="STRING" size="256" />
+			<Column id="privFlag" type="STRING" size="256" />
+			<Column id="optimizeFlag" type="STRING" size="256" />
+			<Column id="optimizedApplyDate" type="STRING" size="256" />
+			<Column id="accelerationFlag" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="organizationId">{{ inputs.get('organizationId', '28753') }}</Col>
+				<Col id="userId">{{ inputs.get('userId', '658359') }}</Col>
+				<Col id="itemYn">Y</Col>
+				<Col id="privFlag">N</Col>
+				<Col id="optimizeFlag">{{ steps.get_optimize_info.output.datasets.ds_rtn[0].optimizeFlag if (steps.get_optimize_info is defined and steps.get_optimize_info.output.datasets.ds_rtn is defined) else inputs.get('optimizeFlag', 'Y') }}</Col>
+				<Col id="optimizedApplyDate">{{ steps.get_optimize_info.output.datasets.ds_rtn[0].optimizedApplyDate if (steps.get_optimize_info is defined and steps.get_optimize_info.output.datasets.ds_rtn is defined) else inputs.get('optimizedApplyDate', '20210316') }}</Col>
+				<Col id="accelerationFlag">Y</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="ds_ItemInfo">
+		<ColumnInfo>
+			<Column id="item" type="STRING" size="256" />
+			<Column id="itemDesc" type="STRING" size="256" />
+			<Column id="inventoryItemId" type="STRING" size="256" />
+			<Column id="remark" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+{% if inputs.get('items') is defined and inputs.get('items') %}
+{% for itm in inputs.get('items') %}
+			<Row>
+				<Col id="item">{{ itm.item if itm.item is defined else (itm.code if itm.code is defined else itm) }}</Col>
+				<Col id="itemDesc"></Col>
+				<Col id="inventoryItemId">{{ itm.inventoryItemId if itm.inventoryItemId is defined else '' }}</Col>
+				<Col id="remark"></Col>
+			</Row>
+{% endfor %}
+{% elif item is defined %}
+			<Row>
+				<Col id="item">{{ item.item if item.item is defined else (item.code if item.code is defined else item) }}</Col>
+				<Col id="itemDesc"></Col>
+				<Col id="inventoryItemId">{{ item.inventoryItemId if item.inventoryItemId is defined else '' }}</Col>
+				<Col id="remark"></Col>
+			</Row>
+{% endif %}
+		</Rows>
+	</Dataset>
+</Root>

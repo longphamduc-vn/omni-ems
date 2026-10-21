@@ -1,0 +1,59 @@
+id: wf_search_and_enrich
+name: "Search and Enrich Items Workflow"
+version: "1.0.0"
+
+inputs:
+  keyword: ""
+  status_filter: "ACTIVE"
+  items: []
+
+steps:
+  # STEP 1: Execute Authentication Sub-Workflow
+  - id: get_auth
+    type: "execute_sub_workflow"
+    config:
+      workflow_id: "wf_auth_nexacro_global"
+      output_var: "session_data"
+
+  # STEP 2: Dispatch HTTP Request (Supports Single or Loop Mode)
+  - id: fetch_nexacro_data
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "single" # Options: "single" (batch) or "loop"
+      template_file: "nexacro_search_template.xml.j2"
+      endpoint: "/emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.get_auth.output.session_data.token }}"
+      output_var: "raw_nexacro_response"
+
+  # STEP 3: Flatten Dataset and Transform via JSONata
+  - id: transform_and_enrich
+    type: "transform_jsonata"
+    config:
+      expression: |
+        steps.fetch_nexacro_data.output.raw_flattened.[{
+          "item_code": (ITEM_CD ? ITEM_CD : itemName),
+          "item_name": (ITEM_NM ? ITEM_NM : itemDescription),
+          "maker": maker,
+          "model": model,
+          "organization_id": organizationId,
+          "organization_name": $lookup($globals.dict.ORGANIZATION, organizationId) ? $lookup($globals.dict.ORGANIZATION, organizationId) : organizationId,
+          "category_name": $lookup($globals.dict.CATEGORY, catalogGroupName) ? $lookup($globals.dict.CATEGORY, catalogGroupName) : ($lookup($globals.dict.CATEGORY, CAT_CD) ? $lookup($globals.dict.CATEGORY, CAT_CD) : catalogGroupName),
+          "supplier_name": supplierName,
+          "timely_purchase_date": timelyPurchaseDate,
+          "unit_price": $number(unitPriceNew ? unitPriceNew : 0),
+          "onhand_qty": $number(onhandQuantity ? onhandQuantity : 0),
+          "available_qty": $number(availableQuantity ? availableQuantity : (QTY ? QTY : 0)),
+          "calculated_status": (
+            (STAT = '01' or itemStatus = 'Active' or itemStatus = '01') and ($number(availableQuantity ? availableQuantity : (QTY ? QTY : 0)) > 0) ? "AVAILABLE" :
+            (STAT = '01' or itemStatus = 'Active' or itemStatus = '01') and ($number(availableQuantity ? availableQuantity : (QTY ? QTY : 0)) <= 0) ? "OUT_OF_STOCK" : "INACTIVE"
+          )
+        }]
+      output_var: "final_items"
+
+response:
+  status: "SUCCESS"
+  metadata: "{{ steps.fetch_nexacro_data.output.metadata }}"
+  data: "{{ steps.transform_and_enrich.output }}"

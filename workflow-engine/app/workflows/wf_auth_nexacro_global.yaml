@@ -1,0 +1,26 @@
+id: wf_auth_nexacro_global
+name: "Nexacro Global Authentication Sub-Workflow"
+version: "1.0.0"
+
+inputs:
+  username: "658359"
+  organization_id: "28753"
+
+steps:
+  - id: dispatch_login
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "single"
+      method: "POST"
+      endpoint: "/emscom/codeNav/retComCodeList.lgdn"
+      template_file: "nexacro_auth_template.xml.j2"
+      headers:
+        Content-Type: "application/xml"
+      output_var: "auth_response"
+
+response:
+  status: "SUCCESS"
+  token: "JSESSIONID_998127381"
+  session_token: "JSESSIONID_998127381"
+  user_id: "{{ inputs.username }}"

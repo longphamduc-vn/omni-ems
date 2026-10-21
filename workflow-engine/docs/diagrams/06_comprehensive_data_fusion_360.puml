@@ -1,0 +1,51 @@
+@startuml Comprehensive_Data_Fusion_360
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam roundcorner 8
+skinparam shadowing false
+skinparam componentStyle uml2
+skinparam ArrowColor #2563EB
+skinparam ArrowThickness 1.5
+
+title Kiến Trúc Data Fusion 360° (Hợp Nhất 6 Nguồn Dữ Liệu Nexacro)
+
+package "6 Nguồn Dữ Liệu Nexacro" #EFF6FF {
+
+    component "1. Dictionaries\n(/retComCodeList)" as S1 #DBEAFE
+    component "2. Stock Balances\n(/RetStockStatusList)" as S2 #DBEAFE
+    component "3. Optimize Info\n(/GetOptimizeInfo)" as S3 #DBEAFE
+    component "4. Target Stock 93\n(/TargetStockSearchList)" as S4 #DBEAFE
+    component "5. Popup Master\n(/retrieveItem)" as S5 #FED7AA
+    component "6. Tech Specs\n(/retrieveItemInfoDetail)" as S6 #FED7AA
+}
+
+package "Core Fusion Engine" #FEF3C7 {
+    component "JSONata Synthesizer\n(DataContext Bus)" as FusionEngine #FDE68A
+}
+
+package "Spare Part 360° Record (6 Trụ Cột)" #ECFDF5 {
+    component "1. Identification\n(Code, InvId, CAD URL)" as Pillar1 #D1FAE5
+    component "2. Organization\n(Org, Dept, Planner, Buyer)" as Pillar2 #D1FAE5
+    component "3. Stock Balances\n(Onhand, Avail, Target, Safety)" as Pillar3 #D1FAE5
+    component "4. Procurement\n(PO Price, Supplier, PO Type)" as Pillar4 #D1FAE5
+    component "5. Reliability & LT\n(Lead Time, Due, MTBF)" as Pillar5 #D1FAE5
+    component "6. Optimization Matrix\n(Health Rating, Actions)" as Pillar6 #D1FAE5
+}
+
+' Inputs into Fusion
+S1 --> FusionEngine : Codes & Translations
+S2 --> FusionEngine : 38 Stock Cols
+S3 --> FusionEngine : Optimize Flags
+S4 --> FusionEngine : 93 Metrics
+S5 --> FusionEngine : Master & Drawings
+S6 --> FusionEngine : MTBF & Specs
+
+' Outputs to Pillars
+FusionEngine --> Pillar1
+FusionEngine --> Pillar2
+FusionEngine --> Pillar3
+FusionEngine --> Pillar4
+FusionEngine --> Pillar5
+FusionEngine --> Pillar6
+
+@enduml

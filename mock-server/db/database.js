@@ -15,9 +15,17 @@ class DatabaseManager {
   initIfEmpty() {
     try {
       const row = this.db.prepare("SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name='items'").get();
+      const transRow = this.db.prepare("SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name='translations'").get();
       if (!row || row.count === 0) {
         console.log('[DB] Database is uninitialized. Running schema and seed...');
         this.reset();
+      } else if (!transRow || transRow.count === 0) {
+        console.log('[DB] Translations table missing. Running schema and seed updates...');
+        const schemaSql = fs.readFileSync(SCHEMA_FILE, 'utf8');
+        this.db.exec(schemaSql);
+        const seedSql = fs.readFileSync(SEED_FILE, 'utf8');
+        this.db.exec(seedSql);
+        console.log('[DB] Translations table initialized successfully.');
       }
     } catch (e) {
       console.log('[DB] Initializing database...');

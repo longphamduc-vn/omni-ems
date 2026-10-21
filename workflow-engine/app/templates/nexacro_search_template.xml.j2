@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">658359</Parameter>
+		<Parameter id="_ems_organizationId">28753</Parameter>
+		<Parameter id="_ems_language">EN</Parameter>
+	</Parameters>
+	<Dataset id="ds_Search">
+		<ColumnInfo>
+			<Column id="keyword" type="STRING" size="256" />
+			<Column id="status_filter" type="STRING" size="256" />
+			<Column id="item" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="keyword">{{ inputs.get('keyword', '') }}</Col>
+				<Col id="status_filter">{{ inputs.get('status_filter', '') }}</Col>
+				<Col id="item">{{ inputs.get('keyword', '') }}</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+{% if inputs.get('items') is defined and inputs.get('items') and inputs.get('items')|length > 0 %}
+	<Dataset id="ds_ItemInfo">
+		<ColumnInfo>
+			<Column id="item" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+{% for itm in inputs.get('items') %}
+			<Row>
+				<Col id="item">{{ itm.code if itm.code is defined else (itm.item if itm.item is defined else itm) }}</Col>
+			</Row>
+{% endfor %}
+		</Rows>
+	</Dataset>
+{% elif item is defined %}
+	<Dataset id="ds_ItemInfo">
+		<ColumnInfo>
+			<Column id="item" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="item">{{ item.code if item.code is defined else (item.item if item.item is defined else item) }}</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+{% endif %}
+</Root>

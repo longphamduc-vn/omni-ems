@@ -1,0 +1,101 @@
+id: wf_target_stock_optimization
+name: "Target Stock Optimization & Enrichment Workflow"
+version: "1.0.0"
+
+inputs:
+  organizationId: "28753"
+  userId: "658359"
+  items:
+    - item: "QCAB17587"
+      inventoryItemId: "3042180"
+    - item: "QDAE01694"
+      inventoryItemId: "3365330"
+
+steps:
+  # STEP 1: Global Session / Token
+  - id: get_auth
+    type: "execute_sub_workflow"
+    config:
+      workflow_id: "wf_auth_nexacro_global"
+      output_var: "session_data"
+
+  # STEP 2: Fetch Optimization Flag & Date (Trace 16 in t1.txt)
+  - id: get_optimize_info
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "single"
+      template_file: "nexacro_optimize_info_template.xml.j2"
+      endpoint: "/emsspareparts/sp302/sp330Nav/GetOptimizeInfo.lgdn"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.get_auth.output.session_data.token }}"
+      output_var: "optimize_info"
+
+  # STEP 3: Target Stock Search List (93 Fields - Trace 24 & 25 in t1.txt)
+  - id: search_target_stock
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "single"
+      template_file: "nexacro_target_stock_template.xml.j2"
+      endpoint: "/emsspareparts/sp302/sp330Nav/TargetStockSearchList.lgdn"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.get_auth.output.session_data.token }}"
+      output_var: "raw_target_stock"
+
+  # STEP 4: Fetch Technical & Usage Details in Loop Mode (Trace 9 in t1.txt)
+  - id: fetch_item_details
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "loop"
+      loop_over: "steps.search_target_stock.output.raw_flattened"
+      max_concurrency: 5
+      template_file: "nexacro_item_detail_template.xml.j2"
+      endpoint: "/emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.get_auth.output.session_data.token }}"
+      output_var: "raw_item_details"
+
+  # STEP 5: Transform & Enrich via JSONata with Enterprise Dictionary Lookup
+  - id: transform_and_enrich
+    type: "transform_jsonata"
+    config:
+      expression: |
+        steps.search_target_stock.output.raw_flattened.[{
+          "item_code": item,
+          "item_description": itemDescription,
+          "model": model,
+          "maker": maker,
+          "organization_id": organizationId,
+          "organization_name": $lookup($globals.dict.ORGANIZATION, organizationId) ? $lookup($globals.dict.ORGANIZATION, organizationId) : organizationId,
+          "target_qty": $number(targetQty ? targetQty : 0),
+          "logic_qty": $number(logicQty ? logicQty : 0),
+          "safety_qty": $number(safetyQty ? safetyQty : 0),
+          "purchase_requisition_qty": $number(purchaseRequisitionQty ? purchaseRequisitionQty : 0),
+          "lead_time_days": $number(fullLeadTime ? fullLeadTime : 0),
+          "due_days": $number(dueDays ? dueDays : 0),
+          "unit_cost": $number(itemCost ? itemCost : 0),
+          "uom": uom ? uom : "EA",
+          "manager": manager,
+          "target_apply_type_code": targetApplyTypeCode,
+          "target_apply_type_desc": $lookup($globals.dict.TARGET_APPLY_TYPE, targetApplyTypeCode) ? $lookup($globals.dict.TARGET_APPLY_TYPE, targetApplyTypeCode) : targetApplyType,
+          "buy_item_type_desc": $lookup($globals.dict.BUY_ITEM_TYPE, partsUseTypeCode) ? $lookup($globals.dict.BUY_ITEM_TYPE, partsUseTypeCode) : partsUseTypeCode,
+          "stock_status": (
+            $number(dueDays) > 0 and $number(dueDays) < 30 ? "CRITICAL_LEAD_TIME" :
+            $number(purchaseRequisitionQty) > 0 or $number(oneTimeUserQty) > 0 ? "REORDER_PENDING" :
+            $number(targetQty) > 0 ? "OPTIMIZED" : "NORMAL"
+          ),
+          "reorder_suggested": (
+            $number(dueDays) > 0 and $number(dueDays) < 30 ? true : false
+          )
+        }]
+      output_var: "final_optimized_stock"
+
+response:
+  status: "SUCCESS"
+  metadata: "{{ steps.search_target_stock.output.metadata }}"
+  data: "{{ steps.transform_and_enrich.output }}"

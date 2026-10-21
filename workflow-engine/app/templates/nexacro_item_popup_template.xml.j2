@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">658359</Parameter>
+		<Parameter id="_ems_organizationId">{{ item.organizationId if (item is defined and item.organizationId is defined) else inputs.get('organizationId', '28753') }}</Parameter>
+		<Parameter id="_ems_language">EN</Parameter>
+	</Parameters>
+	<Dataset id="ds_Search">
+		<ColumnInfo>
+			<Column id="item" type="STRING" size="256" />
+			<Column id="itemDescription" type="STRING" size="256" />
+			<Column id="makerPart" type="STRING" size="256" />
+			<Column id="itemType" type="STRING" size="256" />
+			<Column id="organizationId" type="STRING" size="256" />
+			<Column id="enabledFlag" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="item">{{ item.item if (item is defined and item.item is defined) else (item.itemName if (item is defined and item.itemName is defined) else (item.code if (item is defined and item.code is defined) else (item if item is defined else inputs.get('keyword', 'QCAB17587')))) }}</Col>
+				<Col id="itemDescription"></Col>
+				<Col id="makerPart"></Col>
+				<Col id="itemType">Q</Col>
+				<Col id="organizationId">{{ item.organizationId if (item is defined and item.organizationId is defined) else inputs.get('organizationId', '28753') }}</Col>
+				<Col id="enabledFlag">Y</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>

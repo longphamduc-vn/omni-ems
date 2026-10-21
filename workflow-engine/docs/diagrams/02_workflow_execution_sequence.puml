@@ -1,0 +1,113 @@
+@startuml Workflow_Execution_Sequence
+!theme plain
+autonumber
+skinparam backgroundColor #FFFFFF
+skinparam roundcorner 6
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam ArrowColor #2563EB
+skinparam ArrowThickness 1.5
+
+title Quy Trình Thực Thi 8 Bước (wf_comprehensive_ems_fusion)
+
+actor "Client" as Client #E0F2FE
+participant "API Router" as API #DBEAFE
+participant "WorkflowEngine" as Engine #FEF3C7
+participant "DataContext" as Ctx #FDE68A
+participant "MemoryStore\n(TTLCache)" as Cache #FDE047
+participant "SubworkflowAdapter\n(Auth)" as Auth #E9D5FF
+participant "HttpAdapter" as Http #DDD6FE
+participant "Legacy Nexacro\n(:9000)" as Legacy #FEE2E2
+participant "NexacroParser" as Parser #DDD6FE
+participant "JsonataAdapter\n(360° Fusion)" as Jsonata #C4B5FD
+
+== 1. Khởi Tạo Context ==
+Client -> API : POST /api/v1/workflows/execute
+API -> Engine : execute("wf_comprehensive_ems_fusion", inputs)
+Engine -> Ctx : new DataContext()
+
+== 2. Bước 1: Auth Sub-Workflow ==
+Engine -> Auth : execute("wf_auth_nexacro_global")
+Auth -> Cache : get_token("global")
+alt Token hợp lệ (TTL < 3600s)
+    Cache --> Auth : Token cached (0ms)
+else Token hết hạn / Chưa có
+    Auth -> Http : POST /login
+    Http -> Legacy : POST /login
+    Legacy --> Http : 200 OK (JSESSIONID)
+    Http --> Auth : New Token
+    Auth -> Cache : set_token(ttl=3600)
+end
+Auth --> Engine : session_token
+Engine -> Ctx : set_step("auth_session", SUCCESS)
+
+== 3. Bước 2: Dictionaries [BATCH: 1 HTTP] ==
+Engine -> Http : Step 2 (Batch)
+Http -> Legacy : POST /retComCodeList.lgdn
+Legacy --> Http : XML (Category, Status, PO_Type)
+Http -> Parser : parse_nexacro_response()
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_common_dictionaries", SUCCESS)
+
+== 4. Bước 3: Stock Status [BATCH: 1 HTTP] ==
+Engine -> Http : Step 3 (Batch)
+Http -> Legacy : POST /RetStockStatusList.lgdn
+Legacy --> Http : XML (38 cols stock balances)
+Http -> Parser : parse_nexacro_response()
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_stock_status", SUCCESS)
+
+== 5. Bước 4: Optimize Info [BATCH: 1 HTTP] ==
+Engine -> Http : Step 4 (Batch)
+Http -> Legacy : POST /GetOptimizeInfo.lgdn
+Legacy --> Http : XML (optimize flags)
+Http -> Parser : parse_nexacro_response()
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_optimize_flag", SUCCESS)
+
+== 6. Bước 5: Target Stock [BATCH: 1 HTTP] ==
+Engine -> Http : Step 5 (Batch)
+Http -> Legacy : POST /TargetStockSearchList.lgdn
+Legacy --> Http : XML (93 indicators)
+Http -> Parser : parse_nexacro_response()
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_target_stock_metrics", SUCCESS)
+
+== 7. Bước 6: Popup Master [LOOP: SEMAPHORE=5] ==
+Engine -> Http : Step 6 (Loop over items)
+par Concurrently (Semaphore = 5)
+    Http -> Legacy : POST /retrieveItem.lgdn (Item 1)
+    Legacy --> Http : XML (Popup Master & CAD)
+and
+    Http -> Legacy : POST /retrieveItem.lgdn (Item 2)
+    Legacy --> Http : XML (Popup Master & CAD)
+end
+Http -> Parser : Parse & gather
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_item_popup_master", SUCCESS)
+
+== 8. Bước 7: Tech Specs & MTBF [LOOP: SEMAPHORE=5] ==
+Engine -> Http : Step 7 (Loop over items)
+par Concurrently (Semaphore = 5)
+    Http -> Legacy : POST /retrieveItemInfoDetail.lgdn (Item 1)
+    Legacy --> Http : XML (Tech Specs & MTBF)
+and
+    Http -> Legacy : POST /retrieveItemInfoDetail.lgdn (Item 2)
+    Legacy --> Http : XML (Tech Specs & MTBF)
+end
+Http -> Parser : Parse & gather
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_item_tech_details", SUCCESS)
+
+== 9. Bước 8: Data Fusion 360° ==
+Engine -> Jsonata : Step 8 (Synthesize 360)
+Jsonata -> Ctx : Read 6 Datasets
+Jsonata -> Jsonata : Stitch 6 Domain Pillars\n& Lookup Dictionary Translations
+Jsonata --> Engine : 360° Fused Records
+Engine -> Ctx : set_step("synthesize_and_fuse_360", SUCCESS)
+
+== 10. Trả Kết Quả ==
+Engine --> API : Response JSON (360° Entities)
+API --> Client : 200 OK
+
+@enduml

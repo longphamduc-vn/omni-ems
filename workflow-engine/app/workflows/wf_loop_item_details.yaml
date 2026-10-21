@@ -1,0 +1,50 @@
+id: wf_loop_item_details
+name: "Loop Mode Item Details Workflow"
+version: "1.0.0"
+
+inputs:
+  items:
+    - code: "QCAD57452"
+    - code: "A1002"
+
+steps:
+  - id: get_auth
+    type: "execute_sub_workflow"
+    config:
+      workflow_id: "wf_auth_nexacro_global"
+      output_var: "session_data"
+
+  - id: fetch_each_item
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "loop"
+      loop_over: "inputs.items"
+      max_concurrency: 5
+      template_file: "nexacro_search_template.xml.j2"
+      endpoint: "/emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.get_auth.output.session_data.token }}"
+      output_var: "raw_loop_response"
+
+  - id: transform_loop_items
+    type: "transform_jsonata"
+    config:
+      expression: |
+        steps.fetch_each_item.output.raw_flattened.[{
+          "item_code": itemName ? itemName : ITEM_CD,
+          "item_name": itemDescription ? itemDescription : ITEM_NM,
+          "maker": maker,
+          "model": model,
+          "available_quantity": $number(availableQuantity ? availableQuantity : QTY),
+          "calculated_status": (
+            $number(availableQuantity ? availableQuantity : QTY) > 0 ? "AVAILABLE" : "OUT_OF_STOCK"
+          )
+        }]
+      output_var: "processed_items"
+
+response:
+  status: "SUCCESS"
+  metadata: "{{ steps.fetch_each_item.output.metadata }}"
+  data: "{{ steps.transform_loop_items.output }}"

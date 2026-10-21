@@ -1,0 +1,382 @@
+# ==============================================================================
+# LG Display EMS (Equipment Management System) API Client Collection
+# Sử dụng với VS Code REST Client / IntelliJ HTTP Client / Thunder Client
+# ==============================================================================
+
+### Environment Variables
+# Local Mock Server (Mặc định khi chạy test nội bộ)
+@baseUrl = http://localhost:9000
+
+# Production EMS Server (Bỏ comment để gọi trực tiếp hệ thống EMS thật)
+# @baseUrl = http://ems.lgdisplay.com:9000
+
+@contentType = text/xml; charset=UTF-8
+@userId = 658359
+@orgId = 28753
+@lang = EN
+@sampleItem = QCAB17587
+@sampleItem2 = QDAE01694
+@sampleInventoryItemId = 3042180
+@engineUrl = http://localhost:8000
+
+
+# ==============================================================================
+# 0. Mock Server Health Check
+# ==============================================================================
+### Health Check (Kiểm tra trạng thái Mock Server)
+GET {{baseUrl}}/api/health
+Accept: application/json
+
+
+# ==============================================================================
+# NHÓM 1: 8 API NGHIỆP VỤ LẤY DỮ LIỆU CỐT LÕI (CORE DATA APIS)
+# ==============================================================================
+
+### 1. Spare Parts: Tra cứu trạng thái tồn kho phụ tùng (Stock Status)
+# Endpoint: RetStockStatusList.lgdn
+# Lấy số lượng tồn kho (onhand), phân bổ (allocated), khả dụng (available), đơn giá mới/sửa
+POST {{baseUrl}}/emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+	<Dataset id="ds_search">
+		<ColumnInfo>
+			<Column id="organizationId" type="STRING" size="256" />
+			<Column id="itemCond" type="STRING" size="256" />
+			<Column id="optimizeFlag" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="organizationId">{{orgId}}</Col>
+				<Col id="itemCond">Y</Col>
+				<Col id="optimizeFlag">Y</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+	<Dataset id="ds_ItemInfo">
+		<ColumnInfo>
+			<Column id="item" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="item">{{sampleItem}}</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>
+
+
+### 2. Spare Parts: Danh sách yêu cầu báo giá linh kiện (RFQ)
+# Endpoint: RetEstimateRequestList.lgdn
+# Lấy danh sách RFQ báo giá NCC, chi phí ước tính, liên kết Work Order, PR/PO
+POST {{baseUrl}}/emsspareparts/sp101/sp120Nav/RetEstimateRequestList.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+	<Dataset id="ds_ItemInfo">
+		<ColumnInfo>
+			<Column id="item" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="item">{{sampleItem}}</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>
+
+
+### 3. Spare Parts: Chi tiết linh kiện & định mức kho (Item Detail Info)
+# Endpoint: retrieveItemInfoDetail.lgdn
+# Trả về: ds_Item (thông số kỹ thuật), ds_Inv (định mức tối ưu), ds_Summary (thống kê xuất dùng)
+POST {{baseUrl}}/emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+	<Dataset id="ds_Input">
+		<ColumnInfo>
+			<Column id="inventoryItemId" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="inventoryItemId">{{sampleInventoryItemId}}</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>
+
+
+### 4. Spare Parts: Tối ưu định mức tồn kho an toàn (Target Stock 93 chỉ số)
+# Endpoint: TargetStockSearchList.lgdn
+# Lấy 93 chỉ số định mức tồn kho tối ưu, logicQty, safetyQty, lead time, buffer days
+POST {{baseUrl}}/emsspareparts/sp302/sp335Nav/TargetStockSearchList.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+	<Dataset id="ds_ItemInfo">
+		<ColumnInfo>
+			<Column id="item" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="item">{{sampleItem}}</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>
+
+
+### 5. Popups: Tra cứu danh mục linh kiện (Popup Item Search)
+# Endpoint: retrieveItem.lgdn
+# Tìm kiếm linh kiện theo mã Item, mô tả, Maker, Model
+POST {{baseUrl}}/emscom/popupNav/retrieveItem.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+	<Dataset id="ds_Search">
+		<ColumnInfo>
+			<Column id="item" type="STRING" size="256" />
+			<Column id="description" type="STRING" size="256" />
+			<Column id="maker" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="item">QCAD</Col>
+				<Col id="description"></Col>
+				<Col id="maker"></Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>
+
+
+### 6. Popups: Lịch sử và tiến độ đơn mua hàng PO (Item PO Status)
+# Endpoint: retrieveItemPoStatusList.lgdn
+# Theo dõi tiến độ đơn mua hàng, NCC, số lượng, đơn giá, người yêu cầu
+POST {{baseUrl}}/emscom/popupNav/retrieveItemPoStatusList.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+	<Dataset id="ds_Search">
+		<ColumnInfo>
+			<Column id="item" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="item">{{sampleItem}}</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>
+
+
+### 7. Common Codes: Từ điển danh mục mã dùng chung
+# Endpoint: retComCodeList.lgdn
+# Lấy danh mục mã Dropdown (statementName có thể phân cách bởi dấu hai chấm ':')
+POST {{baseUrl}}/emscom/codeNav/retComCodeList.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="statementName">retrieveItemType:retrieveEstimateStatus:</Parameter>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+</Root>
+
+
+### 8. Work Order: Danh sách nhà máy sản xuất (Factory / Plant List)
+# Endpoint: retFactoryList.lgdn
+# Trả về danh sách nhà máy (Paju, Gumi, Hải Phòng VN A13,...)
+POST {{baseUrl}}/emswonew/wn90/wn900Nav/retFactoryList.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+</Root>
+
+
+# ==============================================================================
+# NHÓM 2: CÁC API HỆ THỐNG / AUTHENTICATION (TRÍCH XUẤT TỪ T1.TXT)
+# ==============================================================================
+
+### 9. System: Đăng nhập hệ thống (Login EMS)
+# Endpoint: login.lgdn
+# Lấy thông tin tài khoản người dùng, quyền trách nhiệm (ds_UserInfo, ds_Responsibility, ds_MenuList)
+POST {{baseUrl}}/emscom/loginNav/login.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="letsId">8CD4D1D900D8C9C7F4D64A9F586BDD1D</Parameter>
+		<Parameter id="userId" />
+		<Parameter id="employeeNumber" />
+		<Parameter id="organizationId" />
+		<Parameter id="responsibilityId" />
+		<Parameter id="defaultLangMsg" />
+		<Parameter id="defaultLangUi" />
+		<Parameter id="defaultTheme" />
+		<Parameter id="defaultFont" />
+		<Parameter id="getDefUser">Y</Parameter>
+		<Parameter id="getBrowser">Chrome</Parameter>
+		<Parameter id="_ems_userId" />
+		<Parameter id="_ems_organizationId" />
+		<Parameter id="_ems_language" />
+	</Parameters>
+</Root>
+
+
+### 10. System: Danh mục Menu yêu thích (Favorite Menu List)
+# Endpoint: retrieveFavoriteMenuList.lgdn
+POST {{baseUrl}}/emscom/loginNav/retrieveFavoriteMenuList.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="userId">{{userId}}</Parameter>
+		<Parameter id="organizationId">{{orgId}}</Parameter>
+		<Parameter id="responsibilityIdList">69966,69968,69972</Parameter>
+		<Parameter id="defaultLangUi">{{lang}}</Parameter>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+</Root>
+
+
+### 11. Report: Tổng số Work Order chưa xử lý (Unprocessed Total Count)
+# Endpoint: retrieveUnPrcsTotal.lgdn
+POST {{baseUrl}}/emsreport/rp70/rp710Nav/retrieveUnPrcsTotal.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+</Root>
+
+
+### 12. Optimization: Cờ tối ưu định mức Target Stock (GetOptimizeInfo.lgdn - t1.txt Trace 16)
+POST {{baseUrl}}/emsspareparts/sp302/sp330Nav/GetOptimizeInfo.lgdn
+Content-Type: {{contentType}}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">{{userId}}</Parameter>
+		<Parameter id="_ems_organizationId">{{orgId}}</Parameter>
+		<Parameter id="_ems_language">{{lang}}</Parameter>
+	</Parameters>
+	<Dataset id="ds_search">
+		<ColumnInfo>
+			<Column id="organizationId" type="STRING" size="256" />
+			<Column id="userId" type="STRING" size="256" />
+			<Column id="accelerationFlag" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="organizationId">{{orgId}}</Col>
+				<Col id="userId">{{userId}}</Col>
+				<Col id="accelerationFlag">Y</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>
+
+
+# ==============================================================================
+# NHÓM 3: WORKFLOW ENGINE & DATA FUSION LAYER REST APIS (PORT 8000)
+# ==============================================================================
+
+### 13. Workflow Engine: Health Check & Token Cache Status
+GET {{engineUrl}}/api/v1/health
+Accept: application/json
+
+
+### 14. Workflow Engine: List Available Registered Workflows
+GET {{engineUrl}}/api/v1/workflows
+Accept: application/json
+
+
+### 15. Workflow Engine: Execute Target Stock Optimization Workflow (t1.txt flow)
+POST {{engineUrl}}/api/v1/workflows/execute
+Content-Type: application/json
+
+{
+  "workflow_id": "wf_target_stock_optimization",
+  "inputs": {
+    "organizationId": "28753",
+    "userId": "658359",
+    "items": [
+      { "item": "QCAB17587", "inventoryItemId": "3042180" },
+      { "item": "QDAE01694", "inventoryItemId": "3365330" }
+    ]
+  }
+}
+
+
+### 16. Workflow Engine: Execute Search & Enrich Items Workflow
+POST {{engineUrl}}/api/v1/workflows/execute
+Content-Type: application/json
+
+{
+  "workflow_id": "wf_search_and_enrich",
+  "inputs": {
+    "keyword": "QCAB17587",
+    "status_filter": "ACTIVE",
+    "items": [
+      { "code": "QCAB17587" },
+      { "code": "QDAE01694" }
+    ]
+  }
+}
+

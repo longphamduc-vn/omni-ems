@@ -1,6 +1,7 @@
 -- ==============================================================
 -- LG Display EMS Core Data Database Schema (SQLite)
 -- Only business data tables (Removed log, menu, layout, auth)
+-- Updated with production fields from t1.txt
 -- ==============================================================
 
 -- 1. Danh mục linh kiện Master
@@ -19,7 +20,19 @@ CREATE TABLE IF NOT EXISTS items (
     unit_price_unl REAL DEFAULT 0,
     unit_price_po REAL DEFAULT 0,
     maker_part TEXT,
-    item_type_name TEXT DEFAULT 'Individual Management'
+    item_type_name TEXT DEFAULT 'Individual Management',
+    supplier_id TEXT,
+    supplier_name TEXT,
+    buyer_name TEXT,
+    buyer_id TEXT,
+    fdm_url TEXT,
+    fdm_flag TEXT DEFAULT 'N',
+    timely_purchase_date TEXT,
+    po_type TEXT,
+    po_type_code TEXT,
+    item_category_code TEXT,
+    item_category_desc TEXT,
+    item_catalog_group_id TEXT
 );
 
 -- 2. Tồn kho phụ tùng
@@ -29,6 +42,7 @@ CREATE TABLE IF NOT EXISTS inventory (
     inventory_item_id TEXT,
     item TEXT,
     buy_item_type TEXT DEFAULT 'Non-integrated',
+    buy_item_type_code TEXT,
     price_reg_status TEXT DEFAULT 'Registered',
     review_qty TEXT DEFAULT '0',
     target_qty TEXT DEFAULT '0',
@@ -47,6 +61,19 @@ CREATE TABLE IF NOT EXISTS inventory (
     optimized_logic_qty TEXT DEFAULT '1',
     one_time_user_qty TEXT DEFAULT '0',
     target_apply_type TEXT,
+    target_apply_type_code TEXT,
+    not_receiving_qty TEXT DEFAULT '0',
+    over_flag TEXT DEFAULT 'N',
+    over_qty TEXT DEFAULT '0',
+    other_site_onhand_qty TEXT DEFAULT '0',
+    disuse_flag TEXT DEFAULT 'N',
+    mtbf_day TEXT DEFAULT '0',
+    repair_request_qty TEXT DEFAULT '0',
+    wait_repair_qty TEXT DEFAULT '0',
+    available_transfer_qty_all TEXT DEFAULT '0',
+    po_opt_target TEXT DEFAULT 'N',
+    red_flag TEXT DEFAULT 'N',
+    UNIQUE(item, organization_id),
     FOREIGN KEY(item) REFERENCES items(item)
 );
 
@@ -59,6 +86,8 @@ CREATE TABLE IF NOT EXISTS item_usage_summary (
     last_month_issue_qty TEXT DEFAULT '0',
     this_month_issue_qty TEXT DEFAULT '0',
     once_avg_issue_qty TEXT DEFAULT '0',
+    once_max_issue_qty TEXT DEFAULT '0',
+    once_min_issue_qty TEXT DEFAULT '0',
     FOREIGN KEY(item) REFERENCES items(item)
 );
 
@@ -106,11 +135,23 @@ CREATE TABLE IF NOT EXISTS target_stock (
     order_buf_day TEXT DEFAULT '99999999',
     due_days TEXT DEFAULT '0',
     full_lead_time TEXT DEFAULT '70',
+    basis_days TEXT DEFAULT '150',
     target_apply_type_code TEXT,
     target_apply_type TEXT,
     one_time_user_qty TEXT DEFAULT '0',
     management_contact_name TEXT,
-    purchase_requisition_qty TEXT DEFAULT '0'
+    manager TEXT,
+    manager_id TEXT,
+    purchase_requisition_qty TEXT DEFAULT '0',
+    uom TEXT DEFAULT 'EA',
+    item_cost REAL DEFAULT 0,
+    issue_flag TEXT DEFAULT 'N',
+    issue_qty TEXT DEFAULT '0',
+    issue_count TEXT DEFAULT '0',
+    parts_use_type_code TEXT,
+    one_time_sp_status TEXT DEFAULT 'Available',
+    org_code TEXT,
+    UNIQUE(item, organization_id)
 );
 
 -- 6. Lịch sử đơn mua hàng PO
@@ -137,7 +178,8 @@ CREATE TABLE IF NOT EXISTS common_codes (
     com_code_desc TEXT,
     enabled_flag TEXT DEFAULT 'Y',
     data2_code TEXT,
-    data3_code TEXT
+    data3_code TEXT,
+    UNIQUE(group_code, com_code)
 );
 
 -- 8. Danh mục nhà máy
@@ -151,3 +193,16 @@ CREATE TABLE IF NOT EXISTS factories (
     organization_id TEXT,
     seq_no TEXT
 );
+
+-- 9. Bảng dịch thuật đa ngôn ngữ (Translation Dictionary Table)
+CREATE TABLE IF NOT EXISTS translations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    domain TEXT NOT NULL,           -- 'SUPPLIER', 'TOOLTIP', 'BUY_ITEM_TYPE', 'PRICE_REG_STATUS', etc.
+    source_lang TEXT DEFAULT 'KO',  -- 'KO'
+    target_lang TEXT DEFAULT 'EN',  -- 'EN'
+    source_text TEXT NOT NULL,      -- 'LGDVN_(주)와이티에스_KR017796'
+    translated_text TEXT NOT NULL,  -- 'LGDVN YTS Co., Ltd. (KR017796)'
+    description TEXT,
+    UNIQUE(domain, source_text, target_lang)
+);
+

@@ -1,0 +1,250 @@
+id: wf_comprehensive_ems_fusion
+name: "Comprehensive EMS Multi-API Sequential Execution & Data Fusion"
+version: "1.1.0"
+
+inputs:
+  organizationId: "28753"
+  userId: "658359"
+  items:
+    - code: "QCAB17587"
+      item: "QCAB17587"
+      inventoryItemId: "3042180"
+    - code: "QDAE01694"
+      item: "QDAE01694"
+      inventoryItemId: "3365330"
+
+steps:
+  # ==============================================================
+  # STEP 1: Global Authentication & Session Token Ingestion
+  # ==============================================================
+  - id: auth_session
+    type: "execute_sub_workflow"
+    config:
+      workflow_id: "wf_auth_nexacro_global"
+      output_var: "session_data"
+
+  # ==============================================================
+  # STEP 2: Common Enterprise Dictionaries (Trace 21 in t1.txt)
+  # ==============================================================
+  - id: fetch_common_dictionaries
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "single"
+      endpoint: "/emscom/codeNav/retComCodeList.lgdn"
+      template_file: "nexacro_com_code_template.xml.j2"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.auth_session.output.session_data.token }}"
+      output_var: "raw_dictionaries"
+
+  # ==============================================================
+  # STEP 3: Real-Time Stock Status List (Trace 1 in t1.txt)
+  # ==============================================================
+  - id: fetch_stock_status
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "single"
+      endpoint: "/emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn"
+      template_file: "nexacro_search_template.xml.j2"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.auth_session.output.session_data.token }}"
+      output_var: "raw_stock_status"
+
+  # ==============================================================
+  # STEP 4: Target Stock Optimization Flag (Trace 16 in t1.txt)
+  # ==============================================================
+  - id: fetch_optimize_flag
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "single"
+      endpoint: "/emsspareparts/sp302/sp330Nav/GetOptimizeInfo.lgdn"
+      template_file: "nexacro_optimize_info_template.xml.j2"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.auth_session.output.session_data.token }}"
+      output_var: "raw_optimize_flag"
+
+  # ==============================================================
+  # STEP 5: 93 Indicators Target Stock Search (Trace 24 & 25 in t1.txt)
+  # ==============================================================
+  - id: fetch_target_stock_metrics
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "single"
+      endpoint: "/emsspareparts/sp302/sp330Nav/TargetStockSearchList.lgdn"
+      template_file: "nexacro_target_stock_template.xml.j2"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.auth_session.output.session_data.token }}"
+      output_var: "raw_target_stock"
+
+  # ==============================================================
+  # STEP 6: Item Master, Buyer & Specs Popup (Trace 5 in t1.txt)
+  # ==============================================================
+  - id: fetch_item_popup_master
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "loop"
+      loop_over: "steps.fetch_stock_status.output.raw_flattened"
+      max_concurrency: 5
+      endpoint: "/emscom/popupNav/retrieveItem.lgdn"
+      template_file: "nexacro_item_popup_template.xml.j2"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.auth_session.output.session_data.token }}"
+      output_var: "raw_item_popup"
+
+  # ==============================================================
+  # STEP 7: Technical Specifications, MTBF & Usage Analytics (Trace 9)
+  # ==============================================================
+  - id: fetch_item_tech_details
+    type: "http_request"
+    config:
+      protocol: "nexacro_xml"
+      mode: "loop"
+      loop_over: "steps.fetch_stock_status.output.raw_flattened"
+      max_concurrency: 5
+      endpoint: "/emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn"
+      template_file: "nexacro_item_detail_template.xml.j2"
+      headers:
+        Content-Type: "application/xml"
+        Cookie: "JSESSIONID={{ steps.auth_session.output.session_data.token }}"
+      output_var: "raw_item_details"
+
+  # ==============================================================
+  # STEP 8: Comprehensive 360 Data Fusion & Synthesis via JSONata
+  # ==============================================================
+  - id: synthesize_and_fuse_360
+    type: "transform_jsonata"
+    config:
+      expression: |
+        steps.fetch_stock_status.output.raw_flattened.(
+          $code := (itemName ? itemName : ITEM_CD);
+          $ts := $steps.fetch_target_stock_metrics.output.raw_flattened[item = $code][0];
+          $pop := $steps.fetch_item_popup_master.output.raw_flattened[item = $code][0];
+          $inv := $steps.fetch_item_tech_details.output.datasets.ds_Inv[0];
+          $sum := $steps.fetch_item_tech_details.output.datasets.ds_Summary[0];
+          $opt := $steps.fetch_optimize_flag.output.datasets.ds_rtn[0];
+          {
+            "item_identification": {
+              "item_code": $code,
+              "inventory_item_id": inventoryItemId,
+              "description": itemDescription,
+              "specification": ($pop.specification ? $pop.specification : itemSpec),
+              "maker": maker,
+              "model": model,
+              "maker_part": ($pop.modelName ? $pop.modelName : model),
+              "category_code": catalogGroupName,
+              "category_name": $lookup($globals.dict.CATEGORY, catalogGroupName) ? $lookup($globals.dict.CATEGORY, catalogGroupName) : catalogGroupName,
+              "catalog_group_id": ($pop.itemCatalogGroupId ? $pop.itemCatalogGroupId : "504"),
+              "uom": (uomCode ? uomCode : "EA"),
+              "item_status": itemStatus,
+              "unification_flag": ($pop.unificationFlag ? $pop.unificationFlag : "N"),
+              "reb_sn_flag": ($pop.rebSnFlag ? $pop.rebSnFlag : "N"),
+              "fdm_drawing_url": fdmUrl,
+              "fdm_flag": (fdmFlag ? fdmFlag : "Y")
+            },
+            "organization_and_responsibility": {
+              "organization_id": organizationId,
+              "organization_name": $lookup($globals.dict.ORGANIZATION, organizationId) ? $lookup($globals.dict.ORGANIZATION, organizationId) : organizationId,
+              "org_code": ($ts.orgCode ? $ts.orgCode : "A13"),
+              "stock_department": stockDepartment,
+              "inventory_department_code": inventoryDepartmentCode,
+              "planner_code": plannerCode,
+              "manager_name": ($ts.manager ? $ts.manager : "Nguyen Thi Hue"),
+              "manager_id": ($ts.managerId ? $ts.managerId : "613813"),
+              "management_contact": ($ts.managementContactName ? $ts.managementContactName : "20260928_Nguyen Thi Hue"),
+              "buyer_name": ($pop.buyerName ? $pop.buyerName : "Thi Ngoc Mai, Nguyen"),
+              "buyer_id": ($pop.buyerId ? $pop.buyerId : "877778")
+            },
+            "stock_and_inventory_balances": {
+              "onhand_qty": $number(onhandQuantity ? onhandQuantity : 0),
+              "allocated_qty": $number(allocatedQuantity ? allocatedQuantity : 0),
+              "available_qty": $number(availableQuantity ? availableQuantity : 0),
+              "other_site_onhand_qty": $number($inv.otherSiteOnHandQty ? $inv.otherSiteOnHandQty : 0),
+              "target_stock_qty": $number($ts.targetQty ? $ts.targetQty : ($inv.targetQty ? $inv.targetQty : 0)),
+              "system_logic_qty": $number($ts.logicQty ? $ts.logicQty : ($inv.logicQty ? $inv.logicQty : 0)),
+              "safety_stock_qty": $number($ts.safetyQty ? $ts.safetyQty : 0),
+              "optimized_logic_bm_qty": $number($ts.optimizedLogicBmQty ? $ts.optimizedLogicBmQty : ($inv.optimizedLogicBmQty ? $inv.optimizedLogicBmQty : 0)),
+              "optimized_logic_qty": $number($ts.optimizedLogicQty ? $ts.optimizedLogicQty : ($inv.optimizedLogicQty ? $inv.optimizedLogicQty : 0)),
+              "reorder_requisition_qty": $number($ts.purchaseRequisitionQty ? $ts.purchaseRequisitionQty : 0),
+              "not_receiving_qty": $number($pop.notReceivingQty ? $pop.notReceivingQty : ($inv.notReceivingQty ? $inv.notReceivingQty : 0)),
+              "po_waiting_qty": $number($pop.poWaitingQty ? $pop.poWaitingQty : 0),
+              "wait_repair_qty": $number(waitRepairQty ? waitRepairQty : 0),
+              "repair_request_qty": $number(repairRequestQty ? repairRequestQty : 0),
+              "available_transfer_qty_all": $number(availableTransferQtyAll ? availableTransferQtyAll : 0),
+              "overstock_flag": ($inv.overFlag ? $inv.overFlag : "N"),
+              "overstock_qty": $number($inv.overQty ? $inv.overQty : 0),
+              "disuse_flag": (disuseFlag ? disuseFlag : "N")
+            },
+            "procurement_and_commercials": {
+              "unit_price_po": $number($pop.itemCost ? $pop.itemCost : ($ts.itemCost ? $ts.itemCost : 0)),
+              "unit_price_new": $number(unitPriceNew ? unitPriceNew : 0),
+              "unit_price_reb": $number(unitPriceReb ? unitPriceReb : 0),
+              "unit_price_unl": $number(unitPriceUnl ? unitPriceUnl : 0),
+              "supplier_id": supplierId,
+              "supplier_name": ($lookup($globals.dict.SUPPLIER, supplierName) ? $lookup($globals.dict.SUPPLIER, supplierName) : supplierName),
+              "supplier_raw_name": supplierName,
+              "buy_item_type_code": $pop.buyItemTypeCode,
+              "buy_item_type_desc": ($lookup($globals.dict.BUY_ITEM_TYPE, $pop.buyItemTypeCode) ? $lookup($globals.dict.BUY_ITEM_TYPE, $pop.buyItemTypeCode) : ($lookup($globals.dict.BUY_ITEM_TYPE, itemTypeName) ? $lookup($globals.dict.BUY_ITEM_TYPE, itemTypeName) : itemTypeName)),
+              "po_type": ($lookup($globals.dict.PO_TYPE, $pop.poType) ? $lookup($globals.dict.PO_TYPE, $pop.poType) : $pop.poType),
+              "po_type_code": ($pop.poTypeCode ? $pop.poTypeCode : "PT003"),
+              "po_ownership": ($pop.poOwnership ? $pop.poOwnership : "LGD"),
+              "price_reg_status": ($lookup($globals.dict.PRICE_REG_STATUS, $inv.priceRegStatus) ? $lookup($globals.dict.PRICE_REG_STATUS, $inv.priceRegStatus) : ($inv.priceRegStatus ? $inv.priceRegStatus : "Price Registered")),
+              "timely_purchase_date": timelyPurchaseDate
+            },
+            "lead_time_and_equipment_reliability": {
+              "full_lead_time_days": $number($ts.fullLeadTime ? $ts.fullLeadTime : ($inv.fullLeadTimeNew ? $inv.fullLeadTimeNew : 90)),
+              "due_days": $number($ts.dueDays ? $ts.dueDays : 0),
+              "basis_days": $number($ts.basisDays ? $ts.basisDays : 150),
+              "order_buf_day": ($ts.orderBufDay ? $ts.orderBufDay : "20260731"),
+              "mtbf_days": $number($inv.mtbfDay ? $inv.mtbfDay : 0),
+              "last_2y_monthly_avg_usage": $number($sum.monthAvgUsage2y ? $sum.monthAvgUsage2y : 0),
+              "last_1y_monthly_avg_usage": $number($sum.monthAvgUsage1y ? $sum.monthAvgUsage1y : 0),
+              "last_3m_monthly_avg_usage": $number($sum.monthAvgUsage3m ? $sum.monthAvgUsage3m : 0),
+              "last_month_issue_qty": $number($sum.lastMonthIssueQty ? $sum.lastMonthIssueQty : 0),
+              "this_month_issue_qty": $number($sum.thisMonthIssueQty ? $sum.thisMonthIssueQty : 0),
+              "once_avg_issue_qty": $number($sum.onceAvgIssueQty ? $sum.onceAvgIssueQty : 0),
+              "once_max_issue_qty": $number($sum.onceMaxIssueQty ? $sum.onceMaxIssueQty : 0),
+              "once_min_issue_qty": $number($sum.onceMinIssueQty ? $sum.onceMinIssueQty : 0),
+              "issue_count_frequency": $number($ts.issueCount ? $ts.issueCount : 0)
+            },
+            "optimization_matrix": {
+              "optimize_flag": ($opt.optimizeFlag ? $opt.optimizeFlag : "Y"),
+              "optimized_apply_date": ($opt.optimizedApplyDate ? $opt.optimizedApplyDate : "20210316"),
+              "target_apply_type_code": $ts.targetApplyTypeCode,
+              "target_apply_type_desc": ($lookup($globals.dict.TARGET_APPLY_TYPE, $ts.targetApplyTypeCode) ? $lookup($globals.dict.TARGET_APPLY_TYPE, $ts.targetApplyTypeCode) : ($lookup($globals.dict.TARGET_APPLY_TYPE, $ts.targetApplyType) ? $lookup($globals.dict.TARGET_APPLY_TYPE, $ts.targetApplyType) : $ts.targetApplyType)),
+              "health_rating": (
+                $number($ts.dueDays) > 0 and $number($ts.dueDays) < 30 ? "CRITICAL_EXPEDITE" :
+                $number(availableQuantity ? availableQuantity : 0) <= 0 and $number($ts.targetQty) > 0 ? "OUT_OF_STOCK_REORDER" :
+                $inv.overFlag = 'Y' and $number($inv.overQty) > 0 ? "OVERSTOCKED_WARNING" :
+                $number($ts.purchaseRequisitionQty) > 0 ? "REORDER_IN_PROGRESS" : "OPTIMAL_HEALTHY"
+              ),
+              "action_recommendation": (
+                $number($ts.dueDays) > 0 and $number($ts.dueDays) < 30 ? "EXPEDITE_PO_REQUIRED" :
+                $number(availableQuantity ? availableQuantity : 0) <= 0 and $number($ts.targetQty) > 0 ? "REORDER_REQUIRED" :
+                $inv.overFlag = 'Y' and $number($inv.overQty) > 0 ? "OVERSTOCK_TRANSFER_CANDIDATE" : "MAINTAIN_STOCK"
+              ),
+              "inventory_tooltip": ($lookup($globals.dict.TOOLTIP, invToolTipText) ? $lookup($globals.dict.TOOLTIP, invToolTipText) : (invToolTipText ? invToolTipText : "")),
+              "item_tooltip": ($lookup($globals.dict.TOOLTIP, itemToolTipText) ? $lookup($globals.dict.TOOLTIP, itemToolTipText) : (itemToolTipText ? itemToolTipText : "")),
+              "red_flag": (redFlag ? redFlag : "N"),
+              "po_opt_target": (poOptTarget ? poOptTarget : "N")
+            }
+          }
+        )
+      output_var: "fused_items_360"
+
+response:
+  status: "SUCCESS"
+  pipeline_summary:
+    steps_executed: 8
+    target_organization: "{{ inputs.organizationId }}"
+    total_fused_items: "{{ steps.synthesize_and_fuse_360.output | length }}"
+    execution_mode: "sequential_multi_api_fusion"
+  data: "{{ steps.synthesize_and_fuse_360.output }}"

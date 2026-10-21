@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="_ems_userId">658359</Parameter>
+		<Parameter id="_ems_organizationId">{{ inputs.get('organizationId', '28753') }}</Parameter>
+		<Parameter id="_ems_language">EN</Parameter>
+	</Parameters>
+	<Dataset id="ds_search">
+		<ColumnInfo>
+			<Column id="organizationId" type="STRING" size="256" />
+			<Column id="userId" type="STRING" size="256" />
+			<Column id="privFlag" type="STRING" size="256" />
+			<Column id="accelerationFlag" type="STRING" size="256" />
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="organizationId">{{ inputs.get('organizationId', '28753') }}</Col>
+				<Col id="userId">{{ inputs.get('userId', '658359') }}</Col>
+				<Col id="privFlag">N</Col>
+				<Col id="accelerationFlag">Y</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>

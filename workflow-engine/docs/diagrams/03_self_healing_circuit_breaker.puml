@@ -1,0 +1,64 @@
+@startuml Self_Healing_Circuit_Breaker
+!theme plain
+autonumber
+skinparam backgroundColor #FFFFFF
+skinparam roundcorner 6
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+skinparam ArrowColor #DC2626
+skinparam ArrowThickness 1.5
+
+title Cơ Chế Tự Phục Hồi Session (Self-Healing Circuit Breaker)
+
+participant "WorkflowEngine" as Engine #FEF3C7
+participant "DataContext" as Ctx #FDE68A
+participant "HttpAdapter" as Http #DDD6FE
+participant "SubworkflowAdapter" as Auth #E9D5FF
+participant "MemoryStore\n(TTLCache)" as Cache #FDE047
+participant "Legacy Nexacro\nPlatform" as Legacy #FEE2E2
+
+== 1. Thực Thi Nghiệp Vụ ==
+Engine -> Http : fetch_nexacro_data (token cũ)
+Http -> Legacy : POST /RetStockStatusList.lgdn
+
+alt HTTP 401/403 Unauthorized
+    Legacy --> Http : 401 Unauthorized
+    Http --> Engine : throw HttpAuthRequiredError(401)
+else Nexacro ErrorCode < 0 (Session Expired)
+    Legacy --> Http : 200 OK (errorCode: -1, "Session Expired")
+    Http --> Engine : throw NexacroError(-1)
+end
+
+== 2. Kích Hoạt Self-Healing ==
+note over Engine #FEE2E2
+  <b>HẾT HẠN PHIÊN (Max retry: 1)</b>
+  Tự động phục hồi trong suốt
+end note
+
+Engine -> Cache : invalidate_token("global")
+
+== 3. Tự Động Tái Xác Thực ==
+Engine -> Auth : execute(wf_auth_nexacro_global)
+Auth -> Http : POST /login
+Http -> Legacy : POST /login XML
+Legacy --> Http : 200 OK (fresh_token)
+Http --> Auth : fresh_token
+Auth -> Cache : set_token("global", fresh_token, ttl=3600)
+Auth --> Engine : { session_token: fresh_token }
+
+Engine -> Ctx : globals.auth_token = fresh_token
+Engine -> Ctx : step "get_auth".status = "RETRIED"
+
+== 4. Transparent Retry ==
+Engine -> Http : fetch_nexacro_data [RETRY]\n(fresh_token)
+Http -> Legacy : POST /RetStockStatusList.lgdn
+Legacy --> Http : 200 OK (Dataset)
+Http --> Engine : step_output (SUCCESS)
+Engine -> Ctx : set_step_result(SUCCESS)
+
+note over Engine #DCFCE7
+  <b>TỰ PHỤC HỒI THÀNH CÔNG</b>
+  Pipeline tiếp tục không gián đoạn
+end note
+
+@enduml

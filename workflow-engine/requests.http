@@ -1,0 +1,84 @@
+# ==============================================================================
+# Workflow Engine & Data Fusion Layer - HTTP Client Collection
+# ==============================================================================
+
+@baseUrl = http://localhost:8000
+@contentType = application/json
+
+### 1. Health Check
+GET {{baseUrl}}/api/v1/health
+Accept: application/json
+
+
+### 2. List Registered Workflows
+GET {{baseUrl}}/api/v1/workflows
+Accept: application/json
+
+
+### 3. Get Workflow Definition (wf_search_and_enrich)
+GET {{baseUrl}}/api/v1/workflows/wf_search_and_enrich
+Accept: application/json
+
+
+### 4. Execute Search and Enrich Workflow (Section 5.2 Spec)
+# Calls wf_search_and_enrich with Single / Batch mode
+POST {{baseUrl}}/api/v1/workflows/execute
+Content-Type: {{contentType}}
+
+{
+  "workflow_id": "wf_search_and_enrich",
+  "inputs": {
+    "keyword": "QCAD57452",
+    "status_filter": "ACTIVE",
+    "items": [
+      { "code": "QCAD57452" }
+    ]
+  }
+}
+
+
+### 5. Execute Loop Mode Workflow (Bounded Concurrency Semaphore)
+# Calls wf_loop_item_details with Loop mode (5 concurrent workers)
+POST {{baseUrl}}/api/v1/workflows/execute
+Content-Type: {{contentType}}
+
+{
+  "workflow_id": "wf_loop_item_details",
+  "inputs": {
+    "items": [
+      { "code": "QCAD57452" },
+      { "code": "A1002" }
+    ]
+  }
+}
+
+
+### 6. Execute Dynamic Inline Workflow Definition
+POST {{baseUrl}}/api/v1/workflows/execute
+Content-Type: {{contentType}}
+
+{
+  "workflow_definition": "id: inline_demo\ninputs:\n  items: []\nsteps:\n  - id: transform\n    type: transform_jsonata\n    config:\n      expression: |\n        inputs.items.[{\n          \"item_code\": code,\n          \"calculated_status\": (\n            STAT == '01' and $number(QTY) > 0 ? 'AVAILABLE' :\n            STAT == '01' and $number(QTY) <= 0 ? 'OUT_OF_STOCK' : 'INACTIVE'\n          )\n        }]\n      output_var: result\nresponse:\n  status: SUCCESS\n  data: '{{ steps.transform.output }}'",
+  "inputs": {
+    "items": [
+      { "code": "PUMP-01", "STAT": "01", "QTY": "10" },
+      { "code": "VALVE-02", "STAT": "01", "QTY": "0" },
+      { "code": "MOTOR-03", "STAT": "02", "QTY": "5" }
+    ]
+  }
+}
+
+
+### 7. Inspect In-Memory Token Cache
+GET {{baseUrl}}/api/v1/cache/token
+Accept: application/json
+
+
+### 8. Clear Token Cache (Trigger Self-Healing Test)
+POST {{baseUrl}}/api/v1/cache/clear
+Accept: application/json
+
+
+### 9. Inspect Code Translation Dictionaries
+GET {{baseUrl}}/api/v1/cache/dictionaries
+Accept: application/json

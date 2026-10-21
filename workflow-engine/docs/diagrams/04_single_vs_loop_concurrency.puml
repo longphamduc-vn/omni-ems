@@ -1,0 +1,46 @@
+@startuml Single_vs_Loop_Concurrency
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam roundcorner 8
+skinparam shadowing false
+skinparam ArrowColor #2563EB
+skinparam ArrowThickness 1.5
+
+title So Sánh: Batch Mode (Single HTTP) vs. Loop Mode (Semaphore = 5)
+
+|#EFF6FF| Batch Mode (1 HTTP Request) |
+|#FEF3C7| Loop Mode (Concurrent Semaphore = 5) |
+
+|Batch Mode (1 HTTP Request)|
+start
+:Nhận N items từ inputs;
+:Render Jinja2 thành **1 XML Body duy nhất**\n(<Dataset><Rows>{% for itm in items %}...);
+:Gửi **1 HTTP POST duy nhất**;
+:Legacy trả về 1 XML chứa N rows;
+:Flattener bóc tách thành **raw_flattened**;
+stop
+
+|Loop Mode (Concurrent Semaphore = 5)|
+start
+:Đánh giá **config.loop_over** (N items);
+:Khởi tạo **asyncio.Semaphore(max_concurrency = 5)**;
+
+fork
+  :Worker 1: Acquire -> POST Item 1;
+fork again
+  :Worker 2: Acquire -> POST Item 2;
+fork again
+  :Worker 3: Acquire -> POST Item 3;
+fork again
+  :Worker 4: Acquire -> POST Item 4;
+fork again
+  :Worker 5: Acquire -> POST Item 5;
+fork again
+  :... (Item 6..N xếp hàng đợi slot trống);
+end fork
+
+:Thu thập kết quả qua **asyncio.gather()**;
+:Gộp thành mảng **raw_flattened** (N items);
+stop
+
+@enduml

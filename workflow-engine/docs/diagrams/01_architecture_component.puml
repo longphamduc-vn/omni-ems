@@ -1,0 +1,102 @@
+@startuml Architecture_Component_Diagram
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam roundcorner 8
+skinparam shadowing false
+skinparam componentStyle uml2
+skinparam ArrowColor #2563EB
+skinparam ArrowThickness 1.5
+
+title Kiến Trúc Tổng Thể Workflow Engine & Data Fusion Layer (EMS 360)
+
+actor "REST Client" as Client #E0F2FE
+
+package "FastAPI Workflow Engine (Port 8000)" #F8FAFC {
+
+    package "API Layer" #EFF6FF {
+        component "FastAPI Router" as APIRouter #DBEAFE
+        component "Pydantic Schemas" as Schemas #DBEAFE
+    }
+
+    package "Core Engine" #FEF3C7 {
+        component "WorkflowEngine" as Engine #FDE68A
+        component "DataContext (State Bus)" as DataCtx #FDE68A
+        component "MemoryStore (TTLCache 3600s)" as MemStore #FDE68A
+    }
+
+    package "Adapters Layer" #F3E8FF {
+        component "SubworkflowAdapter\n(Auth & Sessions)" as SubWfAdapter #E9D5FF
+        component "HttpAdapter\n(Batch & Loop)" as HttpAdapter #E9D5FF
+        component "NexacroParser\n(XML Flattener)" as Parser #E9D5FF
+        component "JsonataAdapter\n(360° Fusion Engine)" as Jsonata #E9D5FF
+    }
+
+    package "Storage" #ECFDF5 {
+        folder "Workflows (*.yaml)" as WorkflowsDir #D1FAE5
+        folder "Templates (*.xml.j2)" as TemplatesDir #D1FAE5
+    }
+}
+
+cloud "Legacy Nexacro EMS (:9000)" as LegacyEMS #FEE2E2 {
+    package "Batch APIs (Single HTTP)" #FECACA {
+        interface "/retComCodeList.lgdn\n(Dictionaries)" as API_Codes #FCA5A5
+        interface "/RetStockStatusList.lgdn\n(Stock 38 Cols)" as API_Stock #FCA5A5
+        interface "/GetOptimizeInfo.lgdn\n(Optimize Flags)" as API_Opt #FCA5A5
+        interface "/TargetStockSearchList.lgdn\n(Target Stock 93 Cols)" as API_Target #FCA5A5
+    }
+
+    package "Loop APIs (Semaphore = 5)" #FED7AA {
+        interface "/retrieveItem.lgdn\n(Popup Master & CAD)" as API_Popup #FDBA74
+        interface "/retrieveItemInfoDetail.lgdn\n(Tech Specs & MTBF)" as API_Tech #FDBA74
+    }
+
+    database "Legacy DB" as DB #FECACA
+}
+
+' Flow Connections
+Client --> APIRouter : 1. POST /api/v1/workflows/execute
+APIRouter --> Schemas : Validate
+APIRouter --> Engine : Dispatch
+
+Engine ..> WorkflowsDir : Load YAML
+Engine --> DataCtx : Init ($inputs, $globals)
+Engine --> MemStore : Check Token
+
+' Execution Steps
+Engine --> SubWfAdapter : 1. Auth (TTLCache 3600s)
+SubWfAdapter --> MemStore : Get Token (0ms)
+
+Engine --> HttpAdapter : 2-5. Batch Requests (Single HTTP)
+HttpAdapter ..> TemplatesDir : Render Jinja2 Batch
+HttpAdapter --> API_Codes : 1 HTTP POST
+HttpAdapter --> API_Stock : 1 HTTP POST
+HttpAdapter --> API_Opt : 1 HTTP POST
+HttpAdapter --> API_Target : 1 HTTP POST
+
+Engine --> HttpAdapter : 6-7. Loop Requests (Semaphore=5)
+HttpAdapter --> API_Popup : N Parallel POSTs
+HttpAdapter --> API_Tech : N Parallel POSTs
+
+API_Codes --> DB
+API_Stock --> DB
+API_Opt --> DB
+API_Target --> DB
+API_Popup --> DB
+API_Tech --> DB
+
+' Response & Parser
+LegacyEMS --> HttpAdapter : Nexacro XML
+HttpAdapter --> Parser : Parse XML
+Parser --> DataCtx : Save raw_flattened
+
+' Fusion
+Engine --> Jsonata : 8. Synthesize 360° Record
+Jsonata --> DataCtx : Read 6 Datasets & Fuse
+Jsonata --> DataCtx : Save 360° Master Record
+
+' Output
+DataCtx --> Engine : Resolve Response
+Engine --> APIRouter : Fused JSON
+APIRouter --> Client : 2. HTTP 200 JSON
+
+@enduml

@@ -1,0 +1,60 @@
+@startuml DataContext_State_Evolution
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam roundcorner 6
+skinparam shadowing false
+skinparam state {
+    BackgroundColor #F8FAFC
+    BorderColor #64748B
+    ArrowColor #2563EB
+}
+
+title Tiến Trình Trạng Thái DataContext
+
+[*] --> InitialState : new DataContext()
+
+state "1. Khởi Tạo (Init)" as InitialState #EFF6FF {
+    InitialState : execution_id = "exec_..."
+    InitialState : workflow_id = "wf_..."
+    InitialState : inputs = { keyword: "PUMP-2026" }
+    InitialState : globals.dict = { CATEGORY: {...}, STATUS: {...} }
+    InitialState : globals.auth_token = None
+    InitialState : steps = {}
+}
+
+InitialState --> AfterAuth : Step 1: get_auth
+
+state "2. Sau Xác Thực (Auth)" as AfterAuth #FEF3C7 {
+    AfterAuth : globals.auth_token = "JSESSIONID_..."
+    AfterAuth : steps.get_auth = { status: "SUCCESS", cached: true }
+}
+
+AfterAuth --> AfterFetch : Step 2: fetch_data
+
+state "3. Sau Lấy Dữ Liệu (Fetch)" as AfterFetch #EDE9FE {
+    AfterFetch : steps.fetch_nexacro_data = {
+    AfterFetch :   status: "SUCCESS",
+    AfterFetch :   raw_flattened: [ { ITEM_CD: "...", ... } ]
+    AfterFetch : }
+}
+
+AfterFetch --> AfterTransform : Step 3: JSONata Fusion
+
+state "4. Sau Hợp Nhất (Fused)" as AfterTransform #DCFCE7 {
+    AfterTransform : steps.transform_and_enrich = {
+    AfterTransform :   status: "SUCCESS",
+    AfterTransform :   output: [ { item_code: "...", health_rating: "A", ... } ]
+    AfterTransform : }
+}
+
+AfterTransform --> FinalResponse : Response Template
+
+state "5. Kết Quả Cuối (Response)" as FinalResponse #F1F5F9 {
+    FinalResponse : status: "COMPLETED"
+    FinalResponse : execution_time_ms: 235
+    FinalResponse : data: [ ... 360° Records ... ]
+}
+
+FinalResponse --> [*] : Trả HTTP 200 Client
+
+@enduml

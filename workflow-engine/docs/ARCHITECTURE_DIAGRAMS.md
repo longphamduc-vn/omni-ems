@@ -217,19 +217,8 @@ APIRouter --> Client : 2. HTTP 200 OK\n{status: COMPLETED, data: [Spare Part 360
 
 ## 2. Sơ Đồ Tuần Tự Luồng Thực Thi 8 Bước (Sequential Pipeline Sequence)
 
-File nguồn: [`docs/diagrams/02_workflow_execution_sequence.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/02_workflow_execution_sequence.puml)
-
-Mô tả luồng xử lý toàn diện cho workflow **`wf_comprehensive_ems_fusion`**:
-1. Tiếp nhận request và khởi tạo `DataContext`.
-2. Xác thực session qua Sub-Workflow (kiểm tra `TTLCache` 3600s, chi phí mạng 0ms).
-3. **[BATCH MODE]** Gửi 1 HTTP request lấy từ điển mã chung (`retComCodeList.lgdn`).
-4. **[BATCH MODE]** Gửi 1 HTTP request lấy trạng thái tồn kho 38 cột (`RetStockStatusList.lgdn`).
-5. **[BATCH MODE]** Gửi 1 HTTP request lấy cờ kích hoạt tối ưu (`GetOptimizeInfo.lgdn`).
-6. **[BATCH MODE]** Gửi 1 HTTP request lấy 93 chỉ số định mức tồn kho (`TargetStockSearchList.lgdn`).
-7. **[LOOP MODE: SEMAPHORE=5]** Bắn song song N request lấy thông tin Popup Master & URL bản vẽ CAD (`retrieveItem.lgdn`).
-8. **[LOOP MODE: SEMAPHORE=5]** Bắn song song N request lấy thông số kỹ thuật & độ tin cậy MTBF (`retrieveItemInfoDetail.lgdn`).
-9. **[JSONATA FUSION]** Hợp nhất 6 dataset thành cấu trúc **Spare Part 360 Master Record** với 6 trụ cột dữ liệu.
-10. Đóng gói phản hồi HTTP 200 JSON cho Client (thời gian xử lý trung bình: 37ms - 120ms).
+- File nguồn: [`docs/diagrams/02_workflow_execution_sequence.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/02_workflow_execution_sequence.puml)
+- Ảnh xuất ra: [`docs/diagrams/Workflow_Execution_Sequence.png`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/Workflow_Execution_Sequence.png)
 
 ```plantuml
 @startuml Workflow_Execution_Sequence
@@ -242,120 +231,107 @@ skinparam sequenceMessageAlign center
 skinparam ArrowColor #2563EB
 skinparam ArrowThickness 1.5
 
-title Quy Trình Thực Thi Tuần Tự 8 Bước (wf_comprehensive_ems_fusion)
+title Quy Trình Thực Thi 8 Bước (wf_comprehensive_ems_fusion)
 
-actor "Client / Caller" as Client #E0F2FE
-participant "FastAPI Router\n(app.main)" as API #DBEAFE
-participant "WorkflowEngine\n(Core Orchestrator)" as Engine #FEF3C7
-participant "DataContext\n(In-Memory State Bus)" as Ctx #FDE68A
-participant "MemoryStore\n(TTLCache 3600s)" as Cache #FDE047
-participant "SubworkflowAdapter\n(Auth Sub-flow)" as Auth #E9D5FF
-participant "HttpAdapter\n(httpx + Jinja2)" as Http #DDD6FE
-participant "Legacy Nexacro\nPlatform (:9000)" as Legacy #FEE2E2
-participant "NexacroParser\n(XML Flattener)" as Parser #DDD6FE
-participant "JsonataAdapter\n(360° Fusion Engine)" as Jsonata #C4B5FD
+actor "Client" as Client #E0F2FE
+participant "API Router" as API #DBEAFE
+participant "WorkflowEngine" as Engine #FEF3C7
+participant "DataContext" as Ctx #FDE68A
+participant "MemoryStore\n(TTLCache)" as Cache #FDE047
+participant "SubworkflowAdapter\n(Auth)" as Auth #E9D5FF
+participant "HttpAdapter" as Http #DDD6FE
+participant "Legacy Nexacro\n(:9000)" as Legacy #FEE2E2
+participant "NexacroParser" as Parser #DDD6FE
+participant "JsonataAdapter\n(360° Fusion)" as Jsonata #C4B5FD
 
-== 1. Tiếp Nhận Yêu Cầu & Khởi Tạo Context ==
-Client -> API : POST /api/v1/workflows/execute\n{workflow_id: "wf_comprehensive_ems_fusion", inputs: {items: [...]}}
+== 1. Khởi Tạo Context ==
+Client -> API : POST /api/v1/workflows/execute
 API -> Engine : execute("wf_comprehensive_ems_fusion", inputs)
-Engine -> Ctx : new DataContext(workflow_id, inputs, globals)
+Engine -> Ctx : new DataContext()
 
-== 2. Bước 1: Xác Thực Session Sub-Workflow (auth_session) ==
-Engine -> Auth : execute(workflow_id: "wf_auth_nexacro_global")
+== 2. Bước 1: Auth Sub-Workflow ==
+Engine -> Auth : execute("wf_auth_nexacro_global")
 Auth -> Cache : get_token("global")
-alt Token hợp lệ trong Cache (< 3600s)
-    Cache --> Auth : Trả về JSESSIONID [0ms network]
-else Token hết hạn hoặc chưa có
-    Auth -> Http : Gửi request login tới /login XML
+alt Token hợp lệ (TTL < 3600s)
+    Cache --> Auth : Token cached (0ms)
+else Token hết hạn / Chưa có
+    Auth -> Http : POST /login
     Http -> Legacy : POST /login
-    Legacy --> Http : 200 OK (Set-Cookie: JSESSIONID)
-    Http --> Auth : Session Token mới
-    Auth -> Cache : set_token("global", token, ttl=3600)
+    Legacy --> Http : 200 OK (JSESSIONID)
+    Http --> Auth : New Token
+    Auth -> Cache : set_token(ttl=3600)
 end
-Auth --> Engine : { session_token: "..." }
-Engine -> Ctx : set_step_result("auth_session", SUCCESS, output)
+Auth --> Engine : session_token
+Engine -> Ctx : set_step("auth_session", SUCCESS)
 
-== 3. Bước 2: Lấy Từ Điển Danh Mục Chung [BATCH MODE: 1 HTTP] ==
-Engine -> Http : execute(step: "fetch_common_dictionaries", config, Ctx)
-Http -> Http : Render Jinja2 template ("nexacro_com_code_template.xml.j2")
-Http -> Legacy : POST /retComCodeList.lgdn (1 HTTP Request)
-Legacy --> Http : 200 OK (XML Payload with CATEGORY, STATUS, PO_TYPE)
-Http -> Parser : parse_nexacro_response(xml)
-Parser --> Http : { metadata, raw_flattened: [code dict items] }
-Http --> Engine : step_output
-Engine -> Ctx : set_step_result("fetch_common_dictionaries", SUCCESS, step_output)
+== 3. Bước 2: Dictionaries [BATCH: 1 HTTP] ==
+Engine -> Http : Step 2 (Batch)
+Http -> Legacy : POST /retComCodeList.lgdn
+Legacy --> Http : XML (Category, Status, PO_Type)
+Http -> Parser : parse_nexacro_response()
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_common_dictionaries", SUCCESS)
 
-== 4. Bước 3: Lấy Trạng Thái Tồn Kho 38 Cột [BATCH MODE: 1 HTTP] ==
-Engine -> Http : execute(step: "fetch_stock_status", config, Ctx)
-Http -> Http : Render Jinja2 template cho N items trong 1 thẻ <Rows>
-Http -> Legacy : POST /RetStockStatusList.lgdn (1 HTTP Request)
-Legacy --> Http : 200 OK (XML Payload với 38 cột tồn kho, phòng ban, planner)
-Http -> Parser : parse_nexacro_response(xml)
-Parser --> Http : { metadata, raw_flattened: [stock status items] }
-Http --> Engine : step_output
-Engine -> Ctx : set_step_result("fetch_stock_status", SUCCESS, step_output)
+== 4. Bước 3: Stock Status [BATCH: 1 HTTP] ==
+Engine -> Http : Step 3 (Batch)
+Http -> Legacy : POST /RetStockStatusList.lgdn
+Legacy --> Http : XML (38 cols stock balances)
+Http -> Parser : parse_nexacro_response()
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_stock_status", SUCCESS)
 
-== 5. Bước 4: Lấy Cờ Kích Hoạt Tối Ưu Hóa [BATCH MODE: 1 HTTP] ==
-Engine -> Http : execute(step: "fetch_optimize_flag", config, Ctx)
-Http -> Http : Render Jinja2 template
-Http -> Legacy : POST /GetOptimizeInfo.lgdn (1 HTTP Request)
-Legacy --> Http : 200 OK (XML Payload cờ optimize_flag, apply_date)
-Http -> Parser : parse_nexacro_response(xml)
-Parser --> Http : { metadata, raw_flattened: [optimize items] }
-Http --> Engine : step_output
-Engine -> Ctx : set_step_result("fetch_optimize_flag", SUCCESS, step_output)
+== 5. Bước 4: Optimize Info [BATCH: 1 HTTP] ==
+Engine -> Http : Step 4 (Batch)
+Http -> Legacy : POST /GetOptimizeInfo.lgdn
+Legacy --> Http : XML (optimize flags)
+Http -> Parser : parse_nexacro_response()
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_optimize_flag", SUCCESS)
 
-== 6. Bước 5: Lấy 93 Chỉ Số Định Mức Tồn Kho [BATCH MODE: 1 HTTP] ==
-Engine -> Http : execute(step: "fetch_target_stock_metrics", config, Ctx)
-Http -> Http : Render Jinja2 template cho N items
-Http -> Legacy : POST /TargetStockSearchList.lgdn (1 HTTP Request)
-Legacy --> Http : 200 OK (XML Payload với 93 chỉ số: due_days, lead_time, safety_stock, logic_bm)
-Http -> Parser : parse_nexacro_response(xml)
-Parser --> Http : { metadata, raw_flattened: [target stock items] }
-Http --> Engine : step_output
-Engine -> Ctx : set_step_result("fetch_target_stock_metrics", SUCCESS, step_output)
+== 6. Bước 5: Target Stock [BATCH: 1 HTTP] ==
+Engine -> Http : Step 5 (Batch)
+Http -> Legacy : POST /TargetStockSearchList.lgdn
+Legacy --> Http : XML (93 indicators)
+Http -> Parser : parse_nexacro_response()
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_target_stock_metrics", SUCCESS)
 
-== 7. Bước 6: Lấy Thông Tin Popup Master [LOOP MODE: CONCURRENCY SEMAPHORE(5)] ==
-Engine -> Http : execute(step: "fetch_item_popup_master", loop_over: inputs.items)
-note over Http
-  **Cơ chế Bounded Concurrency:**
-  asyncio.Semaphore(max_concurrency = 5)
-  Phát N request đồng thời nhưng không vượt quá 5 kết nối
-end note
-par Concurrently for each item in inputs.items (Bounded by Semaphore=5)
+== 7. Bước 6: Popup Master [LOOP: SEMAPHORE=5] ==
+Engine -> Http : Step 6 (Loop over items)
+par Concurrently (Semaphore = 5)
     Http -> Legacy : POST /retrieveItem.lgdn (Item 1)
-    Legacy --> Http : XML Response (FDM Drawing URL, Maker, Spec)
-and
+    Legacy --> Http : XML
+else
     Http -> Legacy : POST /retrieveItem.lgdn (Item 2)
-    Legacy --> Http : XML Response (FDM Drawing URL, Maker, Spec)
+    Legacy --> Http : XML
 end
-Http -> Parser : Parse & Gộp toàn bộ qua asyncio.gather
-Http --> Engine : { metadata: {total_count, loop_count: N}, raw_flattened: [...] }
-Engine -> Ctx : set_step_result("fetch_item_popup_master", SUCCESS, step_output)
+Http -> Parser : Parse & gather
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_item_popup_master", SUCCESS)
 
-== 8. Bước 7: Lấy Thông Số Kỹ Thuật & MTBF [LOOP MODE: CONCURRENCY SEMAPHORE(5)] ==
-Engine -> Http : execute(step: "fetch_item_tech_details", loop_over: inputs.items)
-par Concurrently for each item in inputs.items (Bounded by Semaphore=5)
+== 8. Bước 7: Tech Specs & MTBF [LOOP: SEMAPHORE=5] ==
+Engine -> Http : Step 7 (Loop over items)
+par Concurrently (Semaphore = 5)
     Http -> Legacy : POST /retrieveItemInfoDetail.lgdn (Item 1)
-    Legacy --> Http : XML Response (MTBF days, Failure rates, Material)
-and
+    Legacy --> Http : XML
+else
     Http -> Legacy : POST /retrieveItemInfoDetail.lgdn (Item 2)
-    Legacy --> Http : XML Response (MTBF days, Failure rates, Material)
+    Legacy --> Http : XML
 end
-Http -> Parser : Parse & Gộp kết quả
-Http --> Engine : { metadata, raw_flattened: [...] }
-Engine -> Ctx : set_step_result("fetch_item_tech_details", SUCCESS, step_output)
+Http -> Parser : Parse & gather
+Parser --> Engine : raw_flattened
+Engine -> Ctx : set_step("fetch_item_tech_details", SUCCESS)
 
-== 9. Bước 8: Tổng Hợp & Data Fusion 360° (synthesize_and_fuse_360) ==
-Engine -> Jsonata : transform(expression, Ctx)
-Jsonata -> Ctx : Đọc dữ liệu từ cả 6 bước trước (raw_flattened)
-Jsonata -> Jsonata : Liên kết theo item_code ($item_code := item)\nTổng hợp 6 trụ cột:\n1. item_identification\n2. organization_and_responsibility\n3. stock_and_inventory_balances\n4. procurement_and_commercials\n5. lead_time_and_equipment_reliability\n6. optimization_matrix
-Jsonata --> Engine : 360° Fused Items Array
-Engine -> Ctx : set_step_result("synthesize_and_fuse_360", SUCCESS, fused_items)
+== 9. Bước 8: Data Fusion 360° ==
+Engine -> Jsonata : Step 8 (Synthesize 360)
+Jsonata -> Ctx : Read 6 Datasets
+Jsonata -> Jsonata : Stitch 6 Domain Pillars\n& Lookup Dictionary Translations
+Jsonata --> Engine : 360° Fused Records
+Engine -> Ctx : set_step("synthesize_and_fuse_360", SUCCESS)
 
-== 10. Trả Về Kết Quả Hoàn Chỉnh ==
-Engine --> API : final_response: {\n  status: "COMPLETED",\n  execution_time_ms: 37,\n  data: [360° Master Records]\n}
-API --> Client : HTTP 200 OK (JSON Payload)
+== 10. Trả Kết Quả ==
+Engine --> API : Response JSON (360° Entities)
+API --> Client : 200 OK
 
 @enduml
 ```
@@ -364,13 +340,8 @@ API --> Client : HTTP 200 OK (JSON Payload)
 
 ## 3. Sơ Đồ Cơ Chế Tự Phục Hồi Session (Self-Healing Circuit Breaker)
 
-File nguồn: [`docs/diagrams/03_self_healing_circuit_breaker.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/03_self_healing_circuit_breaker.puml)
-
-Khi phiên đăng nhập bị hủy hoặc hết hạn giữa chừng tại hệ thống Legacy:
-1. Bắt ngoại lệ xác thực (HTTP `401`/`403` hoặc negative `ErrorCode < 0`).
-2. Xóa token cũ trong `MemoryStore`.
-3. Kích hoạt lại sub-workflow `wf_auth_nexacro_global` để đăng nhập lấy session mới.
-4. Tự động thử lại (retry) bước nghiệp vụ vừa lỗi mà không gây gián đoạn cho Client.
+- File nguồn: [`docs/diagrams/03_self_healing_circuit_breaker.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/03_self_healing_circuit_breaker.puml)
+- Ảnh xuất ra: [`docs/diagrams/Self_Healing_Circuit_Breaker.png`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/Self_Healing_Circuit_Breaker.png)
 
 ```plantuml
 @startuml Self_Healing_Circuit_Breaker
@@ -392,50 +363,48 @@ participant "SubworkflowAdapter" as Auth #E9D5FF
 participant "MemoryStore\n(TTLCache)" as Cache #FDE047
 participant "Legacy Nexacro\nPlatform" as Legacy #FEE2E2
 
-== 1. Thực Thi Bước Nghiệp Vụ Với Token Đã Lưu ==
-Engine -> Http : execute(step: "fetch_nexacro_data")\nCookie: "JSESSIONID_EXPIRED_TOKEN"
-Http -> Legacy : POST /RetStockStatusList.lgdn (Payload XML)
+== 1. Thực Thi Nghiệp Vụ ==
+Engine -> Http : fetch_nexacro_data (token cũ)
+Http -> Legacy : POST /RetStockStatusList.lgdn
 
-alt Trường Hợp A: HTTP 401/403 Unauthorized
-    Legacy --> Http : HTTP 401 Unauthorized
+alt HTTP 401/403 Unauthorized
+    Legacy --> Http : 401 Unauthorized
     Http --> Engine : throw HttpAuthRequiredError(401)
-else Trường Hợp B: Nexacro Protocol ErrorCode < 0
-    Legacy --> Http : HTTP 200 OK (<Parameter id="errorCode">-1</Parameter>\n<Parameter id="errorMsg">Session Expired</Parameter>)
-    Http --> Engine : throw NexacroError(error_code=-1, "Session Expired")
+else Nexacro ErrorCode < 0 (Session Expired)
+    Legacy --> Http : 200 OK (errorCode: -1, "Session Expired")
+    Http --> Engine : throw NexacroError(-1)
 end
 
-== 2. Kích Hoạt Self-Healing Circuit Breaker ==
+== 2. Kích Hoạt Self-Healing ==
 note over Engine #FEE2E2
-  <b>PHÁT HIỆN LỖI XÁC THỰC / HẾT HẠN PHIÊN</b>
-  Cơ chế tự phục hồi kích hoạt (Max Retry: 1 lần)
-  Người dùng cuối hoàn toàn không bị gián đoạn!
+  <b>HẾT HẠN PHIÊN (Max retry: 1)</b>
+  Tự động phục hồi trong suốt
 end note
 
 Engine -> Cache : invalidate_token("global")
-note right of Cache #FEF08A : Xóa bỏ Token cũ khỏi TTLCache
 
-== 3. Tự Động Tái Xác Thực (Re-Authentication) ==
-Engine -> Auth : execute(workflow_id: "wf_auth_nexacro_global")
-Auth -> Http : Gửi request login mới
-Http -> Legacy : POST /login XML (Credentials)
-Legacy --> Http : HTTP 200 OK (JSESSIONID mới: "JSESSIONID_FRESH_998")
-Http --> Auth : fresh_token: "JSESSIONID_FRESH_998"
-Auth -> Cache : set_token("global", "JSESSIONID_FRESH_998", ttl=3600)
-Auth --> Engine : { session_token: "JSESSIONID_FRESH_998" }
+== 3. Tự Động Tái Xác Thực ==
+Engine -> Auth : execute(wf_auth_nexacro_global)
+Auth -> Http : POST /login
+Http -> Legacy : POST /login XML
+Legacy --> Http : 200 OK (fresh_token)
+Http --> Auth : fresh_token
+Auth -> Cache : set_token("global", fresh_token, ttl=3600)
+Auth --> Engine : { session_token: fresh_token }
 
-Engine -> Ctx : update globals.auth_token = "JSESSIONID_FRESH_998"
-Engine -> Ctx : update step "get_auth" status = "RETRIED"
+Engine -> Ctx : globals.auth_token = fresh_token
+Engine -> Ctx : step "get_auth".status = "RETRIED"
 
-== 4. Tự Động Thử Lại Bước Nghiệp Vụ Đã Thất Bại (Transparent Retry) ==
-Engine -> Http : execute(step: "fetch_nexacro_data") [RETRY]\nCookie: "JSESSIONID_FRESH_998"
-Http -> Legacy : POST /RetStockStatusList.lgdn (Payload XML)
-Legacy --> Http : HTTP 200 OK (<Parameter id="errorCode">1</Parameter>\n<Dataset id="ds_result">...)
+== 4. Transparent Retry ==
+Engine -> Http : fetch_nexacro_data [RETRY]\n(fresh_token)
+Http -> Legacy : POST /RetStockStatusList.lgdn
+Legacy --> Http : 200 OK (Dataset)
 Http --> Engine : step_output (SUCCESS)
-Engine -> Ctx : set_step_result("fetch_nexacro_data", SUCCESS, step_output)
+Engine -> Ctx : set_step_result(SUCCESS)
 
 note over Engine #DCFCE7
-  <b>TỰ PHỤC HỒI THÀNH CÔNG!</b>
-  Pipeline tiếp tục thực thi các bước tiếp theo (JSONata Enrichment).
+  <b>TỰ PHỤC HỒI THÀNH CÔNG</b>
+  Pipeline tiếp tục không gián đoạn
 end note
 
 @enduml
@@ -443,18 +412,10 @@ end note
 
 ---
 
-## 4. Sơ Đồ So Sánh: Batch Mode (Single HTTP) vs. Loop Mode (Bounded Semaphore Concurrency)
+## 4. Sơ Đồ So Sánh: Batch Mode vs. Loop Mode (Concurrency)
 
-File nguồn: [`docs/diagrams/04_single_vs_loop_concurrency.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/04_single_vs_loop_concurrency.puml)
-
-Bảng so sánh kỹ thuật:
-| Tiêu chí | Batch Mode (Single Request) | Loop Mode (Bounded Semaphore) |
-|---|---|---|
-| **Số lượng HTTP Request** | Đúng 1 request cho toàn bộ N items | N request song song cho N items |
-| **Cơ chế Jinja2** | Template lặp `{% for itm in items %}` trong 1 thẻ `<Rows>` | Template nhận từng `item` riêng lẻ |
-| **Khả năng đồng thời** | Xử lý hàng loạt tại phía server Nexacro | Quản lý bởi `asyncio.Semaphore(max_concurrency = 5)` |
-| **Endpoints áp dụng** | `/retComCodeList`, `/RetStockStatusList`, `/GetOptimizeInfo`, `/TargetStockSearchList` | `/retrieveItem` (Popup Master), `/retrieveItemInfoDetail` (Tech Specs) |
-| **Bảo vệ hệ thống Legacy** | Tối thiểu hóa Network Round-Trip Time | Chống nghẽn kết nối và sập server Nexacro |
+- File nguồn: [`docs/diagrams/04_single_vs_loop_concurrency.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/04_single_vs_loop_concurrency.puml)
+- Ảnh xuất ra: [`docs/diagrams/Single_vs_Loop_Concurrency.png`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/Single_vs_Loop_Concurrency.png)
 
 ```plantuml
 @startuml Single_vs_Loop_Concurrency
@@ -465,78 +426,41 @@ skinparam shadowing false
 skinparam ArrowColor #2563EB
 skinparam ArrowThickness 1.5
 
-title So Sánh Chi Tiết: Batch Mode (Single HTTP) vs. Loop Mode (Bounded Concurrency Semaphore)
+title So Sánh: Batch Mode (Single HTTP) vs. Loop Mode (Semaphore = 5)
 
-|#EFF6FF| Mode 1: Batch Mode (Single HTTP Request) |
-|#FEF3C7| Mode 2: Loop Mode (Bounded Concurrency Pool) |
+|#EFF6FF| Batch Mode (1 HTTP Request) |
+|#FEF3C7| Loop Mode (Concurrent Semaphore = 5) |
 
-|Mode 1: Batch Mode (Single HTTP Request)|
+|Batch Mode (1 HTTP Request)|
 start
-:Nhận danh sách N items từ request inputs;
-:Biên dịch Jinja2 Template thành **1 XML Body duy nhất**;
-note right
-  **Cơ chế gộp Batch trong Jinja2:**
-  <Dataset id="ds_ItemInfo">
-    <Rows>
-    {% for itm in inputs.items %}
-      <Row>
-        <Col id="item">{{ itm.item }}</Col>
-        <Col id="organizationId">{{ inputs.organizationId }}</Col>
-      </Row>
-    {% endfor %}
-    </Rows>
-  </Dataset>
-end note
-
-:Mở 1 connection và phát đi **duy nhất 1 HTTP POST**;
-note left
-  - Giảm thiểu Network RTT (Round Trip Time)
-  - Áp dụng cho:
-    * /RetStockStatusList.lgdn (38 cols)
-    * /TargetStockSearchList.lgdn (93 cols)
-    * /GetOptimizeInfo.lgdn
-    * /retComCodeList.lgdn
-end note
-
-:Legacy EMS xử lý và phản hồi 1 XML Payload chứa N rows;
-:Bộ bóc tách Dataset Flattener duyệt qua <Rows>;
-:Xuất ra mảng kết quả: **raw_flattened** (N phần tử);
+:Nhận N items từ inputs;
+:Render Jinja2 thành **1 XML Body duy nhất**\n(<Dataset><Rows>{% for itm in items %}...);
+:Gửi **1 HTTP POST duy nhất**;
+:Legacy trả về 1 XML chứa N rows;
+:Flattener bóc tách thành **raw_flattened**;
 stop
 
-|Mode 2: Loop Mode (Bounded Concurrency Pool)|
+|Loop Mode (Concurrent Semaphore = 5)|
 start
-:Đánh giá biểu thức **config.loop_over** (ví dụ: inputs.items);
+:Đánh giá **config.loop_over** (N items);
 :Khởi tạo **asyncio.Semaphore(max_concurrency = 5)**;
-note right
-  **Mục đích của Bounded Semaphore:**
-  - Bảo vệ Legacy EMS khỏi bị sập do cạn kiệt connection pool
-  - Giới hạn tối đa 5 socket đồng thời
-  - Tự động xếp hàng (queue) các item vượt quá quota 5
-  - Áp dụng khi Legacy API chỉ nhận 1 item / 1 request:
-    * /retrieveItem.lgdn (Popup Master & FDM Drawing)
-    * /retrieveItemInfoDetail.lgdn (Tech Specs & MTBF)
-end note
 
 fork
-  :Worker 1: Acquire Semaphore -> Render XML -> POST Item 1;
+  :Worker 1: Acquire -> POST Item 1;
 fork again
-  :Worker 2: Acquire Semaphore -> Render XML -> POST Item 2;
+  :Worker 2: Acquire -> POST Item 2;
 fork again
-  :Worker 3: Acquire Semaphore -> Render XML -> POST Item 3;
+  :Worker 3: Acquire -> POST Item 3;
 fork again
-  :Worker 4: Acquire Semaphore -> Render XML -> POST Item 4;
+  :Worker 4: Acquire -> POST Item 4;
 fork again
-  :Worker 5: Acquire Semaphore -> Render XML -> POST Item 5;
+  :Worker 5: Acquire -> POST Item 5;
 fork again
-  :... (Item 6..N nằm trong hàng đợi, worker giải phóng semaphore thì item kế tiếp được cấp phát);
+  :... (Item 6..N xếp hàng đợi slot trống);
 end fork
 
-:Chờ toàn bộ tác vụ hoàn tất qua **asyncio.gather(*tasks)**;
-:Tổng hợp dữ liệu thành 1 mảng đồng nhất: **raw_flattened**;
-:Ghi nhận metadata thống kê:
-- **loop_count**: N vòng lặp
-- **total_count**: Tổng số rows thu được
-- **execution_time_ms**: Thời gian thực thi song song;
+:Thu thập kết quả qua **asyncio.gather()**;
+:Gộp thành mảng **raw_flattened** (N items);
 stop
 
 @enduml
@@ -544,9 +468,10 @@ stop
 
 ---
 
-## 5. Sơ Đồ Vòng Đời & Sự Biến Đổi Dữ Liệu DataContext
+## 5. Sơ Đồ Tiến Trình Trạng Thái DataContext
 
-File nguồn: [`docs/diagrams/05_data_context_state_evolution.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/05_data_context_state_evolution.puml)
+- File nguồn: [`docs/diagrams/05_data_context_state_evolution.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/05_data_context_state_evolution.puml)
+- Ảnh xuất ra: [`docs/diagrams/DataContext_State_Evolution.png`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/DataContext_State_Evolution.png)
 
 ```plantuml
 @startuml DataContext_State_Evolution
@@ -560,68 +485,53 @@ skinparam state {
     ArrowColor #2563EB
 }
 
-title Sự Tiến Triển Dữ Liệu Của DataContext Qua Từng Bước Pipeline
+title Tiến Trình Trạng Thái DataContext
 
-[*] --> InitialState : Khởi tạo DataContext
+[*] --> InitialState : new DataContext()
 
-state "1. Trạng Thái Khởi Tạo (Init)" as InitialState #EFF6FF {
-    InitialState : execution_id = "exec_20261021_9f8a2b1c"
-    InitialState : workflow_id = "wf_comprehensive_ems_fusion"
-    InitialState : inputs = { organizationId: "28753", items: [...] }
+state "1. Khởi Tạo (Init)" as InitialState #EFF6FF {
+    InitialState : execution_id = "exec_..."
+    InitialState : workflow_id = "wf_..."
+    InitialState : inputs = { keyword: "PUMP-2026" }
     InitialState : globals.dict = { CATEGORY: {...}, STATUS: {...} }
-    InitialState : globals.auth_token = None (hoặc lấy từ TTLCache)
+    InitialState : globals.auth_token = None
     InitialState : steps = {}
 }
 
-InitialState --> AfterAuth : Hoàn thành Step 1: auth_session
+InitialState --> AfterAuth : Step 1: get_auth
 
-state "2. Sau Bước Xác Thực (auth_session)" as AfterAuth #FEF3C7 {
-    AfterAuth : globals.auth_token = "JSESSIONID_998127381"
-    AfterAuth : steps.auth_session = { status: "SUCCESS", output: { session_token: "..." } }
+state "2. Sau Xác Thực (Auth)" as AfterAuth #FEF3C7 {
+    AfterAuth : globals.auth_token = "JSESSIONID_..."
+    AfterAuth : steps.get_auth = { status: "SUCCESS", cached: true }
 }
 
-AfterAuth --> AfterBatch : Hoàn thành Steps 2, 3, 4, 5 (Batch Endpoints)
+AfterAuth --> AfterFetch : Step 2: fetch_data
 
-state "3. Sau Các Bước Batch (Dictionaries, Stock, Optimize, Target)" as AfterBatch #EDE9FE {
-    AfterBatch : steps.fetch_common_dictionaries.output.raw_flattened
-    AfterBatch : steps.fetch_stock_status.output.raw_flattened (38 cols)
-    AfterBatch : steps.fetch_optimize_flag.output.raw_flattened
-    AfterBatch : steps.fetch_target_stock_metrics.output.raw_flattened (93 cols)
+state "3. Sau Lấy Dữ Liệu (Fetch)" as AfterFetch #EDE9FE {
+    AfterFetch : steps.fetch_nexacro_data = {
+    AfterFetch :   status: "SUCCESS",
+    AfterFetch :   raw_flattened: [ { ITEM_CD: "...", ... } ]
+    AfterFetch : }
 }
 
-AfterBatch --> AfterLoop : Hoàn thành Steps 6, 7 (Loop Concurrency Semaphore=5)
+AfterFetch --> AfterTransform : Step 3: JSONata Fusion
 
-state "4. Sau Các Bước Loop (Item Popup Master & Tech Specs Detail)" as AfterLoop #FED7AA {
-    AfterLoop : steps.fetch_item_popup_master.output.raw_flattened (FDM Drawing URLs, Maker Parts)
-    AfterLoop : steps.fetch_item_tech_details.output.raw_flattened (MTBF Days, Specs)
+state "4. Sau Hợp Nhất (Fused)" as AfterTransform #DCFCE7 {
+    AfterTransform : steps.transform_and_enrich = {
+    AfterTransform :   status: "SUCCESS",
+    AfterTransform :   output: [ { item_code: "...", health_rating: "A", ... } ]
+    AfterTransform : }
 }
 
-AfterLoop --> AfterFusion : Hoàn thành Step 8 (JSONata 360° Data Fusion)
+AfterTransform --> FinalResponse : Response Template
 
-state "5. Sau Bước Hợp Nhất 360° (synthesize_and_fuse_360)" as AfterFusion #DCFCE7 {
-    AfterFusion : steps.synthesize_and_fuse_360.output = [
-    AfterFusion :   {
-    AfterFusion :     item_identification: { ... },
-    AfterFusion :     organization_and_responsibility: { ... },
-    AfterFusion :     stock_and_inventory_balances: { ... },
-    AfterFusion :     procurement_and_commercials: { ... },
-    AfterFusion :     lead_time_and_equipment_reliability: { ... },
-    AfterFusion :     optimization_matrix: { ... }
-    AfterFusion :   }
-    AfterFusion : ]
-}
-
-AfterFusion --> FinalResponse : Đóng gói theo response block
-
-state "6. Phản Hồi Cuối Cùng (API Response)" as FinalResponse #F1F5F9 {
+state "5. Kết Quả Cuối (Response)" as FinalResponse #F1F5F9 {
     FinalResponse : status: "COMPLETED"
-    FinalResponse : workflow_id: "wf_comprehensive_ems_fusion"
-    FinalResponse : execution_time_ms: 37
-    FinalResponse : metadata: { total_count: 2, loop_count: 2 }
-    FinalResponse : data: [ ... 360° Master Records ... ]
+    FinalResponse : execution_time_ms: 235
+    FinalResponse : data: [ ... 360° Records ... ]
 }
 
-FinalResponse --> [*] : Trả về HTTP 200 cho Client
+FinalResponse --> [*] : Trả HTTP 200 Client
 
 @enduml
 ```
@@ -630,9 +540,8 @@ FinalResponse --> [*] : Trả về HTTP 200 cho Client
 
 ## 6. Sơ Đồ Kiến Trúc Data Fusion 360° (Comprehensive Entity Stitching)
 
-File nguồn: [`docs/diagrams/06_comprehensive_data_fusion_360.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/06_comprehensive_data_fusion_360.puml)
-
-Mô tả cách thức 6 dataset phản hồi từ 6 API sản xuất của Nexacro được JSONata hợp nhất in-memory theo khóa `item_code` để tạo ra thực thể **Spare Part 360 Master Record** chuẩn hóa gồm 6 trụ cột dữ liệu:
+- File nguồn: [`docs/diagrams/06_comprehensive_data_fusion_360.puml`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/06_comprehensive_data_fusion_360.puml)
+- Ảnh xuất ra: [`docs/diagrams/Comprehensive_Data_Fusion_360.png`](file:///home/longp/projects/company/omni-ems/workflow-engine/docs/diagrams/Comprehensive_Data_Fusion_360.png)
 
 ```plantuml
 @startuml Comprehensive_Data_Fusion_360
@@ -644,109 +553,40 @@ skinparam componentStyle uml2
 skinparam ArrowColor #2563EB
 skinparam ArrowThickness 1.5
 
-title Kiến Trúc Data Fusion 360°: Hợp Nhất 6 Nguồn Dữ Liệu Nexacro Thành 1 Thực Thể Duy Nhất
+title Kiến Trúc Data Fusion 360° (Hợp Nhất 6 Nguồn Dữ Liệu Nexacro)
 
-package "6 Nguồn Dữ Liệu Nexacro (Data Sources từ 6 APIs)" #EFF6FF {
+package "6 Nguồn Dữ Liệu Nexacro" #EFF6FF {
 
-    component "1. fetch_common_dictionaries\n(/retComCodeList.lgdn)\n[BATCH MODE]" as S1 #DBEAFE {
-        portout "CATEGORY Codes" as P_Cat
-        portout "STATUS Codes" as P_Stat
-        portout "PO_TYPE Codes" as P_PoType
-    }
-
-    component "2. fetch_stock_status\n(/RetStockStatusList.lgdn - 38 cols)\n[BATCH MODE]" as S2 #DBEAFE {
-        portout "Onhand Qty" as P_OH
-        portout "Available Qty" as P_Avail
-        portout "Allocated Qty" as P_Alloc
-        portout "Stock Dept / Planner" as P_Dept
-    }
-
-    component "3. fetch_optimize_flag\n(/GetOptimizeInfo.lgdn)\n[BATCH MODE]" as S3 #DBEAFE {
-        portout "Optimize Flag (Y/N)" as P_OptFlag
-        portout "Optimized Apply Date" as P_OptDate
-    }
-
-    component "4. fetch_target_stock_metrics\n(/TargetStockSearchList.lgdn - 93 cols)\n[BATCH MODE]" as S4 #DBEAFE {
-        portout "Target Stock Qty" as P_Target
-        portout "Safety Stock Qty" as P_Safety
-        portout "System Logic BM Qty" as P_Logic
-        portout "Due Days (Urgency)" as P_Due
-        portout "PO Unit Price ($)" as P_Price
-        portout "Supplier Name" as P_Supplier
-    }
-
-    component "5. fetch_item_popup_master\n(/retrieveItem.lgdn)\n[LOOP MODE: SEMAPHORE=5]" as S5 #FED7AA {
-        portout "FDM CAD Drawing URL" as P_Drawing
-        portout "Maker Part Number" as P_MakerPart
-        portout "Inventory Item ID" as P_InvId
-        portout "Unification Flag" as P_Unif
-    }
-
-    component "6. fetch_item_tech_details\n(/retrieveItemInfoDetail.lgdn)\n[LOOP MODE: SEMAPHORE=5]" as S6 #FED7AA {
-        portout "MTBF Days (Reliability)" as P_MTBF
-        portout "Detailed Specs" as P_Spec
-        portout "Maker / Model" as P_Model
-        portout "UOM (Unit of Measure)" as P_UOM
-    }
+    component "1. Dictionaries\n(/retComCodeList)" as S1 #DBEAFE
+    component "2. Stock Balances\n(/RetStockStatusList)" as S2 #DBEAFE
+    component "3. Optimize Info\n(/GetOptimizeInfo)" as S3 #DBEAFE
+    component "4. Target Stock 93\n(/TargetStockSearchList)" as S4 #DBEAFE
+    component "5. Popup Master\n(/retrieveItem)" as S5 #FED7AA
+    component "6. Tech Specs\n(/retrieveItemInfoDetail)" as S6 #FED7AA
 }
 
-package "Bộ Hợp Nhất Dữ Liệu In-Memory (JSONata Fusion Engine)" #FEF3C7 {
-    component "JSONata Expression Synthesizer\n(step: synthesize_and_fuse_360)" as FusionEngine #FDE68A
-    note right of FusionEngine
-      **Nguyên lý liên kết (Entity Stitching):**
-      Duyệt mảng gốc từ Stock Status:
-      steps.fetch_stock_status.output.raw_flattened.(
-        $code := item;
-        $ts := $steps.fetch_target_stock_metrics.output.raw_flattened[item = $code][0];
-        $master := $steps.fetch_item_popup_master.output.raw_flattened[item = $code][0];
-        $tech := $steps.fetch_item_tech_details.output.raw_flattened[item = $code][0];
-        $opt := $steps.fetch_optimize_flag.output.raw_flattened[item = $code][0];
-        ...
-      )
-    end note
+package "Core Fusion Engine" #FEF3C7 {
+    component "JSONata Synthesizer\n(DataContext Bus)" as FusionEngine #FDE68A
 }
 
-package "Kết Quả: Spare Part 360° Master Record (6 Trụ Cột Hoàn Chỉnh)" #ECFDF5 {
-
-    component "Trụ Cột 1: item_identification\n(14 thuộc tính: Code, InvId, Spec, Maker, Model, CAD Drawing, UOM)" as Pillar1 #D1FAE5
-    component "Trụ Cột 2: organization_and_responsibility\n(11 thuộc tính: Org, Dept, Planner, Manager, Buyer)" as Pillar2 #D1FAE5
-    component "Trụ Cột 3: stock_and_inventory_balances\n(18 thuộc tính: Onhand, Avail, Target, Safety, PO Waiting, Overstock)" as Pillar3 #D1FAE5
-    component "Trụ Cột 4: procurement_and_commercials\n(13 thuộc tính: PO Price, New/Reb/Unl Price, Supplier, Buy Type)" as Pillar4 #D1FAE5
-    component "Trụ Cột 5: lead_time_and_equipment_reliability\n(14 thuộc tính: Lead Time, Due Days, MTBF, 2Y/1Y/3M Avg Usage)" as Pillar5 #D1FAE5
-    component "Trụ Cột 6: optimization_matrix\n(10 thuộc tính: Health Rating, Action Recommendation, Optimize Flag)" as Pillar6 #D1FAE5
+package "Spare Part 360° Record (6 Trụ Cột)" #ECFDF5 {
+    component "1. Identification\n(Code, InvId, CAD URL)" as Pillar1 #D1FAE5
+    component "2. Organization\n(Org, Dept, Planner, Buyer)" as Pillar2 #D1FAE5
+    component "3. Stock Balances\n(Onhand, Avail, Target, Safety)" as Pillar3 #D1FAE5
+    component "4. Procurement\n(PO Price, Supplier, PO Type)" as Pillar4 #D1FAE5
+    component "5. Reliability & LT\n(Lead Time, Due, MTBF)" as Pillar5 #D1FAE5
+    component "6. Optimization Matrix\n(Health Rating, Actions)" as Pillar6 #D1FAE5
 }
 
-' Connections into Fusion Engine
-P_Cat --> FusionEngine
-P_Stat --> FusionEngine
-P_PoType --> FusionEngine
+' Inputs into Fusion
+S1 --> FusionEngine : Codes & Translations
+S2 --> FusionEngine : 38 Stock Cols
+S3 --> FusionEngine : Optimize Flags
+S4 --> FusionEngine : 93 Metrics
+S5 --> FusionEngine : Master & Drawings
+S6 --> FusionEngine : MTBF & Specs
 
-P_OH --> FusionEngine
-P_Avail --> FusionEngine
-P_Alloc --> FusionEngine
-P_Dept --> FusionEngine
-
-P_OptFlag --> FusionEngine
-P_OptDate --> FusionEngine
-
-P_Target --> FusionEngine
-P_Safety --> FusionEngine
-P_Logic --> FusionEngine
-P_Due --> FusionEngine
-P_Price --> FusionEngine
-P_Supplier --> FusionEngine
-
-P_Drawing --> FusionEngine
-P_MakerPart --> FusionEngine
-P_InvId --> FusionEngine
-P_Unif --> FusionEngine
-
-P_MTBF --> FusionEngine
-P_Spec --> FusionEngine
-P_Model --> FusionEngine
-P_UOM --> FusionEngine
-
-' Output Pillars
+' Outputs to Pillars
 FusionEngine --> Pillar1
 FusionEngine --> Pillar2
 FusionEngine --> Pillar3

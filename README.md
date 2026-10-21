@@ -1,96 +1,130 @@
-# Omni-EMS: LG Display EMS Core Data APIs & Mock Server
+# Omni-EMS: LG Display EMS Core Data APIs, Mock Server & 360° Workflow Engine
 
-Hệ thống đặc tả API, TypeScript SDK và Mock Server mô phỏng các API nghiệp vụ lấy dữ liệu cốt lõi của nền tảng LG Display Equipment Management System (EMS - Nexacro Platform), kết nối trực tiếp với Cơ sở dữ liệu SQLite quan hệ.
-
----
-
-## 📌 Tính Năng Nổi Bật
-
-1. **Chuẩn hóa API (Clean Architecture)**:
-   - Tập trung vào **8 API nghiệp vụ lấy dữ liệu cốt lõi** (Spare Parts, Estimate RFQ, Target Stock Optimization, Popups, Common Codes, Factories).
-   - Đã loại bỏ các API dư thừa (Log, Menu, Grid format, Auth checks).
-2. **TypeScript SDK & OpenAPI 3.0**:
-   - Bộ thư viện `apis/` bao gồm đầy đủ Types, Client gọi API chuẩn XML Nexacro và tài liệu OpenAPI 3.0.
-3. **Mock Server Đa Nền Tảng (Node.js & Python)**:
-   - **Node.js Server (`server.js`)**: Dựa trên Express và Node.js native `DatabaseSync` (SQLite).
-   - **Python Simulator (`simulator.py`)**: Zero-dependency, chỉ sử dụng Python 3 standard library.
-4. **Cơ sở dữ liệu SQLite quan hệ tập trung (Không mock tĩnh từng API)**:
-   - Lưu trữ dữ liệu thực tế tại `mock-server/db/schema.sql` và `mock-server/db/seed.sql`.
-   - Server truy vấn trực tiếp bằng các câu lệnh SQL thay vì mock rời rạc.
-5. **Kiểm thử tự động 100%**:
-   - Suite kiểm thử tự động `test-simulation.js` kiểm tra độ chính xác của toàn bộ 8 endpoint.
+Hệ thống tích hợp toàn diện gồm:
+1. **Mock Server Nexacro Platform**: Mô phỏng các API nghiệp vụ cốt lõi của nền tảng LG Display Equipment Management System (EMS), kết nối trực tiếp với Cơ sở dữ liệu SQLite quan hệ.
+2. **FastAPI Workflow Engine & Data Fusion Layer (Port 8000)**: Bộ điều phối luồng xử lý dữ liệu động, cơ chế tự phục hồi (**Self-Healing Circuit Breaker**), xử lý song song phân biệt **Batch Mode (Single HTTP)** vs **Loop Mode (Bounded Concurrency Semaphore)**, và hợp nhất dữ liệu 360° (**JSONata Fusion**).
+3. **Demo UI Pipeline Trực Quan**: Giao diện người dùng theo dõi trực tiếp luồng thực thi (Live Pipeline), biểu đồ radar sức khỏe linh kiện và bảng hợp nhất 6 trụ cột dữ liệu.
 
 ---
 
-## 📁 Cấu Trúc Dự Án
+## ⚡ Hướng Dẫn Cài Đặt & Chạy Nhanh (1-Click Scripts)
 
+Dự án đã trang bị sẵn bộ script tự động hóa toàn bộ việc cài đặt thư viện (npm & Python venv) và khởi động cả 2 server (`:9000` & `:8000`) cho cả **Windows** và **WSL / Linux**:
+
+### 🐧 Dành Cho WSL / Linux
+
+Chỉ cần mở terminal tại thư mục gốc và chạy:
+
+```bash
+# Cấp quyền thực thi nếu cần
+chmod +x setup.sh start.sh
+
+# 1. Cài đặt toàn bộ dependencies (Node.js & Python .venv)
+./setup.sh
+
+# 2. Khởi chạy toàn bộ hệ thống (Mock Server + FastAPI Engine)
+./start.sh
 ```
+
+*(Nhấn `Ctrl+C` tại terminal để dừng toàn bộ hệ thống một cách an toàn).*
+
+---
+
+### 🪟 Dành Cho Windows (CMD / PowerShell / File Explorer)
+
+#### Cách 1: Chạy trực tiếp bằng File Explorer
+- Nhấp đúp chuột vào file **`setup_windows.bat`** để cài đặt tự động.
+- Nhấp đúp chuột vào file **`start_windows.bat`** để khởi chạy cả 2 server và tự động mở trình duyệt!
+
+#### Cách 2: Chạy qua PowerShell
+```powershell
+# Cài đặt
+.\scripts\setup_windows.ps1
+
+# Khởi chạy
+.\scripts\start_windows.ps1
+```
+
+---
+
+## 🌐 Các Cổng Dịch Vụ Sau Khi Chạy
+
+| Dịch vụ | Địa chỉ URL | Mô tả |
+|---|---|---|
+| **🖥️ Demo UI EMS 360°** | [http://localhost:8000/](http://localhost:8000/) | Giao diện Live Pipeline, Radar chart & Bảng 360° |
+| **📖 Swagger API Docs** | [http://localhost:8000/docs](http://localhost:8000/docs) | Tài liệu OpenAPI tương tác cho Workflow Engine |
+| **🏢 Legacy Mock Server** | [http://localhost:9000/health](http://localhost:9000/health) | Máy chủ mô phỏng Nexacro XML & SQLite DB |
+| **📊 API Dịch Thuật DB** | [http://localhost:9000/api/translations](http://localhost:9000/api/translations) | Bảng dịch đa ngữ (Hàn -> Anh) từ SQLite |
+
+---
+
+## 📁 Cấu Trúc Thư Mục Dự Án
+
+```text
 omni-ems/
-├── apis/                   # Module TypeScript SDK & OpenAPI
-│   ├── types.ts            # Type definitions cho 8 thực thể dữ liệu
-│   ├── client.ts           # NexacroClient & parser/builder XML
-│   ├── openapi.json        # Đặc tả OpenAPI 3.0
-│   ├── index.ts            # Barrel export
-│   └── package.json
-├── mock-server/            # Máy chủ mô phỏng API Nexacro
+├── start.sh                # Script 1-click khởi chạy cho WSL / Linux
+├── setup.sh                # Script 1-click cài đặt cho WSL / Linux
+├── start_windows.bat       # Script 1-click khởi chạy cho Windows
+├── setup_windows.bat       # Script 1-click cài đặt cho Windows
+├── scripts/                # Thư mục chứa script chi tiết (PowerShell / Bash)
+│   ├── start_wsl.sh
+│   ├── setup_wsl.sh
+│   ├── start_windows.ps1
+│   └── setup_windows.ps1
+├── workflow-engine/        # FastAPI Workflow Engine & Data Fusion Layer
+│   ├── app/
+│   │   ├── core/           # WorkflowEngine, DataContext (State Bus), MemoryStore
+│   │   ├── adapters/       # HttpAdapter, JsonataAdapter, SubworkflowAdapter, NexacroParser
+│   │   ├── workflows/      # Khai báo workflow YAML (wf_comprehensive_ems_fusion.yaml)
+│   │   ├── templates/      # Jinja2 XML templates cho Nexacro
+│   │   └── static/         # Demo UI (HTML, Tailwind/Vanilla CSS, Live Pipeline JS)
+│   ├── docs/
+│   │   ├── ARCHITECTURE_DIAGRAMS.md # Tài liệu tổng hợp 7 sơ đồ PlantUML & ảnh PNG
+│   │   └── diagrams/       # Mã nguồn *.puml và 7 file ảnh *.png đã xuất
+│   ├── tests/              # Test suite (18/18 pytest passed)
+│   └── requirements.txt
+├── mock-server/            # Máy chủ mô phỏng API Nexacro Platform
 │   ├── db/
-│   │   ├── schema.sql      # 8 bảng SQLite quan hệ cốt lõi
-│   │   ├── seed.sql        # Dữ liệu mẫu chuẩn trích xuất từ EMS
-│   │   └── database.js     # Kết nối và tự động khởi tạo database
-│   ├── utils/
-│   │   ├── nexacro-parser.js # Parse XML Nexacro Request
-│   │   └── nexacro-builder.js# Build XML Nexacro Response
-│   ├── server.js           # Express mock server (truy vấn SQL)
-│   ├── simulator.py        # Python 3 standalone simulator
-│   ├── test-simulation.js  # Automated test suite (8/8 pass)
+│   │   ├── schema.sql      # Schema SQLite (Bảng items, target_stock, translations...)
+│   │   ├── seed.sql        # Dữ liệu chuẩn trích xuất từ EMS & từ điển dịch thuật
+│   │   └── database.js     # Trình quản lý kết nối SQLite
+│   ├── server.js           # Express mock server phục vụ 8 API Nexacro & SQLite
 │   └── package.json
-├── .gitignore
 └── README.md
 ```
 
 ---
 
-## 🚀 Danh Sách 8 API Nghiệp Vụ Cốt Lõi
+## 📊 Tài Liệu Sơ Đồ Thiết Kế (PlantUML Diagrams)
 
-| STT | Method | Endpoint Nexacro | Nghiệp vụ | Bảng SQLite |
-|:---:|:---:|---|---|---|
-| 1 | POST | `/emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn` | Tra cứu tồn kho linh kiện & giá nhập | `items`, `inventory` |
-| 2 | POST | `/emsspareparts/sp101/sp120Nav/RetEstimateRequestList.lgdn` | Yêu cầu báo giá linh kiện (RFQ) | `estimate_requests` |
-| 3 | POST | `/emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn` | Chi tiết linh kiện & chỉ số định mức | `items`, `inventory`, `item_usage_summary` |
-| 4 | POST | `/emsspareparts/sp302/sp335Nav/TargetStockSearchList.lgdn` | Tối ưu tồn kho an toàn (Target Stock 93 fields) | `target_stock` |
-| 5 | POST | `/emscom/popupNav/retrieveItem.lgdn` | Popup tìm kiếm Item Master | `items` |
-| 6 | POST | `/emscom/popupNav/retrieveItemPoStatusList.lgdn` | Popup theo dõi lịch sử đơn hàng PO | `item_po_history` |
-| 7 | POST | `/emscom/codeNav/retComCodeList.lgdn` | Từ điển mã dùng chung (Common Codes) | `common_codes` |
-| 8 | POST | `/emswonew/wn90/wn900Nav/retFactoryList.lgdn` | Danh sách nhà máy sản xuất (Plant List) | `factories` |
+Toàn bộ sơ đồ thiết kế chi tiết và ảnh PNG chất lượng cao được lưu tại:
+- **Tài liệu chi tiết:** [`workflow-engine/docs/ARCHITECTURE_DIAGRAMS.md`](workflow-engine/docs/ARCHITECTURE_DIAGRAMS.md)
+- **Danh sách 7 sơ đồ đã xuất ảnh:**
+  1. `General_Workflow_Operating_Flow.png`: Vòng đời vận hành tổng quát của Workflow Engine.
+  2. `Architecture_Component_Diagram.png`: Kiến trúc phân tầng và các Adapter.
+  3. `Workflow_Execution_Sequence.png`: Quy trình tuần tự 8 bước thực thi pipeline.
+  4. `Self_Healing_Circuit_Breaker.png`: Cơ chế tự phục hồi Session khi hết hạn phiên.
+  5. `Single_vs_Loop_Concurrency.png`: So sánh Batch Mode vs Loop Concurrency (Semaphore).
+  6. `DataContext_State_Evolution.png`: Sự tiến triển dữ liệu qua State Bus.
+  7. `Comprehensive_Data_Fusion_360.png`: Hợp nhất 6 nguồn dữ liệu thành 6 trụ cột 360°.
 
 ---
 
-## 🛠️ Hướng Dẫn Cài Đặt & Chạy
+## 🧪 Kiểm Thử Tự Động (Automated Testing)
 
-### 1. Khởi chạy Mock Server
-
-#### Lựa chọn A: Sử dụng Node.js
-```bash
-cd mock-server
-npm install
-npm start
-```
-Server chạy tại: `http://localhost:9000` (Database tự động khởi tạo và nạp seed data nếu chưa có).
-
-#### Lựa chọn B: Sử dụng Python 3 (Không cần cài thư viện ngoài)
-```bash
-cd mock-server
-python3 simulator.py
-```
-Server chạy tại: `http://localhost:9000`.
-
-### 2. Chạy Kiểm Thử Tự Động (Automated Verification)
-Mở một terminal mới và chạy:
+### 1. Kiểm thử Mock Server (Node.js)
 ```bash
 cd mock-server
 node test-simulation.js
+# Kết quả: 8/8 tests passed
 ```
-Kết quả mong đợi: **8/8 tests passed (100%)**.
+
+### 2. Kiểm thử Workflow Engine (Pytest)
+```bash
+cd workflow-engine
+pytest tests/ -v
+# Kết quả: 18/18 tests passed
+```
 
 ---
 

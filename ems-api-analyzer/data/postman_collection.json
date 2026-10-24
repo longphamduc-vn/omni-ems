@@ -1,0 +1,1513 @@
+{
+  "info": {
+    "name": "EMS API Endpoints Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://ems.lgdisplay.com:9000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "EMSCOM",
+      "item": [
+        {
+          "name": "[QUERY] retrieveGridFormat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {},\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"programId\",\n        \"screenGridName\",\n        \"userId\",\n        \"itemSetupValue\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"CM313\",\n          \"emNoPop.CM313.grd_list\",\n          \"658359\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/gridFormatNav/retrieveGridFormat.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "gridFormatNav",
+                "retrieveGridFormat.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/gridFormatNav/retrieveGridFormat.lgdn\nCategory: QUERY\nTotal calls: 22"
+          }
+        },
+        {
+          "name": "[LOGGING] insertStartLog",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"userId\": \"658359\",\n    \"programId\": \"Organization\",\n    \"objectName\": \"Organization\",\n    \"type\": \"S\",\n    \"organizationId\": \"28753\"\n  },\n  \"datasets\": {}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/connLogNav/insertStartLog.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "connLogNav",
+                "insertStartLog.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/connLogNav/insertStartLog.lgdn\nCategory: LOGGING\nTotal calls: 21"
+          }
+        },
+        {
+          "name": "[QUERY] retComCodeList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"statementName\": \"retrieveOrderType:retrieveLecShareGroup:retrieveReasonPartUse:\",\n    \"comboCnt\": \"3\",\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_input0\": {\n      \"cols\": [\n        \"requestMasterId\",\n        \"moduleCode\",\n        \"requestCode\",\n        \"requestUrlAddr\",\n        \"approvalUrlAddr\",\n        \"buttonRender\",\n        \"attribute1\",\n        \"attribute2\",\n        \"attribute3\",\n        \"viewType\",\n        \"rejectRequestId\",\n        \"noSettle\",\n        \"rejectButtonRender\",\n        \"requestCancelButtonRender\",\n        \"masterIdCreateFlag\",\n        \"attachmentRender\",\n        \"reqCallFlag\",\n        \"actor\",\n        \"statusCode\",\n        \"organizationId\",\n        \"requestorId\",\n        \"systemCode\",\n        \"requestorName\",\n        \"requestorDept\",\n        \"departmentCode\",\n        \"requestCreateDesc\",\n        \"requestStatusDesc\",\n        \"requestCreationCode\",\n        \"sysCode\",\n        \"userId\",\n        \"categoryGroupId\",\n        \"autoSetValve\",\n        \"messageContents\",\n        \"smsSendFlag\",\n        \"smsOrgId\",\n        \"smsFactoryCode\",\n        \"smsUtType\",\n        \"smsUserId\",\n        \"orgDefaultLanguage\",\n        \"requestNo\",\n        \"command\",\n        \"categoryGroupIdList\",\n        \"statusFlag\",\n        \"departmentId\",\n        \"inventoryItemId\",\n        \"interlockFlag\",\n        \"transTypeCode\",\n        \"unitPriceOrgId\",\n        \"invTrRequestMasterId\",\n        \"invTrOrganizationId\",\n        \"formId\",\n        \"today\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"VI\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"2090634\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"SP131\",\n          \"261024\"\n        ]\n      ]\n    },\n    \"ds_input1\": {\n      \"cols\": [\n        \"requestMasterId\",\n        \"moduleCode\",\n        \"requestCode\",\n        \"requestUrlAddr\",\n        \"approvalUrlAddr\",\n        \"buttonRender\",\n        \"attribute1\",\n        \"attribute2\",\n        \"attribute3\",\n        \"viewType\",\n        \"rejectRequestId\",\n        \"noSettle\",\n        \"rejectButtonRender\",\n        \"requestCancelButtonRender\",\n        \"masterIdCreateFlag\",\n        \"attachmentRender\",\n        \"reqCallFlag\",\n        \"actor\",\n        \"statusCode\",\n        \"organizationId\",\n        \"requestorId\",\n        \"systemCode\",\n        \"requestorName\",\n        \"requestorDept\",\n        \"departmentCode\",\n        \"requestCreateDesc\",\n        \"requestStatusDesc\",\n        \"requestCreationCode\",\n        \"sysCode\",\n        \"userId\",\n        \"categoryGroupId\",\n        \"autoSetValve\",\n        \"messageContents\",\n        \"smsSendFlag\",\n        \"smsOrgId\",\n        \"smsFactoryCode\",\n        \"smsUtType\",\n        \"smsUserId\",\n        \"orgDefaultLanguage\",\n        \"requestNo\",\n        \"command\",\n        \"categoryGroupIdList\",\n        \"statusFlag\",\n        \"departmentId\",\n        \"inventoryItemId\",\n        \"interlockFlag\",\n        \"transTypeCode\",\n        \"unitPriceOrgId\",\n        \"invTrRequestMasterId\",\n        \"invTrOrganizationId\",\n        \"formId\",\n        \"today\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"VI\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"2090634\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"SP131\",\n          \"261024\"\n        ]\n      ]\n    },\n    \"ds_input2\": {\n      \"cols\": [\n        \"requestMasterId\",\n        \"moduleCode\",\n        \"requestCode\",\n        \"requestUrlAddr\",\n        \"approvalUrlAddr\",\n        \"buttonRender\",\n        \"attribute1\",\n        \"attribute2\",\n        \"attribute3\",\n        \"viewType\",\n        \"rejectRequestId\",\n        \"noSettle\",\n        \"rejectButtonRender\",\n        \"requestCancelButtonRender\",\n        \"masterIdCreateFlag\",\n        \"attachmentRender\",\n        \"reqCallFlag\",\n        \"actor\",\n        \"statusCode\",\n        \"organizationId\",\n        \"requestorId\",\n        \"systemCode\",\n        \"requestorName\",\n        \"requestorDept\",\n        \"departmentCode\",\n        \"requestCreateDesc\",\n        \"requestStatusDesc\",\n        \"requestCreationCode\",\n        \"sysCode\",\n        \"userId\",\n        \"categoryGroupId\",\n        \"autoSetValve\",\n        \"messageContents\",\n        \"smsSendFlag\",\n        \"smsOrgId\",\n        \"smsFactoryCode\",\n        \"smsUtType\",\n        \"smsUserId\",\n        \"orgDefaultLanguage\",\n        \"requestNo\",\n        \"command\",\n        \"categoryGroupIdList\",\n        \"statusFlag\",\n        \"departmentId\",\n        \"inventoryItemId\",\n        \"interlockFlag\",\n        \"transTypeCode\",\n        \"unitPriceOrgId\",\n        \"invTrRequestMasterId\",\n        \"invTrOrganizationId\",\n        \"formId\",\n        \"today\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"VI\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"2090634\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"SP131\",\n          \"261024\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/codeNav/retComCodeList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "codeNav",
+                "retComCodeList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/codeNav/retComCodeList.lgdn\nCategory: QUERY\nTotal calls: 20"
+          }
+        },
+        {
+          "name": "[LOGGING] updateEndLog",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"userId\": \"658359\",\n    \"programId\": \"CM313_P\",\n    \"objectName\": \"CM313_P\",\n    \"type\": \"S\",\n    \"organizationId\": \"28753\"\n  },\n  \"datasets\": {}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/connLogNav/updateEndLog.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "connLogNav",
+                "updateEndLog.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/connLogNav/updateEndLog.lgdn\nCategory: LOGGING\nTotal calls: 11"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveUserOrgList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_input\": {\n      \"cols\": [\n        \"userId\",\n        \"letsId\",\n        \"personId\",\n        \"employeeNumber\",\n        \"employeeName\",\n        \"userName\",\n        \"departmentCode\",\n        \"departmentName\",\n        \"emailAddress\",\n        \"phoneNo\",\n        \"supervisorNumber\",\n        \"organizationId\",\n        \"organizationCode\",\n        \"organizationName\",\n        \"language\",\n        \"messageLanguage\",\n        \"theme\",\n        \"font\",\n        \"owningDepartmentId\",\n        \"owningDepartmentCode\",\n        \"owningDepartmentName\",\n        \"responsibilityId\",\n        \"responsibilityIdList\",\n        \"respGroupList\",\n        \"subsidiaryCode\",\n        \"currencyCode\",\n        \"orgDefaultLanguage\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"658359\",\n          \"phamduclong04\",\n          \"1369610\",\n          \"VH081996\",\n          \"Pham Duc Long\",\n          \"Pham Duc Long\",\n          \"87479\",\n          \"NY SW PO M Technology DB/BD Unit B2\",\n          \"phamduclong04@lgdisplay.com\",\n          \"0366270148\",\n          \"VH009552\",\n          \"28753\",\n          \"A13\",\n          \"LG Display Vietnam. Asset\",\n          \"EN\",\n          \"EN\",\n          \"DARK\",\n          \"MGD\",\n          \"2090634\",\n          \"87479\",\n          \"NY SW PO M Technology DB/BD Unit B2\",\n          \"69972\",\n          \"69966,69968,69972\",\n          \"PLANNER@,SCHEDULER@,TECHNICIAN@\",\n          \"LGDVN\",\n          \"USD\",\n          \"VI\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/loginNav/retrieveUserOrgList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "loginNav",
+                "retrieveUserOrgList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/loginNav/retrieveUserOrgList.lgdn\nCategory: QUERY\nTotal calls: 2"
+          }
+        },
+        {
+          "name": "[OTHER] WoMasterRetInit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_info\": {\n      \"cols\": [\n        \"wipEntityId\",\n        \"organizationId\",\n        \"userId\",\n        \"txnType\",\n        \"command\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"314805734\",\n          \"28753\",\n          \"658359\",\n          \"ViewWO\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/woMasterNav/WoMasterRetInit.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "woMasterNav",
+                "WoMasterRetInit.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/woMasterNav/WoMasterRetInit.lgdn\nCategory: OTHER\nTotal calls: 2"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveItemTargetQtyInfo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"prvNo\",\n        \"organizationId\",\n        \"userId\",\n        \"inventoryItemId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"\",\n          \"28753\",\n          \"658359\",\n          \"3979799\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/prvNoNav/retrieveItemTargetQtyInfo.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "prvNoNav",
+                "retrieveItemTargetQtyInfo.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/prvNoNav/retrieveItemTargetQtyInfo.lgdn\nCategory: QUERY\nTotal calls: 2"
+          }
+        },
+        {
+          "name": "[QUERY] retApprovalRequest",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"requestMasterId\",\n        \"moduleCode\",\n        \"requestCode\",\n        \"requestUrlAddr\",\n        \"approvalUrlAddr\",\n        \"buttonRender\",\n        \"attribute1\",\n        \"attribute2\",\n        \"attribute3\",\n        \"viewType\",\n        \"rejectRequestId\",\n        \"noSettle\",\n        \"rejectButtonRender\",\n        \"requestCancelButtonRender\",\n        \"masterIdCreateFlag\",\n        \"attachmentRender\",\n        \"reqCallFlag\",\n        \"actor\",\n        \"statusCode\",\n        \"organizationId\",\n        \"requestorId\",\n        \"systemCode\",\n        \"requestorName\",\n        \"requestorDept\",\n        \"departmentCode\",\n        \"requestCreateDesc\",\n        \"requestStatusDesc\",\n        \"requestCreationCode\",\n        \"sysCode\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"17967067\",\n          \"WOP\",\n          \"16001\",\n          \"SP134_P\",\n          \"SP134_P\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"N\",\n          \"N\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"REQUESTOR\",\n          \"10\",\n          \"28753\",\n          \"658359\",\n          \"EMS\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"UPDATE\",\n          \"28\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/approvalNav/retApprovalRequest.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "approvalNav",
+                "retApprovalRequest.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/approvalNav/retApprovalRequest.lgdn\nCategory: QUERY\nTotal calls: 2"
+          }
+        },
+        {
+          "name": "[SECURITY] getAuthButton",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"requestMasterId\",\n        \"requestFrmDate\",\n        \"requestToDate\",\n        \"actionTypeCode\",\n        \"emergencyActionNo\",\n        \"requestorId\",\n        \"statusCode\",\n        \"requestorName\",\n        \"itemCategory\",\n        \"prvNo\",\n        \"workOrder\",\n        \"issueWo\",\n        \"item\",\n        \"vendorId\",\n        \"catelogGroupId\",\n        \"inventoryItemId\",\n        \"itemYn\",\n        \"receiptYn\",\n        \"poRequestMasterId\",\n        \"reviewRequestNo\",\n        \"requestDept\",\n        \"requestDeptCode\",\n        \"budgetDept\",\n        \"budgetDeptCode\",\n        \"wipEntityId\",\n        \"emergencyNo\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/authButtonNav/getAuthButton.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "authButtonNav",
+                "getAuthButton.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/authButtonNav/getAuthButton.lgdn\nCategory: SECURITY\nTotal calls: 2"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveEmployeeNumber",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_input\": {\n      \"cols\": [\n        \"letsId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"phamduclong04\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/loginNav/retrieveEmployeeNumber.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "loginNav",
+                "retrieveEmployeeNumber.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/loginNav/retrieveEmployeeNumber.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveLowestEmNo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_Search\": {\n      \"cols\": [\n        \"emNo\",\n        \"emNoDesc\",\n        \"owningDept\",\n        \"owningDeptDesc\",\n        \"rootEmNo\",\n        \"organizationId\",\n        \"enabledFlag\",\n        \"inventoryItemId\",\n        \"iamType\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"HWBMTL21EC\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/popupNav/retrieveLowestEmNo.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "popupNav",
+                "retrieveLowestEmNo.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/popupNav/retrieveLowestEmNo.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] RetSpPartsTxnGroupIdS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"itemId\",\n        \"commonFlag\",\n        \"periodicFlag\",\n        \"itemDesc\",\n        \"maker\",\n        \"commonItemUser\",\n        \"overstockFlag\",\n        \"stockDept\",\n        \"vendorSiteCode\",\n        \"vendorName\",\n        \"itemCond\",\n        \"userId\",\n        \"owingDept\",\n        \"owingDeptDesc\",\n        \"stockDeptDesc\",\n        \"commonItemUserName\",\n        \"budgetDept\",\n        \"budgetDeptDesc\",\n        \"emrgPoFlag\",\n        \"model\",\n        \"userLogicFlag\",\n        \"itemCategory\",\n        \"itemCategoryDesc\",\n        \"inventoryItemId\",\n        \"vendorId\",\n        \"stockFlag\",\n        \"publicFlag\",\n        \"optimizeFlag\",\n        \"optimizedApplyDate\",\n        \"poInterlock\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"20210316\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/seqNav/RetSpPartsTxnGroupIdS.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "seqNav",
+                "RetSpPartsTxnGroupIdS.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/seqNav/RetSpPartsTxnGroupIdS.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveItemPoStatusList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_Search\": {\n      \"cols\": [\n        \"inventoryItemId\",\n        \"organizationId\",\n        \"enabledFlag\",\n        \"alternatePartNo\",\n        \"invItemList\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"3890752\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/popupNav/retrieveItemPoStatusList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "popupNav",
+                "retrieveItemPoStatusList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/popupNav/retrieveItemPoStatusList.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveWipEntity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_input\": {\n      \"cols\": [\n        \"wipEntityId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"314805734\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/woSearchNav/retrieveWipEntity.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "woSearchNav",
+                "retrieveWipEntity.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/woSearchNav/retrieveWipEntity.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retApprovalLine",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"requestMasterId\",\n        \"moduleCode\",\n        \"requestCode\",\n        \"requestUrlAddr\",\n        \"approvalUrlAddr\",\n        \"buttonRender\",\n        \"attribute1\",\n        \"attribute2\",\n        \"attribute3\",\n        \"viewType\",\n        \"rejectRequestId\",\n        \"noSettle\",\n        \"rejectButtonRender\",\n        \"requestCancelButtonRender\",\n        \"masterIdCreateFlag\",\n        \"attachmentRender\",\n        \"reqCallFlag\",\n        \"actor\",\n        \"statusCode\",\n        \"organizationId\",\n        \"requestorId\",\n        \"systemCode\",\n        \"requestorName\",\n        \"requestorDept\",\n        \"departmentCode\",\n        \"requestCreateDesc\",\n        \"requestStatusDesc\",\n        \"requestCreationCode\",\n        \"setApprovalRender\",\n        \"sysCode\",\n        \"userId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"18026951\",\n          \"WOP\",\n          \"16026\",\n          \"XXEMSWOP034REQ\",\n          \"XXEMSWOP034APPR\",\n          \"Y\",\n          \"WOP-16797\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"REQUESTOR\",\n          \"10\",\n          \"28753\",\n          \"658359\",\n          \"EMS\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"UPDATE\",\n          \"N\",\n          \"28\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/approvalNav/retApprovalLine.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "approvalNav",
+                "retApprovalLine.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/approvalNav/retApprovalLine.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retrievePrvNoInfo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_input\": {\n      \"cols\": [\n        \"prvNo\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"Q2609-3081292\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/prvNoNav/retrievePrvNoInfo.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "prvNoNav",
+                "retrievePrvNoInfo.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/prvNoNav/retrievePrvNoInfo.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[SECURITY] retrieveAuthCommPartsManager",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"prvNo\",\n        \"itemYn\",\n        \"userId\",\n        \"organizationId\",\n        \"poRequestMasterId\",\n        \"rfqRequestMasterId\",\n        \"type\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"Q2609-3081292\",\n          \"\",\n          \"658359\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"REV_CONFIRM_Q\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/prvNoNav/retrieveAuthCommPartsManager.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "prvNoNav",
+                "retrieveAuthCommPartsManager.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/prvNoNav/retrieveAuthCommPartsManager.lgdn\nCategory: SECURITY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retPLOverFlag",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"itemGroupSerialNo\",\n        \"requestCode\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"\",\n          \"658359\",\n          \"\",\n          \"16001\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/approvalNav/retPLOverFlag.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "approvalNav",
+                "retPLOverFlag.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/approvalNav/retPLOverFlag.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retMethodPop",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"itemGroupSerialNo\",\n        \"requestCode\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"\",\n          \"658359\",\n          \"\",\n          \"16001\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/approvalNav/retMethodPop.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "approvalNav",
+                "retMethodPop.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/approvalNav/retMethodPop.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveItem",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_Search\": {\n      \"cols\": [\n        \"item\",\n        \"itemDescription\",\n        \"makerPart\",\n        \"itemType\",\n        \"exceptionType\",\n        \"itemCategoryId\",\n        \"maker\",\n        \"organizationId\",\n        \"enabledFlag\",\n        \"issuePartsInvId\",\n        \"itemExclType\",\n        \"raeFlag\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"QCAK93067\",\n          \"\",\n          \"\",\n          \"Q\",\n          \"\",\n          \"\",\n          \"\",\n          \"28753\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emscom/popupNav/retrieveItem.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emscom",
+                "popupNav",
+                "retrieveItem.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emscom/popupNav/retrieveItem.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "EMSSPAREPARTS",
+      "item": [
+        {
+          "name": "[QUERY] retWaitRepairItemInterlock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"txnGroupId\",\n        \"organizationId\",\n        \"userId\",\n        \"itemType\",\n        \"inventoryItemId\",\n        \"type\",\n        \"qReqFlag\",\n        \"emNo\",\n        \"item\",\n        \"itemOrgId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"421996047\",\n          \"28753\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"PO_REV_REQ_Q\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp131Nav/retWaitRepairItemInterlock.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp131Nav",
+                "retWaitRepairItemInterlock.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp131Nav/retWaitRepairItemInterlock.lgdn\nCategory: QUERY\nTotal calls: 4"
+          }
+        },
+        {
+          "name": "[SECURITY] CheckMasterAuth",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"itemDescription\",\n        \"lastUpdatedBy\",\n        \"inventoryItemId\",\n        \"userConfirmFlag\",\n        \"disuseInventoryFlag\",\n        \"requestMasterId\",\n        \"itemYn\",\n        \"tempInventoryItemId\",\n        \"chkFlag\",\n        \"userAssignmentFlag\",\n        \"publicFlag\",\n        \"periodicFlag\",\n        \"creationFromDate\",\n        \"creationToDate\",\n        \"changeFromDate\",\n        \"changeToDate\",\n        \"issueContactId\",\n        \"batchIssueContactId\",\n        \"lastUpdatedByNo\",\n        \"privFlag\",\n        \"lastUpdatedById\",\n        \"optimizeFlag\",\n        \"optimizedApplyDate\",\n        \"accelerationFlag\",\n        \"itemTypeCode\",\n        \"registFromDate\",\n        \"registToDate\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp302/sp330Nav/CheckMasterAuth.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp302",
+                "sp330Nav",
+                "CheckMasterAuth.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp302/sp330Nav/CheckMasterAuth.lgdn\nCategory: SECURITY\nTotal calls: 3"
+          }
+        },
+        {
+          "name": "[QUERY] RetStockStatusList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"itemId\",\n        \"commonFlag\",\n        \"periodicFlag\",\n        \"itemDesc\",\n        \"maker\",\n        \"commonItemUser\",\n        \"overstockFlag\",\n        \"stockDept\",\n        \"vendorSiteCode\",\n        \"vendorName\",\n        \"itemCond\",\n        \"userId\",\n        \"owingDept\",\n        \"owingDeptDesc\",\n        \"stockDeptDesc\",\n        \"commonItemUserName\",\n        \"budgetDept\",\n        \"budgetDeptDesc\",\n        \"emrgPoFlag\",\n        \"model\",\n        \"userLogicFlag\",\n        \"itemCategory\",\n        \"itemCategoryDesc\",\n        \"inventoryItemId\",\n        \"vendorId\",\n        \"stockFlag\",\n        \"publicFlag\",\n        \"optimizeFlag\",\n        \"optimizedApplyDate\",\n        \"poInterlock\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"20210316\",\n          \"\"\n        ]\n      ]\n    },\n    \"ds_ItemInfo\": {\n      \"cols\": [\n        \"item\",\n        \"itemDesc\",\n        \"inventoryItemId\",\n        \"remark\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"QCAK93067\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp101",
+                "sp110Nav",
+                "RetStockStatusList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn\nCategory: QUERY\nTotal calls: 3"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveCheckAppLine",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"requestMasterId\",\n        \"moduleCode\",\n        \"requestCode\",\n        \"requestUrlAddr\",\n        \"approvalUrlAddr\",\n        \"buttonRender\",\n        \"attribute1\",\n        \"attribute2\",\n        \"attribute3\",\n        \"viewType\",\n        \"rejectRequestId\",\n        \"noSettle\",\n        \"rejectButtonRender\",\n        \"requestCancelButtonRender\",\n        \"masterIdCreateFlag\",\n        \"attachmentRender\",\n        \"reqCallFlag\",\n        \"actor\",\n        \"statusCode\",\n        \"organizationId\",\n        \"requestorId\",\n        \"systemCode\",\n        \"requestorName\",\n        \"requestorDept\",\n        \"departmentCode\",\n        \"requestCreateDesc\",\n        \"requestStatusDesc\",\n        \"requestCreationCode\",\n        \"sysCode\",\n        \"userId\",\n        \"wipEntityId\",\n        \"emrgPoFlag\",\n        \"totalAmt\",\n        \"checkApprLine\",\n        \"inventoryItemId\",\n        \"itemType\",\n        \"vendorId\",\n        \"basicPriceRequestorId\",\n        \"armPosition\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"18033023\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Q\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp103/sp161Nav/retrieveCheckAppLine.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp103",
+                "sp161Nav",
+                "retrieveCheckAppLine.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp103/sp161Nav/retrieveCheckAppLine.lgdn\nCategory: QUERY\nTotal calls: 3"
+          }
+        },
+        {
+          "name": "[QUERY] retrievePurchaseRequest",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"requestMasterId\",\n        \"moduleCode\",\n        \"requestCode\",\n        \"requestUrlAddr\",\n        \"approvalUrlAddr\",\n        \"buttonRender\",\n        \"attribute1\",\n        \"attribute2\",\n        \"attribute3\",\n        \"viewType\",\n        \"rejectRequestId\",\n        \"noSettle\",\n        \"rejectButtonRender\",\n        \"requestCancelButtonRender\",\n        \"masterIdCreateFlag\",\n        \"attachmentRender\",\n        \"reqCallFlag\",\n        \"actor\",\n        \"statusCode\",\n        \"organizationId\",\n        \"requestorId\",\n        \"systemCode\",\n        \"requestorName\",\n        \"requestorDept\",\n        \"departmentCode\",\n        \"requestCreateDesc\",\n        \"requestStatusDesc\",\n        \"requestCreationCode\",\n        \"sysCode\",\n        \"userId\",\n        \"wipEntityId\",\n        \"emrgPoFlag\",\n        \"totalAmt\",\n        \"checkApprLine\",\n        \"inventoryItemId\",\n        \"itemType\",\n        \"vendorId\",\n        \"basicPriceRequestorId\",\n        \"armPosition\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"18033023\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Q\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp134Nav/retrievePurchaseRequest.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp134Nav",
+                "retrievePurchaseRequest.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp134Nav/retrievePurchaseRequest.lgdn\nCategory: QUERY\nTotal calls: 3"
+          }
+        },
+        {
+          "name": "[QUERY] getEmrgPoFlag",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"requestMasterId\",\n        \"moduleCode\",\n        \"requestCode\",\n        \"requestUrlAddr\",\n        \"approvalUrlAddr\",\n        \"buttonRender\",\n        \"attribute1\",\n        \"attribute2\",\n        \"attribute3\",\n        \"viewType\",\n        \"rejectRequestId\",\n        \"noSettle\",\n        \"rejectButtonRender\",\n        \"requestCancelButtonRender\",\n        \"masterIdCreateFlag\",\n        \"attachmentRender\",\n        \"reqCallFlag\",\n        \"actor\",\n        \"statusCode\",\n        \"organizationId\",\n        \"requestorId\",\n        \"systemCode\",\n        \"requestorName\",\n        \"requestorDept\",\n        \"departmentCode\",\n        \"requestCreateDesc\",\n        \"requestStatusDesc\",\n        \"requestCreationCode\",\n        \"sysCode\",\n        \"userId\",\n        \"wipEntityId\",\n        \"emrgPoFlag\",\n        \"totalAmt\",\n        \"checkApprLine\",\n        \"inventoryItemId\",\n        \"itemType\",\n        \"vendorId\",\n        \"basicPriceRequestorId\",\n        \"armPosition\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"18033023\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Q\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp134Nav/getEmrgPoFlag.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp134Nav",
+                "getEmrgPoFlag.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp134Nav/getEmrgPoFlag.lgdn\nCategory: QUERY\nTotal calls: 3"
+          }
+        },
+        {
+          "name": "[SECURITY] GetSpPrivFlag",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"itemDescription\",\n        \"lastUpdatedBy\",\n        \"inventoryItemId\",\n        \"userConfirmFlag\",\n        \"disuseInventoryFlag\",\n        \"requestMasterId\",\n        \"itemYn\",\n        \"tempInventoryItemId\",\n        \"chkFlag\",\n        \"userAssignmentFlag\",\n        \"publicFlag\",\n        \"periodicFlag\",\n        \"creationFromDate\",\n        \"creationToDate\",\n        \"changeFromDate\",\n        \"changeToDate\",\n        \"issueContactId\",\n        \"batchIssueContactId\",\n        \"lastUpdatedByNo\",\n        \"privFlag\",\n        \"lastUpdatedById\",\n        \"optimizeFlag\",\n        \"optimizedApplyDate\",\n        \"accelerationFlag\",\n        \"itemTypeCode\",\n        \"registFromDate\",\n        \"registToDate\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp302/sp330Nav/GetSpPrivFlag.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp302",
+                "sp330Nav",
+                "GetSpPrivFlag.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp302/sp330Nav/GetSpPrivFlag.lgdn\nCategory: SECURITY\nTotal calls: 2"
+          }
+        },
+        {
+          "name": "[QUERY] RetEstimateRequestList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_Search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"wipEntityName\",\n        \"itemType\",\n        \"budgetDept\",\n        \"estimateStatus\",\n        \"requestorName\",\n        \"requestorUserId\",\n        \"supplier\",\n        \"estimateRequestDateFrom\",\n        \"estimateRequestDateTo\",\n        \"prvNo\",\n        \"budgetDeptName\",\n        \"vendorName\",\n        \"userId\",\n        \"itemYn\",\n        \"requestMasterId\",\n        \"wipEntityId\",\n        \"budgetDepartmentCode\",\n        \"vendorId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"\",\n          \"Q\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"20260101\",\n          \"20261024\",\n          \"\",\n          \"\",\n          \"\",\n          \"658359\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    },\n    \"ds_ItemInfo\": {\n      \"cols\": [\n        \"item\",\n        \"itemDesc\",\n        \"inventoryItemId\",\n        \"remark\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"QCAK93067\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp101/sp120Nav/RetEstimateRequestList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp101",
+                "sp120Nav",
+                "RetEstimateRequestList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp101/sp120Nav/RetEstimateRequestList.lgdn\nCategory: QUERY\nTotal calls: 2"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveItemBuyMainList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"itemTypeCode\",\n        \"prvStatusCode\",\n        \"prvNo\",\n        \"overShortageQty\",\n        \"unitPriceStatusCode\",\n        \"itemStatus\",\n        \"confirmFlag\",\n        \"reviewerId\",\n        \"instanceId\",\n        \"requestorId\",\n        \"requestorDeptCode\",\n        \"requestFrmDate\",\n        \"requestToDate\",\n        \"inventoryItemId\",\n        \"organizationItemId\",\n        \"organizationId\",\n        \"txnGroupId\",\n        \"itemYn\",\n        \"reviewerName\",\n        \"requestorName\",\n        \"emNoDesc\",\n        \"budgetDeptCode\",\n        \"budgetDept\",\n        \"emNo\",\n        \"requestDept\",\n        \"requestDeptCode\",\n        \"chkInclude\",\n        \"userId\",\n        \"poRequestMasterId\",\n        \"rfqRequestMasterId\",\n        \"tPrvNo\",\n        \"vendorName\",\n        \"vendorId\",\n        \"workOrder\",\n        \"prvTypeCode\",\n        \"excelExportFlag\",\n        \"publicFlag\",\n        \"periodicFlag\",\n        \"dateType\",\n        \"requisitionLineId\",\n        \"authWipEntityId\",\n        \"cancelPrvNo\",\n        \"type\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"20260101\",\n          \"20261024\",\n          \"\",\n          \"\",\n          \"28753\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"REQUEST\",\n          \"\",\n          \"\",\n          \"\",\n          \"REV_CONFIRM_Q\"\n        ]\n      ]\n    },\n    \"ds_ItemInfo\": {\n      \"cols\": [\n        \"item\",\n        \"itemDesc\",\n        \"inventoryItemId\",\n        \"remark\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"QCAD19169\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    },\n    \"ds_PoRvNo\": {\n      \"cols\": [\n        \"reviewRequestNo\"\n      ],\n      \"count\": 0,\n      \"rows\": []\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp130Nav/retrieveItemBuyMainList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp130Nav",
+                "retrieveItemBuyMainList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp130Nav/retrieveItemBuyMainList.lgdn\nCategory: QUERY\nTotal calls: 2"
+          }
+        },
+        {
+          "name": "[QUERY] retEcFlag",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_param\": {\n      \"cols\": [\n        \"txnGroupId\",\n        \"organizationId\",\n        \"userId\",\n        \"itemType\",\n        \"inventoryItemId\",\n        \"type\",\n        \"qReqFlag\",\n        \"emNo\",\n        \"item\",\n        \"itemOrgId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"421996047\",\n          \"28753\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"PO_REV_REQ_Q\",\n          \"Y\",\n          \"HWBMTL21EC0101\",\n          \"QCAK93067\",\n          \"28753\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp137Nav/retEcFlag.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp137Nav",
+                "retEcFlag.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp137Nav/retEcFlag.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retSiteManagerInfo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_param\": {\n      \"cols\": [\n        \"txnGroupId\",\n        \"organizationId\",\n        \"userId\",\n        \"itemType\",\n        \"inventoryItemId\",\n        \"type\",\n        \"qReqFlag\",\n        \"emNo\",\n        \"item\",\n        \"itemOrgId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"421996047\",\n          \"28753\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"PO_REV_REQ_Q\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp130Nav/retSiteManagerInfo.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp130Nav",
+                "retSiteManagerInfo.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp130Nav/retSiteManagerInfo.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveItemInfoPopList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_param\": {\n      \"cols\": [\n        \"txnGroupId\",\n        \"organizationId\",\n        \"userId\",\n        \"itemType\",\n        \"inventoryItemId\",\n        \"type\",\n        \"qReqFlag\",\n        \"emNo\",\n        \"item\",\n        \"itemOrgId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"421996047\",\n          \"28753\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"PO_REV_REQ_Q\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp131Nav/retrieveItemInfoPopList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp131Nav",
+                "retrieveItemInfoPopList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp131Nav/retrieveItemInfoPopList.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveItemUseDate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_itemInfo\": {\n      \"cols\": [\n        \"item\",\n        \"itemDesc\",\n        \"partsUseType\",\n        \"partsUseTypeCode\",\n        \"emNo\",\n        \"emNoDesc\",\n        \"requestQty\",\n        \"overShortQty\",\n        \"unitPrice\",\n        \"estimatedPrice\",\n        \"reviewerName\",\n        \"requestorName\",\n        \"budgetDept\",\n        \"owningDept\",\n        \"bufferZone\",\n        \"orderTypeDesc\",\n        \"scheduledUseDate\",\n        \"vendorName\",\n        \"requestComment\",\n        \"wacCode\",\n        \"wacDesc\",\n        \"lecShareGroup\",\n        \"budgetDeptCode\",\n        \"poProgressFlag\",\n        \"orderType\",\n        \"reviewerId\",\n        \"vendorId\",\n        \"instanceId\",\n        \"requestorId\",\n        \"requestorDeptCode\",\n        \"inventoryItemId\",\n        \"organizationId\",\n        \"txnGroupId\",\n        \"rpoNo\",\n        \"purchaseProgressFlag\",\n        \"checked\",\n        \"userId\",\n        \"attachment\",\n        \"sscsAttachment\",\n        \"owningDeptId\",\n        \"owningDeptCode\",\n        \"overShortPrvQty\",\n        \"addPoReason\",\n        \"publicFlag\",\n        \"periodicFlag\",\n        \"alterItem\",\n        \"timelyPurchaseDate\",\n        \"interlockFlag\",\n        \"dueDays\",\n        \"equipmentGroup\",\n        \"reviewerEditFlag\",\n        \"owningDepratmentCode\",\n        \"useDate\",\n        \"reasonDesc\",\n        \"waitRepairQty\",\n        \"availableTransferQtyAll\",\n        \"poInterlockFlag\",\n        \"calRequestQty\",\n        \"poType\",\n        \"poTypeCode\",\n        \"waitRepairFlag\",\n        \"qltyMgtTargetFlag\",\n        \"poOptTargetFlag\",\n        \"orgMaskCnt\",\n        \"ecCode\",\n        \"ecCodeDesc\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"QCAK93067\",\n          \"Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,\\nMaterial:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,\\nRemark:\",\n          \"비통합 관리\",\n          \"N001\",\n          \"\",\n          \"\",\n          \"\",\n          \"14\",\n          \"544.67\",\n          \"544.67\",\n          \"\",\n          \"Pham Duc Long\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"LGDVN_(주) 서브원_KR017765\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"N\",\n          \"\",\n          \"\",\n          \"863381\",\n          \"\",\n          \"658359\",\n          \"87479\",\n          \"3890752\",\n          \"28753\",\n          \"421996047\",\n          \"Q2610-3107549\",\n          \"N\",\n          \"0\",\n          \"\",\n          \"0\",\n          \"0\",\n          \"\",\n          \"\",\n          \"14\",\n          \"\",\n          \"N\",\n          \"N\",\n          \"\",\n          \"20261002\",\n          \"\",\n          \"48\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\",\n          \"0\",\n          \"0\",\n          \"N\",\n          \"\",\n          \"원 법인 구매\",\n          \"PT003\",\n          \"N\",\n          \"N\",\n          \"N\",\n          \"1\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp131Nav/retrieveItemUseDate.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp131Nav",
+                "retrieveItemUseDate.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp131Nav/retrieveItemUseDate.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[MUTATE] CreInsertItemPrvRequest",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"txnGroupId\",\n        \"inventoryItemId\",\n        \"organizationId\",\n        \"prvType\",\n        \"prvNo\",\n        \"userId\",\n        \"result\",\n        \"errCode\",\n        \"errMsg\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"421996047\",\n          \"3890752\",\n          \"28753\",\n          \"NEW\",\n          \"\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp101/sp110Nav/CreInsertItemPrvRequest.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp101",
+                "sp110Nav",
+                "CreInsertItemPrvRequest.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp101/sp110Nav/CreInsertItemPrvRequest.lgdn\nCategory: MUTATE\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] TargetStockSearchList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"itemDescription\",\n        \"lastUpdatedBy\",\n        \"inventoryItemId\",\n        \"userConfirmFlag\",\n        \"disuseInventoryFlag\",\n        \"requestMasterId\",\n        \"itemYn\",\n        \"tempInventoryItemId\",\n        \"chkFlag\",\n        \"userAssignmentFlag\",\n        \"publicFlag\",\n        \"periodicFlag\",\n        \"creationFromDate\",\n        \"creationToDate\",\n        \"changeFromDate\",\n        \"changeToDate\",\n        \"issueContactId\",\n        \"issueContactName\",\n        \"batchIssueContactId\",\n        \"lastUpdatedByNo\",\n        \"privFlag\",\n        \"lastUpdatedById\",\n        \"optimizeFlag\",\n        \"optimizedApplyDate\",\n        \"accelerationFlag\",\n        \"itemTypeCode\",\n        \"orgCode\",\n        \"excludeFlag\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"N\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"A13\",\n          \"\"\n        ]\n      ]\n    },\n    \"ds_ItemInfo\": {\n      \"cols\": [\n        \"item\",\n        \"itemDesc\",\n        \"inventoryItemId\",\n        \"remark\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"QCAK93067\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp302/sp335Nav/TargetStockSearchList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp302",
+                "sp335Nav",
+                "TargetStockSearchList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp302/sp335Nav/TargetStockSearchList.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] GetOptimizeInfo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"itemDescription\",\n        \"lastUpdatedBy\",\n        \"inventoryItemId\",\n        \"userConfirmFlag\",\n        \"disuseInventoryFlag\",\n        \"requestMasterId\",\n        \"itemYn\",\n        \"tempInventoryItemId\",\n        \"chkFlag\",\n        \"userAssignmentFlag\",\n        \"publicFlag\",\n        \"periodicFlag\",\n        \"creationFromDate\",\n        \"creationToDate\",\n        \"changeFromDate\",\n        \"changeToDate\",\n        \"issueContactId\",\n        \"batchIssueContactId\",\n        \"lastUpdatedByNo\",\n        \"privFlag\",\n        \"lastUpdatedById\",\n        \"optimizeFlag\",\n        \"optimizedApplyDate\",\n        \"accelerationFlag\",\n        \"itemTypeCode\",\n        \"registFromDate\",\n        \"registToDate\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"N\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp302/sp330Nav/GetOptimizeInfo.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp302",
+                "sp330Nav",
+                "GetOptimizeInfo.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp302/sp330Nav/GetOptimizeInfo.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] TargetStockSearchList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"itemDescription\",\n        \"lastUpdatedBy\",\n        \"inventoryItemId\",\n        \"userConfirmFlag\",\n        \"disuseInventoryFlag\",\n        \"requestMasterId\",\n        \"itemYn\",\n        \"tempInventoryItemId\",\n        \"chkFlag\",\n        \"userAssignmentFlag\",\n        \"publicFlag\",\n        \"periodicFlag\",\n        \"creationFromDate\",\n        \"creationToDate\",\n        \"changeFromDate\",\n        \"changeToDate\",\n        \"issueContactId\",\n        \"batchIssueContactId\",\n        \"lastUpdatedByNo\",\n        \"privFlag\",\n        \"lastUpdatedById\",\n        \"optimizeFlag\",\n        \"optimizedApplyDate\",\n        \"accelerationFlag\",\n        \"itemTypeCode\",\n        \"registFromDate\",\n        \"registToDate\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"658359\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"N\",\n          \"\",\n          \"Y\",\n          \"20210316\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    },\n    \"ds_ItemInfo\": {\n      \"cols\": [\n        \"item\",\n        \"itemDesc\",\n        \"inventoryItemId\",\n        \"remark\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"QCAK93067\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp302/sp330Nav/TargetStockSearchList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp302",
+                "sp330Nav",
+                "TargetStockSearchList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp302/sp330Nav/TargetStockSearchList.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retPoUnitPriceBySiteList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"responsibilityId\",\n        \"itemType\",\n        \"orgCode\",\n        \"poOptTarget\",\n        \"gapFrom\",\n        \"gapTo\",\n        \"itemYn\",\n        \"itemList\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"658359\",\n          \"69972\",\n          \"Q\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\"\n        ]\n      ]\n    },\n    \"ds_item\": {\n      \"cols\": [\n        \"item\",\n        \"organizationId\",\n        \"itemDesc\",\n        \"inventoryItemId\",\n        \"remark\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"QCAK93067\",\n          \"\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp40/sp403Nav/retPoUnitPriceBySiteList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp40",
+                "sp403Nav",
+                "retPoUnitPriceBySiteList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp40/sp403Nav/retPoUnitPriceBySiteList.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveItemInfoDetail",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_Input\": {\n      \"cols\": [\n        \"organizationId\",\n        \"inventoryItemId\",\n        \"requestCode\",\n        \"requestMasterId\",\n        \"rcodeItemId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"3890752\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp135Nav",
+                "retrieveItemInfoDetail.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] RetAllocationQuantity",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"inventoryItemId\",\n        \"organizationId\",\n        \"itemName\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"2922383\",\n          \"28753\",\n          \"QCAE02537\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp101/sp110Nav/RetAllocationQuantity.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp101",
+                "sp110Nav",
+                "RetAllocationQuantity.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp101/sp110Nav/RetAllocationQuantity.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retSparepartsStatus",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_Search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"budgetDeptCode\",\n        \"budgetDeptName\",\n        \"buyItemType\",\n        \"requestorId\",\n        \"requestorName\",\n        \"requestorTeam\",\n        \"requestorTeamName\",\n        \"reviewerId\",\n        \"reviewerName\",\n        \"emNo\",\n        \"itemCond\",\n        \"fromValue\",\n        \"toValue\",\n        \"subinventory\",\n        \"subinventoryDesc\",\n        \"chkHistory\",\n        \"chkStock\",\n        \"instanceId\",\n        \"userId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"20170101\",\n          \"20261024\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"658359\"\n        ]\n      ]\n    },\n    \"ds_ItemInfo\": {\n      \"cols\": [\n        \"item\",\n        \"itemDesc\",\n        \"inventoryItemId\",\n        \"remark\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"QCAD19169\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp201/sp220Nav/retSparepartsStatus.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp201",
+                "sp220Nav",
+                "retSparepartsStatus.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp201/sp220Nav/retSparepartsStatus.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retrieveItemRequestDetail",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"requestMasterId\",\n        \"moduleCode\",\n        \"requestCode\",\n        \"requestUrlAddr\",\n        \"approvalUrlAddr\",\n        \"buttonRender\",\n        \"attribute1\",\n        \"attribute2\",\n        \"attribute3\",\n        \"viewType\",\n        \"rejectRequestId\",\n        \"noSettle\",\n        \"rejectButtonRender\",\n        \"requestCancelButtonRender\",\n        \"masterIdCreateFlag\",\n        \"attachmentRender\",\n        \"reqCallFlag\",\n        \"actor\",\n        \"statusCode\",\n        \"organizationId\",\n        \"requestorId\",\n        \"systemCode\",\n        \"requestorName\",\n        \"requestorDept\",\n        \"departmentCode\",\n        \"requestCreateDesc\",\n        \"requestStatusDesc\",\n        \"requestCreationCode\",\n        \"sysCode\",\n        \"userId\",\n        \"wipEntityId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"18026951\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"658359\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp132Nav/retrieveItemRequestDetail.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp132Nav",
+                "retrieveItemRequestDetail.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp132Nav/retrieveItemRequestDetail.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] getCurrencyCode",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"itemOrgId\",\n        \"item\",\n        \"emNo\",\n        \"organizationId\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"\",\n          \"\",\n          \"\",\n          \"28753\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp134Nav/getCurrencyCode.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp134Nav",
+                "getCurrencyCode.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp134Nav/getCurrencyCode.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[OTHER] EmergencyPoList",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"requestMasterId\",\n        \"requestFrmDate\",\n        \"requestToDate\",\n        \"actionTypeCode\",\n        \"emergencyActionNo\",\n        \"requestorId\",\n        \"statusCode\",\n        \"requestorName\",\n        \"itemCategory\",\n        \"prvNo\",\n        \"workOrder\",\n        \"issueWo\",\n        \"item\",\n        \"vendorId\",\n        \"catelogGroupId\",\n        \"inventoryItemId\",\n        \"itemYn\",\n        \"receiptYn\",\n        \"poRequestMasterId\",\n        \"reviewRequestNo\",\n        \"requestDept\",\n        \"requestDeptCode\",\n        \"budgetDept\",\n        \"budgetDeptCode\",\n        \"wipEntityId\",\n        \"emergencyNo\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"658359\",\n          \"\",\n          \"20170101\",\n          \"20261024\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    },\n    \"ds_ItemInfo\": {\n      \"cols\": [\n        \"item\",\n        \"itemDesc\",\n        \"inventoryItemId\",\n        \"remark\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"QCAK93067\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    },\n    \"ds_PoRvNo\": {\n      \"cols\": [\n        \"reviewRequestNo\"\n      ],\n      \"count\": 0,\n      \"rows\": []\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp105/sp180Nav/EmergencyPoList.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp105",
+                "sp180Nav",
+                "EmergencyPoList.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp105/sp180Nav/EmergencyPoList.lgdn\nCategory: OTHER\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] getPoMasterReturnUrl",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"requestMasterId\",\n        \"requestFrmDate\",\n        \"requestToDate\",\n        \"actionTypeCode\",\n        \"emergencyActionNo\",\n        \"requestorId\",\n        \"statusCode\",\n        \"requestorName\",\n        \"itemCategory\",\n        \"prvNo\",\n        \"workOrder\",\n        \"issueWo\",\n        \"item\",\n        \"vendorId\",\n        \"catelogGroupId\",\n        \"inventoryItemId\",\n        \"itemYn\",\n        \"receiptYn\",\n        \"poRequestMasterId\",\n        \"reviewRequestNo\",\n        \"requestDept\",\n        \"requestDeptCode\",\n        \"budgetDept\",\n        \"budgetDeptCode\",\n        \"wipEntityId\",\n        \"emergencyNo\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"658359\",\n          \"17967067\",\n          \"20170101\",\n          \"20261024\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"Y\",\n          \"\",\n          \"17967067\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp103/sp160Nav/getPoMasterReturnUrl.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp103",
+                "sp160Nav",
+                "getPoMasterReturnUrl.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp103/sp160Nav/getPoMasterReturnUrl.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[SECURITY] RetAuthEmergencyPo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"organizationId\",\n        \"userId\",\n        \"requestMasterId\",\n        \"requestFrmDate\",\n        \"requestToDate\",\n        \"actionTypeCode\",\n        \"emergencyActionNo\",\n        \"requestorId\",\n        \"statusCode\",\n        \"requestorName\",\n        \"itemCategory\",\n        \"prvNo\",\n        \"workOrder\",\n        \"issueWo\",\n        \"item\",\n        \"vendorId\",\n        \"catelogGroupId\",\n        \"inventoryItemId\",\n        \"itemYn\",\n        \"receiptYn\",\n        \"poRequestMasterId\",\n        \"reviewRequestNo\",\n        \"requestDept\",\n        \"requestDeptCode\",\n        \"budgetDept\",\n        \"budgetDeptCode\",\n        \"wipEntityId\",\n        \"emergencyNo\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"28753\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp101/sp110Nav/RetAuthEmergencyPo.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp101",
+                "sp110Nav",
+                "RetAuthEmergencyPo.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp101/sp110Nav/RetAuthEmergencyPo.lgdn\nCategory: SECURITY\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[QUERY] retrievePrvNoData",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_search\": {\n      \"cols\": [\n        \"prvNo\",\n        \"itemYn\",\n        \"userId\",\n        \"organizationId\",\n        \"poRequestMasterId\",\n        \"rfqRequestMasterId\",\n        \"type\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"Q2608-3043631\",\n          \"\",\n          \"658359\",\n          \"28753\",\n          \"\",\n          \"\",\n          \"REV_CONFIRM_Q\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsspareparts/sp102/sp136Nav/retrievePrvNoData.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsspareparts",
+                "sp102",
+                "sp136Nav",
+                "retrievePrvNoData.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp136Nav/retrievePrvNoData.lgdn\nCategory: QUERY\nTotal calls: 1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "EMSWORKORDER",
+      "item": [
+        {
+          "name": "[OTHER] WO230WoSaveInit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_info\": {\n      \"cols\": [\n        \"wipEntityId\",\n        \"organizationId\",\n        \"userId\",\n        \"command\",\n        \"inventoryItemId\",\n        \"flexValueSetName\",\n        \"responsibilityId\",\n        \"txnType\",\n        \"operationId\",\n        \"operationSeqNum\",\n        \"indiEmNoCopy\",\n        \"indiInstanceIdCopy\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"314805734\",\n          \"28753\",\n          \"658359\",\n          \"WoInit\",\n          \"\",\n          \"XXEMS_YN_I\",\n          \"69972\",\n          \"ViewWO\",\n          \"\",\n          \"\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsworkorder/wo20/wo230Nav/WO230WoSaveInit.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsworkorder",
+                "wo20",
+                "wo230Nav",
+                "WO230WoSaveInit.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsworkorder/wo20/wo230Nav/WO230WoSaveInit.lgdn\nCategory: OTHER\nTotal calls: 1"
+          }
+        },
+        {
+          "name": "[OTHER] statusHistory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {\n    \"_ems_userId\": \"658359\",\n    \"_ems_organizationId\": \"28753\",\n    \"_ems_language\": \"EN\"\n  },\n  \"datasets\": {\n    \"ds_info\": {\n      \"cols\": [\n        \"wipEntityId\",\n        \"organizationId\",\n        \"userId\",\n        \"command\",\n        \"responsibilityId\",\n        \"txnType\"\n      ],\n      \"count\": 1,\n      \"rows\": [\n        [\n          \"314805734\",\n          \"28753\",\n          \"658359\",\n          \"search\",\n          \"\",\n          \"\"\n        ]\n      ]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/emsworkorder/wo50/wo580Nav/statusHistory.lgdn",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "emsworkorder",
+                "wo50",
+                "wo580Nav",
+                "statusHistory.lgdn"
+              ]
+            },
+            "description": "Endpoint: http://ems.lgdisplay.com:9000/emsworkorder/wo50/wo580Nav/statusHistory.lgdn\nCategory: OTHER\nTotal calls: 1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "SERVLET",
+      "item": [
+        {
+          "name": "[SECURITY] MenuPermit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"params\": {},\n  \"datasets\": {}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/Servlet/MenuPermit.document",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "Servlet",
+                "MenuPermit.document"
+              ]
+            },
+            "description": "Endpoint: /Servlet/MenuPermit.document\nCategory: SECURITY\nTotal calls: 1"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMS API Studio & Analyzer | LG Display Endpoints</title>
+  <meta name="description" content="Trực quan hóa, phân tích cấu trúc datasets và nhóm toàn diện 50+ API Endpoints trích xuất từ hệ thống LG Display EMS qua file A1.txt">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="theme-dark">
+  <div class="app-container">
+    <!-- TOP NAVIGATION HEADER -->
+    <header class="app-header" id="appHeader">
+      <div class="header-left">
+        <div class="logo-box">
+          <div class="logo-icon">⚡</div>
+          <div class="logo-text">
+            <span class="logo-title">EMS API Studio</span>
+            <span class="logo-badge">LGD Vietnam</span>
+          </div>
+        </div>
+        <div class="source-file-badge" id="sourceFileBadge" title="Nguồn dữ liệu đang đọc">
+          <span class="pulse-dot"></span>
+          <span class="source-name">A1.txt</span>
+          <span class="source-count" id="headerCallCount">141 calls</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="search-bar-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="globalSearchInput" class="search-input" placeholder="Tìm endpoint, dataset, params, module (Ctrl + K)..." autocomplete="off">
+          <kbd class="search-kbd">Ctrl K</kbd>
+          <button id="clearSearchBtn" class="clear-search-btn" title="Xóa tìm kiếm" style="display:none;">✕</button>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button id="reanalyzeBtn" class="btn btn-secondary" title="Đọc lại và phân tích lại file A1.txt">
+          <span class="btn-icon">🔄</span>
+          <span class="btn-text">Phân tích lại A1.txt</span>
+        </button>
+
+        <div class="dropdown-wrapper">
+          <button id="exportDropdownBtn" class="btn btn-primary">
+            <span class="btn-icon">📥</span>
+            <span class="btn-text">Xuất dữ liệu</span>
+            <span class="dropdown-arrow">▼</span>
+          </button>
+          <div class="dropdown-menu" id="exportMenu">
+            <a href="/api/openapi" target="_blank" class="dropdown-item">
+              <span class="item-icon">📜</span>
+              <div class="item-content">
+                <strong>OpenAPI 3.0 (Swagger)</strong>
+                <small>openapi.json cho Swagger UI, Postman</small>
+              </div>
+            </a>
+            <a href="/api/postman" target="_blank" class="dropdown-item">
+              <span class="item-icon">🚀</span>
+              <div class="item-content">
+                <strong>Postman Collection v2.1</strong>
+                <small>Import chạy thử API ngay lập tức</small>
+              </div>
+            </a>
+            <a href="/api/data" target="_blank" class="dropdown-item">
+              <span class="item-icon">💾</span>
+              <div class="item-content">
+                <strong>Analyzed JSON Toàn diện</strong>
+                <small>Dữ liệu đầy đủ datasets & metrics</small>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <button id="themeToggleBtn" class="theme-toggle-btn" title="Đổi giao diện Sáng / Tối">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN WRAPPER: SIDEBAR + CONTENT -->
+    <div class="app-body">
+      <!-- SIDEBAR -->
+      <aside class="app-sidebar" id="appSidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-heading">CHẾ ĐỘ XEM</div>
+          <nav class="sidebar-nav">
+            <button class="nav-item active" data-view="dashboard" id="navDashboard">
+              <span class="nav-icon">📊</span>
+              <span class="nav-label">Tổng quan Dashboard</span>
+            </button>
+            <button class="nav-item" data-view="endpoints" id="navEndpoints">
+              <span class="nav-icon">🌐</span>
+              <span class="nav-label">Danh sách Endpoints</span>
+              <span class="nav-counter" id="badgeTotalEndpoints">50</span>
+            </button>
+            <button class="nav-item" data-view="flows" id="navFlows">
+              <span class="nav-icon">🔀</span>
+              <span class="nav-label">Workflow & Call Traces</span>
+              <span class="nav-counter" id="badgeTotalFlows">28</span>
+            </button>
+            <button class="nav-item" data-view="datasets" id="navDatasets">
+              <span class="nav-icon">📑</span>
+              <span class="nav-label">Từ điển Datasets</span>
+              <span class="nav-counter" id="badgeTotalDatasets">68</span>
+            </button>
+          </nav>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-heading">NHÓM PHÂN HỆ (MODULES)</div>
+          <div class="filter-chips" id="moduleFilterChips">
+            <!-- Render dynamically -->
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-heading">LOẠI NGHIỆP VỤ</div>
+          <div class="filter-chips" id="categoryFilterChips">
+            <button class="chip chip-query" data-category="QUERY">
+              <span class="chip-dot"></span> Tra cứu (QUERY)
+            </button>
+            <button class="chip chip-security" data-category="SECURITY">
+              <span class="chip-dot"></span> Phân quyền (SECURITY)
+            </button>
+            <button class="chip chip-logging" data-category="LOGGING">
+              <span class="chip-dot"></span> Nhật ký (LOGGING)
+            </button>
+            <button class="chip chip-mutate" data-category="MUTATE">
+              <span class="chip-dot"></span> Lưu / Cập nhật (MUTATE)
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-heading">MÀN HÌNH / PROGRAM ID</div>
+          <div class="program-badges-list" id="programBadgesList">
+            <!-- Render dynamically -->
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="footer-meta">
+            <span>Server Target:</span>
+            <code>ems.lgdisplay.com:9000</code>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT VIEW -->
+      <main class="main-content" id="mainContent">
+        <!-- VIEW 1: DASHBOARD OVERVIEW -->
+        <section id="viewDashboard" class="view-panel active">
+          <div class="panel-header">
+            <div>
+              <h1 class="panel-title">EMS API Intelligence Dashboard</h1>
+              <p class="panel-subtitle">Tổng hợp phân tích toàn diện 50 Endpoints và 141 giao dịch trích xuất từ file A1.txt</p>
+            </div>
+            <div class="panel-actions">
+              <span class="live-status-pill">● Trạng thái hoạt động 100% OK</span>
+            </div>
+          </div>
+
+          <!-- KPI STAT CARDS -->
+          <div class="kpi-grid">
+            <div class="kpi-card" id="kpiEndpointsCard">
+              <div class="kpi-icon" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">🌐</div>
+              <div class="kpi-info">
+                <span class="kpi-label">Endpoints duy nhất</span>
+                <span class="kpi-value" id="kpiEndpoints">50</span>
+              </div>
+              <div class="kpi-footer">Qua 4 phân hệ chính</div>
+            </div>
+
+            <div class="kpi-card" id="kpiCallsCard">
+              <div class="kpi-icon" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">⚡</div>
+              <div class="kpi-info">
+                <span class="kpi-label">Tổng lượt gọi API</span>
+                <span class="kpi-value" id="kpiCalls">141</span>
+              </div>
+              <div class="kpi-footer">Từ 28 phiên thao tác EMS</div>
+            </div>
+
+            <div class="kpi-card" id="kpiDatasetsCard">
+              <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">📑</div>
+              <div class="kpi-info">
+                <span class="kpi-label">Cấu trúc Datasets</span>
+                <span class="kpi-value" id="kpiDatasets">68</span>
+              </div>
+              <div class="kpi-footer">Request & Response tables</div>
+            </div>
+
+            <div class="kpi-card" id="kpiLatencyCard">
+              <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">⏱️</div>
+              <div class="kpi-info">
+                <span class="kpi-label">Thời gian phản hồi TB</span>
+                <span class="kpi-value" id="kpiLatency">389.8 <small>ms</small></span>
+              </div>
+              <div class="kpi-footer">Nhanh nhất: 72ms | Lâu nhất: 1200ms</div>
+            </div>
+          </div>
+
+          <!-- ANALYTICS CHARTS & MODULE SUMMARY -->
+          <div class="dashboard-grid">
+            <!-- Module Distribution -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>Phân bố theo Phân hệ EMS (Subsystems)</h3>
+                <span class="tag-badge">4 Modules</span>
+              </div>
+              <div class="module-bar-list" id="moduleBarList">
+                <!-- Render dynamically -->
+              </div>
+            </div>
+
+            <!-- Category Distribution -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <h3>Phân bố theo Mục đích Nghiệp vụ</h3>
+                <span class="tag-badge">Categories</span>
+              </div>
+              <div class="category-pie-list" id="categoryDistributionList">
+                <!-- Render dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TOP ACTIVE ENDPOINTS -->
+          <div class="dash-card" style="margin-top: 1.5rem;">
+            <div class="dash-card-header">
+              <h3>Top Endpoints Được Gọi Nhiều Nhất Trong Phiên</h3>
+              <button class="btn btn-sm btn-ghost" id="viewAllEndpointsFromDashBtn">Xem tất cả 50 endpoints →</button>
+            </div>
+            <div class="table-container">
+              <table class="data-table" id="topEndpointsTable">
+                <thead>
+                  <tr>
+                    <th>Phương thức</th>
+                    <th>Tên Endpoint & Action</th>
+                    <th>Phân hệ</th>
+                    <th>Nghiệp vụ</th>
+                    <th>Lượt gọi</th>
+                    <th>Thời gian TB</th>
+                    <th>Hành động</th>
+                  </tr>
+                </thead>
+                <tbody id="topEndpointsTbody">
+                  <!-- Render dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: ENDPOINTS EXPLORER -->
+        <section id="viewEndpoints" class="view-panel">
+          <div class="panel-header">
+            <div>
+              <h1 class="panel-title">Khám Phá Endpoints EMS</h1>
+              <p class="panel-subtitle">Tra cứu chi tiết tham số, cấu trúc bảng dataset request/response và code mẫu</p>
+            </div>
+            <div class="filter-toolbar">
+              <div class="filter-group">
+                <label>Phân hệ:</label>
+                <select id="moduleSelectFilter" class="form-select">
+                  <option value="ALL">Tất cả phân hệ</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label>Nghiệp vụ:</label>
+                <select id="categorySelectFilter" class="form-select">
+                  <option value="ALL">Tất cả nghiệp vụ</option>
+                  <option value="QUERY">Tra cứu (QUERY)</option>
+                  <option value="MUTATE">Lưu / Thay đổi (MUTATE)</option>
+                  <option value="SECURITY">Phân quyền (SECURITY)</option>
+                  <option value="LOGGING">Ghi log (LOGGING)</option>
+                  <option value="OTHER">Khác (OTHER)</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label>Sắp xếp:</label>
+                <select id="sortBySelect" class="form-select">
+                  <option value="calls-desc">Lượt gọi (Cao → Thấp)</option>
+                  <option value="latency-desc">Thời gian phản hồi (Lâu nhất)</option>
+                  <option value="latency-asc">Thời gian phản hồi (Nhanh nhất)</option>
+                  <option value="name-asc">Tên Action (A → Z)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- FILTER RESULTS SUMMARY -->
+          <div class="results-meta-bar">
+            <span>Hiển thị <strong id="resultsCount">50</strong> / <span id="totalCount">50</span> endpoints</span>
+            <div class="active-filter-tags" id="activeFilterTags"></div>
+          </div>
+
+          <!-- ENDPOINTS CARD GRID -->
+          <div class="endpoints-grid" id="endpointsGrid">
+            <!-- Render dynamically -->
+          </div>
+        </section>
+
+        <!-- VIEW 3: WORKFLOW FLOW TRACES -->
+        <section id="viewFlows" class="view-panel">
+          <div class="panel-header">
+            <div>
+              <h1 class="panel-title">Workflow & Call Traces (Chuỗi gọi API theo Session)</h1>
+              <p class="panel-subtitle">28 Ghi chú trích xuất tương ứng với 28 chuỗi tương tác thực tế của người dùng trên EMS</p>
+            </div>
+          </div>
+
+          <div class="flows-layout">
+            <!-- Sessions list (Left) -->
+            <div class="sessions-sidebar">
+              <div class="sessions-header">
+                <h3>Danh sách Sessions ({28})</h3>
+              </div>
+              <div class="sessions-list" id="sessionsList">
+                <!-- Render dynamically -->
+              </div>
+            </div>
+
+            <!-- Session detail waterfall (Right) -->
+            <div class="session-waterfall-pane" id="sessionWaterfallPane">
+              <div class="empty-state" id="emptySessionState">
+                <div class="empty-icon">👈</div>
+                <h4>Chọn một Session bên trái</h4>
+                <p>Xem toàn bộ chuỗi thứ tự các API được gọi, thời gian xử lý và dữ liệu trao đổi trong phiên thao tác đó.</p>
+              </div>
+              <div class="waterfall-content" id="waterfallContent" style="display:none;">
+                <!-- Render dynamically -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 4: DATASETS DICTIONARY -->
+        <section id="viewDatasets" class="view-panel">
+          <div class="panel-header">
+            <div>
+              <h1 class="panel-title">Từ Điển Cấu Trúc Datasets EMS (68 Bảng)</h1>
+              <p class="panel-subtitle">Chuẩn hóa tất cả cấu trúc bảng dữ liệu Dataset được truyền nhận giữa Client (XPlatform/Nexacro) và Server EMS</p>
+            </div>
+            <div class="search-dataset-box">
+              <input type="text" id="datasetSearchInput" class="form-input" placeholder="Lọc theo tên dataset hoặc tên cột...">
+            </div>
+          </div>
+
+          <div class="datasets-grid" id="datasetsGrid">
+            <!-- Render dynamically -->
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- ENDPOINT DETAIL MODAL DRAWER -->
+    <div class="modal-backdrop" id="endpointModalBackdrop">
+      <div class="modal-drawer" id="endpointModalDrawer">
+        <div class="modal-header">
+          <div class="modal-header-meta">
+            <span class="method-badge method-post" id="modalMethodBadge">POST</span>
+            <span class="modal-category-badge" id="modalCategoryBadge">QUERY</span>
+            <span class="modal-program-badge" id="modalProgramBadge">SP130</span>
+          </div>
+          <button class="modal-close-btn" id="modalCloseBtn" title="Đóng modal">✕</button>
+        </div>
+
+        <div class="modal-title-box">
+          <h2 class="modal-endpoint-title" id="modalEndpointTitle">retEcFlag.lgdn</h2>
+          <div class="modal-url-bar">
+            <code id="modalUrlCode">http://ems.lgdisplay.com:9000/...</code>
+            <button class="btn btn-sm btn-ghost" id="copyUrlBtn" title="Sao chép URL">📋 Copy URL</button>
+            <button class="btn btn-sm btn-ghost" id="copyCurlBtn" title="Sao chép cURL">⚡ Copy cURL</button>
+          </div>
+        </div>
+
+        <!-- STATS STRIP -->
+        <div class="modal-stats-strip">
+          <div class="stat-pill">
+            <span class="stat-lbl">Lượt gọi quan sát:</span>
+            <strong id="modalCallCount">1</strong>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-lbl">Thời gian TB:</span>
+            <strong id="modalAvgDuration">127 ms</strong>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-lbl">Phân hệ:</span>
+            <strong id="modalModule">emsspareparts</strong>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-lbl">Controller:</span>
+            <strong id="modalController">sp137Nav</strong>
+          </div>
+        </div>
+
+        <!-- MODAL TABS -->
+        <div class="modal-tabs">
+          <button class="modal-tab active" data-tab="tabRequest">Yêu cầu (Request)</button>
+          <button class="modal-tab" data-tab="tabResponse">Phản hồi (Response)</button>
+          <button class="modal-tab" data-tab="tabCode">Code Mẫu (cURL / JS / Py)</button>
+          <button class="modal-tab" data-tab="tabRaw">JSON Mẫu Gốc</button>
+        </div>
+
+        <div class="modal-tab-content">
+          <!-- TAB 1: REQUEST -->
+          <div class="tab-pane active" id="tabRequest">
+            <div class="spec-section">
+              <h4 class="spec-heading">1. Tham số Request Parameters (Key-Value)</h4>
+              <div id="modalReqParamsContainer"></div>
+            </div>
+
+            <div class="spec-section" style="margin-top: 1.5rem;">
+              <h4 class="spec-heading">2. Bảng Dữ liệu Request Datasets</h4>
+              <div id="modalReqDatasetsContainer"></div>
+            </div>
+          </div>
+
+          <!-- TAB 2: RESPONSE -->
+          <div class="tab-pane" id="tabResponse">
+            <div class="spec-section">
+              <h4 class="spec-heading">1. Tham số Response Parameters</h4>
+              <div id="modalResParamsContainer"></div>
+            </div>
+
+            <div class="spec-section" style="margin-top: 1.5rem;">
+              <h4 class="spec-heading">2. Bảng Dữ liệu Phản hồi Response Datasets</h4>
+              <div id="modalResDatasetsContainer"></div>
+            </div>
+          </div>
+
+          <!-- TAB 3: CODE SNIPPETS -->
+          <div class="tab-pane" id="tabCode">
+            <div class="code-selector">
+              <button class="code-tab-btn active" data-lang="curl">cURL</button>
+              <button class="code-tab-btn" data-lang="javascript">JavaScript (Fetch)</button>
+              <button class="code-tab-btn" data-lang="python">Python (Requests)</button>
+            </div>
+            <div class="code-block-wrapper">
+              <pre><code id="modalCodeSnippet" class="code-display"></code></pre>
+              <button class="btn btn-sm btn-secondary copy-snippet-btn" id="copyCodeSnippetBtn">Sao chép code</button>
+            </div>
+          </div>
+
+          <!-- TAB 4: RAW JSON -->
+          <div class="tab-pane" id="tabRaw">
+            <div class="code-block-wrapper">
+              <pre><code id="modalRawJson" class="code-display"></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast-container" id="toastContainer"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

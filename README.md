@@ -1,7 +1,7 @@
-# Omni-EMS: LG Display EMS Core Data APIs, Mock Server & 360° Workflow Engine
+# Omni-EMS: LX EMS Core Data APIs, Mock Server & 360° Workflow Engine
 
 Hệ thống tích hợp toàn diện gồm:
-1. **Mock Server Nexacro Platform**: Mô phỏng các API nghiệp vụ cốt lõi của nền tảng LG Display Equipment Management System (EMS), kết nối trực tiếp với Cơ sở dữ liệu SQLite quan hệ.
+1. **Mock Server Nexacro Platform**: Mô phỏng các API nghiệp vụ cốt lõi của nền tảng LX Equipment Management System (EMS), kết nối trực tiếp với Cơ sở dữ liệu SQLite quan hệ.
 2. **FastAPI Workflow Engine & Data Fusion Layer (Port 8000)**: Bộ điều phối luồng xử lý dữ liệu động, cơ chế tự phục hồi (**Self-Healing Circuit Breaker**), xử lý song song phân biệt **Batch Mode (Single HTTP)** vs **Loop Mode (Bounded Concurrency Semaphore)**, và hợp nhất dữ liệu 360° (**JSONata Fusion**).
 3. **Demo UI Pipeline Trực Quan**: Giao diện người dùng theo dõi trực tiếp luồng thực thi (Live Pipeline), biểu đồ radar sức khỏe linh kiện và bảng hợp nhất 6 trụ cột dữ liệu.
 

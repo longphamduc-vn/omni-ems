@@ -1,0 +1,146 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+# Endpoint: emsspareparts/sp102/sp131Nav/retrieveItemUseDate.lgdn
+# Action: retrieveItemUseDate
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp102_sp131Nav_retrieveItemUseDate_lgdn
+  name: retrieveItemUseDate
+  path: emsspareparts/sp102/sp131Nav/retrieveItemUseDate.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp131Nav/retrieveItemUseDate.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  submodule: sp102
+  controller: sp131Nav
+  category: QUERY
+  business_domain: Inventory & Spare Parts Core
+  business_domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  summary_vi: Lấy ngày xuất dùng phụ tùng gần nhất để dự báo hao mòn và chu kỳ thay
+    thế định kỳ.
+  program_ids:
+  - SP102
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 150.0
+    min_duration_ms: 150
+    max_duration_ms: 150
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - item_usage_summary
+  dependencies:
+    upstream:
+    - RetStockStatusList
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_itemInfo:
+      description: Dataset đầu vào ds_itemInfo
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAK93067
+        - 'Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,
+
+          Material:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,
+
+          Remark:'
+        - 비통합 관리
+        - N001
+        - ''
+        - ''
+        - ''
+        - '14'
+        - '544.67'
+        - '544.67'
+        - ''
+        - Pham Duc Long
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - LGDVN_(주) 서브원_KR017765
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - N
+        - ''
+        - ''
+        - '863381'
+        - ''
+        - '658359'
+        - '87479'
+        - '3890752'
+        - '28753'
+        - '421996047'
+        - Q2610-3107549
+        - N
+        - '0'
+        - ''
+        - '0'
+        - '0'
+        - ''
+        - ''
+        - '14'
+        - ''
+        - N
+        - N
+        - ''
+        - '20261002'
+        - ''
+        - '48'
+        - ''
+        - Y
+        - ''
+        - ''
+        - ''
+        - '0'
+        - '0'
+        - N
+        - ''
+        - 원 법인 구매
+        - PT003
+        - N
+        - N
+        - N
+        - '1'
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_rtn:
+      description: Dataset kết quả ds_rtn
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '3890752'
+        - '20261226'

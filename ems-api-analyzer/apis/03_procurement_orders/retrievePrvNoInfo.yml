@@ -1,0 +1,79 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emscom/prvNoNav/retrievePrvNoInfo.lgdn
+# Action: retrievePrvNoInfo
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_prvNoNav_retrievePrvNoInfo_lgdn
+  name: retrievePrvNoInfo
+  path: emscom/prvNoNav/retrievePrvNoInfo.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/prvNoNav/retrievePrvNoInfo.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emscom
+  submodule: prvNoNav
+  controller: retrievePrvNoInfo.lgdn
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Tra cứu thông tin và tính hợp lệ của số phiếu PRV.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 950.0
+    min_duration_ms: 950
+    max_duration_ms: 950
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - prv_requests
+  dependencies:
+    upstream: []
+    downstream:
+    - retrieveItemTargetQtyInfo
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_input:
+      description: Dataset đầu vào ds_input
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - Q2609-3081292
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_rtn:
+      description: Dataset kết quả ds_rtn
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - Q2609-3081292
+        - Q
+        - QP011
+        - PO(Remained)
+        - QCAD19169

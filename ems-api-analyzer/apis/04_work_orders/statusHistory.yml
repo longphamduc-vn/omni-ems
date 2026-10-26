@@ -1,0 +1,113 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 04. Bảo trì Thiết bị & Lệnh công tác
+# Endpoint: emsworkorder/wo50/wo580Nav/statusHistory.lgdn
+# Action: statusHistory
+# Subsystem: emsworkorder
+# Category: OTHER
+# ==============================================================================
+
+info:
+  id: emsworkorder_wo50_wo580Nav_statusHistory_lgdn
+  name: statusHistory
+  path: emsworkorder/wo50/wo580Nav/statusHistory.lgdn
+  url: http://ems.lgdisplay.com:9000/emsworkorder/wo50/wo580Nav/statusHistory.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 04_work_orders
+  functional_title_vi: 04. Bảo trì Thiết bị & Lệnh công tác
+  subsystem: emsworkorder
+  submodule: wo50
+  controller: wo580Nav
+  category: OTHER
+  business_domain: Work Orders & Maintenance
+  business_domain_vi: Bảo trì Thiết bị & Lệnh công tác
+  summary_vi: Truy vấn lịch sử thay đổi trạng thái của phiếu công tác bảo trì.
+  program_ids:
+  - WO580
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 178.0
+    min_duration_ms: 178
+    max_duration_ms: 178
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - work_orders
+  dependencies:
+    upstream:
+    - WO230WoSaveInit
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_info:
+      description: Dataset đầu vào ds_info
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '314805734'
+        - '28753'
+        - '658359'
+        - search
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_list:
+      description: Dataset kết quả ds_list
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '314805734'
+        - '139544072'
+        - '28753'
+        - 'PR Return에 따른 WO 취소 처리(Pr No:119356.1,구매담당자:Nguyen Thi Hong Ngoc,사유:BPA
+
+          Price completed)'
+        - '1102'
+        - '20251014133434000'
+        - '1102'
+        - '20251014133434000'
+        - '-1'
+        - N
+        - Cancelled
+        - EMS System / 설비/환경 AX 팀
+        - '0'
+      - - '314805734'
+        - '139012963'
+        - '28753'
+        - Created
+        - '658359'
+        - '20250915110713000'
+        - '658359'
+        - '20250915110713000'
+        - ''
+        - N
+        - Unreleased
+        - Pham Duc Long / NY SW PO M Technology DB/BD Unit B2
+        - '0'
+    ds_input:
+      description: Dataset kết quả ds_input
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '147566170'

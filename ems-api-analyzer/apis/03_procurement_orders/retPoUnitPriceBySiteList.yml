@@ -1,0 +1,159 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emsspareparts/sp40/sp403Nav/retPoUnitPriceBySiteList.lgdn
+# Action: retPoUnitPriceBySiteList
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp40_sp403Nav_retPoUnitPriceBySiteList_lgdn
+  name: retPoUnitPriceBySiteList
+  path: emsspareparts/sp40/sp403Nav/retPoUnitPriceBySiteList.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp40/sp403Nav/retPoUnitPriceBySiteList.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  submodule: sp40
+  controller: sp403Nav
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Tra cứu lịch sử đơn giá mua PO của phụ tùng theo từng nhà máy sản xuất.
+  program_ids:
+  - SP403
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 669.0
+    min_duration_ms: 669
+    max_duration_ms: 669
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - item_po_history
+  dependencies:
+    upstream:
+    - RetStockStatusList
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - '658359'
+        - '69972'
+        - Q
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - ''
+    ds_item:
+      description: Dataset đầu vào ds_item
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAK93067
+        - ''
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_list:
+      description: Dataset kết quả ds_list
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - ''
+        - Q
+        - '3890752'
+        - '28753'
+        - QCAK93067
+        - 'Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,
+
+          Material:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,
+
+          Remark:'
+        - Q4.Bracket
+        - TOP ENGINEERING CO.,LTD
+        - PC2512005-001-00021-0
+        - ''
+        - ''
+        - '1'
+        - '544.7'
+        - '604'
+        - '604'
+        - ''
+        - ''
+        - '544.7'
+        - ''
+        - '800000'
+        - '800000'
+        - ''
+        - ''
+        - '716927.3'
+        - ''
+        - '4032.9'
+        - '4032.9'
+        - ''
+        - ''
+        - '3659.1'
+        - ''
+        - '544.7'
+        - '604'
+        - '604'
+        - ''
+        - ''
+        - '544.7'
+        - ''
+        - '800000'
+        - '800000'
+        - ''
+        - ''
+        - '716927.3'
+        - ''
+        - '4032.9'
+        - '4032.9'
+        - ''
+        - ''
+        - '3659.1'
+        - ''
+        - ''
+        - ''
+        - '604'
+        - '10.8867266385166146502662015788507435286'
+        - A02
+        - '10'
+        - N
+        - '5'
+        - '132'
+        - '1'
+        - N
+        - '10'

@@ -34,6 +34,14 @@ class DatabaseManager {
   }
 
   reset() {
+    const tables = [
+      'prv_requests', 'work_orders', 'translations', 'factories',
+      'common_codes', 'item_po_history', 'target_stock',
+      'estimate_requests', 'item_usage_summary', 'inventory', 'items'
+    ];
+    for (const t of tables) {
+      try { this.db.exec(`DROP TABLE IF EXISTS ${t}`); } catch (e) {}
+    }
     const schemaSql = fs.readFileSync(SCHEMA_FILE, 'utf8');
     this.db.exec(schemaSql);
     const seedSql = fs.readFileSync(SEED_FILE, 'utf8');

@@ -1,0 +1,83 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+# Endpoint: emscom/gridFormatNav/retrieveGridFormat.lgdn
+# Action: retrieveGridFormat
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_gridFormatNav_retrieveGridFormat_lgdn
+  name: retrieveGridFormat
+  path: emscom/gridFormatNav/retrieveGridFormat.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/gridFormatNav/retrieveGridFormat.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  submodule: gridFormatNav
+  controller: retrieveGridFormat.lgdn
+  category: QUERY
+  business_domain: Common Master & Security
+  business_domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  summary_vi: Tải cấu hình ẩn/hiện cột, độ rộng cột của các bảng theo user.
+  program_ids:
+  - CM313
+  - SP110
+  - SP120
+  - SP130
+  - SP131
+  - SP132_P
+  - SP135
+  - SP136_P
+  - SP138_P
+  - SP140_P
+  - SP180
+  - SP220
+  - SP332
+  - SP335
+  - SP353
+  - SP403
+  - WO230
+  - WO580_P
+  metrics:
+    total_calls: 22
+    avg_duration_ms: 98.9
+    min_duration_ms: 80
+    max_duration_ms: 185
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream: []
+    downstream: []
+request:
+  parameters: {}
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - CM313
+        - emNoPop.CM313.grd_list
+        - '658359'
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_list:
+      description: Dataset kết quả ds_list
+      column_count: 0
+      columns: []
+      sample_rows: []

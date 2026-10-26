@@ -1,0 +1,229 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 04. Bảo trì Thiết bị & Lệnh công tác
+# Endpoint: emscom/woMasterNav/WoMasterRetInit.lgdn
+# Action: WoMasterRetInit
+# Subsystem: emscom
+# Category: OTHER
+# ==============================================================================
+
+info:
+  id: emscom_woMasterNav_WoMasterRetInit_lgdn
+  name: WoMasterRetInit
+  path: emscom/woMasterNav/WoMasterRetInit.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/woMasterNav/WoMasterRetInit.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 04_work_orders
+  functional_title_vi: 04. Bảo trì Thiết bị & Lệnh công tác
+  subsystem: emscom
+  submodule: woMasterNav
+  controller: WoMasterRetInit.lgdn
+  category: OTHER
+  business_domain: Work Orders & Maintenance
+  business_domain_vi: Bảo trì Thiết bị & Lệnh công tác
+  summary_vi: Tải dữ liệu master của một phiếu công tác bảo trì định kỳ.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 2
+    avg_duration_ms: 210.5
+    min_duration_ms: 189
+    max_duration_ms: 232
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - work_orders
+  dependencies:
+    upstream:
+    - retrieveWipEntity
+    downstream:
+    - WO230WoSaveInit
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_info:
+      description: Dataset đầu vào ds_info
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '314805734'
+        - '28753'
+        - '658359'
+        - ViewWO
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_wo:
+      description: Dataset kết quả ds_wo
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '12'
+        - PR
+        - '12'
+        - '1'
+        - '[QCAC23840][PRE-RFQ]Van phun keo dùng để điều chỉnh lưu lượng keo một
+
+          cách chính xác trong hệ thống đường ống công nghiệp, model MV-100-3.0S-F0-E08,
+
+          sản xuất bởi Marco Systemanalyse und Entwicklung GmbH,'
+        - '28753'
+        - '1571423'
+        - M1412
+        - MODULE_MCL
+        - M1412-4844558
+        - ''
+        - ''
+        - '20250915110713000'
+        - '20260403110713000'
+        - ''
+        - '87254'
+        - '1201617'
+        - '2'
+        - '4800'
+        - ''
+        - ''
+        - ''
+        - ''
+        - '7'
+        - '314805734'
+        - WO-232220577
+        - ''
+        - ''
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '2'
+        - '1'
+        - Cancelled
+        - '5790086'
+        - '2'
+        - '0'
+        - ''
+        - ''
+        - ''
+        - ''
+        - EM-MFG-003
+        - HWBMTL21BP0101
+        - A13
+        - ''
+        - ''
+        - '7'
+        - ''
+        - ''
+        - '20250915110713000'
+        - ''
+        - '5790086'
+        - ''
+        - ''
+        - '7'
+        - '3'
+        - true
+        - '20250915130713000'
+        - '20250915130713000'
+        - N
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '1201617'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - NY SW PO M Technology Lami/Laser Part
+        - ''
+        - VH081996
+        - Pham Duc Long, NY SW PO M Technology DB/BD Unit B2
+        - '2'
+        - '2'
+        - '2'
+        - ''
+        - N
+        - ''
+        - ''
+        - '0'
+        - ''
+        - '87321'
+        - PO Module Technology Team 2/MFG
+        - '87254'
+        - NY SW PO M Technology Lami/Laser Part
+        - ''
+        - 'Manuf Exp_Spare Parts_Production(Replacement),Manuf Exp_Repair_Facility
+
+          Maintenance(Machinery)'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '0'
+        - ''
+        - HW MICRO COATING 201-PANEL LOADING-LOADING TRANSFER
+        - '6'
+        - ''
+        - N
+        - N
+        - ''
+        - '20250915110713000'
+        - '20260403110713000'
+        - N
+        - ''
+        - HW
+        - MTL
+        - '0000000000000'
+        - '00000000'
+        - ''
+        - ''
+        - 0000000000000()
+        - 00000000()
+        - '0'
+    ds_step:
+      description: Dataset kết quả ds_step
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - OK
+        - '#575757ff'
+        - '#575757ff'
+        - '#575757ff'
+        - N
+    ds_spAttachFile:
+      description: Dataset kết quả ds_spAttachFile
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'

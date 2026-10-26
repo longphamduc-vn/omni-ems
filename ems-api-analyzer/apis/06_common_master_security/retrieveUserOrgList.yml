@@ -1,0 +1,131 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+# Endpoint: emscom/loginNav/retrieveUserOrgList.lgdn
+# Action: retrieveUserOrgList
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_loginNav_retrieveUserOrgList_lgdn
+  name: retrieveUserOrgList
+  path: emscom/loginNav/retrieveUserOrgList.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/loginNav/retrieveUserOrgList.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  submodule: loginNav
+  controller: retrieveUserOrgList.lgdn
+  category: QUERY
+  business_domain: Common Master & Security
+  business_domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  summary_vi: Lấy danh sách phòng ban và vai trò trách nhiệm của người dùng.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 2
+    avg_duration_ms: 183.5
+    min_duration_ms: 151
+    max_duration_ms: 216
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream:
+    - retrieveEmployeeNumber
+    downstream:
+    - getAuthButton
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_input:
+      description: Dataset đầu vào ds_input
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '658359'
+        - phamduclong04
+        - '1369610'
+        - VH081996
+        - Pham Duc Long
+        - Pham Duc Long
+        - '87479'
+        - NY SW PO M Technology DB/BD Unit B2
+        - phamduclong04@lgdisplay.com
+        - 0366270148
+        - VH009552
+        - '28753'
+        - A13
+        - LG Display Vietnam. Asset
+        - EN
+        - EN
+        - DARK
+        - MGD
+        - '2090634'
+        - '87479'
+        - NY SW PO M Technology DB/BD Unit B2
+        - '69972'
+        - 69966,69968,69972
+        - PLANNER@,SCHEDULER@,TECHNICIAN@
+        - LGDVN
+        - USD
+        - VI
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_organization:
+      description: Dataset kết quả ds_organization
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '658359'
+        - VH081996
+        - Pham Duc Long
+        - '28753'
+        - A13
+        - LG Display Vietnam. Asset
+        - '1'
+        - '69972'
+    ds_responsibility:
+      description: Dataset kết quả ds_responsibility
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - VH081996
+        - A13
+        - '69966'
+        - VN_EMSE_PLANNER_A13
+        - VH EMS Planner (A13)
+        - PLANNER
+      - - VH081996
+        - A13
+        - '69968'
+        - VN_EMSE_SCHEDULER_A13
+        - VH EMS Scheduler (A13)
+        - SCHEDULER
+      - - VH081996
+        - A13
+        - '69972'
+        - VN_EMSE_TECHNICIAN_A13
+        - VH EMS Technician (A13)
+        - TECHNICIAN

@@ -1,0 +1,113 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 05. Quy trình Phê duyệt Điện tử
+# Endpoint: emsspareparts/sp103/sp161Nav/retrieveCheckAppLine.lgdn
+# Action: retrieveCheckAppLine
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp103_sp161Nav_retrieveCheckAppLine_lgdn
+  name: retrieveCheckAppLine
+  path: emsspareparts/sp103/sp161Nav/retrieveCheckAppLine.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp103/sp161Nav/retrieveCheckAppLine.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 05_approval_workflow
+  functional_title_vi: 05. Quy trình Phê duyệt Điện tử
+  subsystem: emsspareparts
+  submodule: sp103
+  controller: sp161Nav
+  category: QUERY
+  business_domain: Electronic Approval Workflow
+  business_domain_vi: Quy trình Phê duyệt Điện tử
+  summary_vi: Kiểm tra tính hợp lệ của luồng phê duyệt trước khi ký duyệt.
+  program_ids:
+  - SP103
+  metrics:
+    total_calls: 3
+    avg_duration_ms: 93.7
+    min_duration_ms: 83
+    max_duration_ms: 103
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream:
+    - retApprovalLine
+    downstream:
+    - retApprovalRequest
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '18033023'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '28753'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '658359'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Q
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_rtn:
+      description: Dataset kết quả ds_rtn
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - Y

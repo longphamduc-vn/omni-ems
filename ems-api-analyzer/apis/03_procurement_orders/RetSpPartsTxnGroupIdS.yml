@@ -1,0 +1,106 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emscom/seqNav/RetSpPartsTxnGroupIdS.lgdn
+# Action: RetSpPartsTxnGroupIdS
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_seqNav_RetSpPartsTxnGroupIdS_lgdn
+  name: RetSpPartsTxnGroupIdS
+  path: emscom/seqNav/RetSpPartsTxnGroupIdS.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/seqNav/RetSpPartsTxnGroupIdS.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emscom
+  submodule: seqNav
+  controller: RetSpPartsTxnGroupIdS.lgdn
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Sinh mã định danh phiên giao dịch mua sắm (txnGroupId) từ Sequence hệ
+    thống.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 191.0
+    min_duration_ms: 191
+    max_duration_ms: 191
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - prv_requests
+  dependencies:
+    upstream: []
+    downstream:
+    - CreInsertItemPrvRequest
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - '20210316'
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_result:
+      description: Dataset kết quả ds_result
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '421996047'

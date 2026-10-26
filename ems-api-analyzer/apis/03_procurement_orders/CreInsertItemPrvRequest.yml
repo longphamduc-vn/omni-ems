@@ -1,0 +1,89 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emsspareparts/sp101/sp110Nav/CreInsertItemPrvRequest.lgdn
+# Action: CreInsertItemPrvRequest
+# Subsystem: emsspareparts
+# Category: MUTATE
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp101_sp110Nav_CreInsertItemPrvRequest_lgdn
+  name: CreInsertItemPrvRequest
+  path: emsspareparts/sp101/sp110Nav/CreInsertItemPrvRequest.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp101/sp110Nav/CreInsertItemPrvRequest.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  submodule: sp101
+  controller: sp110Nav
+  category: MUTATE
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: 'API Đột biến (Mutate) quan trọng: Tạo mới phiếu yêu cầu mua sắm phụ
+    tùng (PRV Request).'
+  program_ids:
+  - SP101
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 180.0
+    min_duration_ms: 180
+    max_duration_ms: 180
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - prv_requests
+  dependencies:
+    upstream:
+    - RetSpPartsTxnGroupIdS
+    - RetStockStatusList
+    downstream:
+    - retApprovalLine
+    - RetEstimateRequestList
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '421996047'
+        - '3890752'
+        - '28753'
+        - NEW
+        - ''
+        - '658359'
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_list:
+      description: Dataset kết quả ds_list
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - OK
+        - '0'
+        - ''

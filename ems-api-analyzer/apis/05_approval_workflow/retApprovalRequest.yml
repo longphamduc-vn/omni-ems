@@ -1,0 +1,213 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 05. Quy trình Phê duyệt Điện tử
+# Endpoint: emscom/approvalNav/retApprovalRequest.lgdn
+# Action: retApprovalRequest
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_approvalNav_retApprovalRequest_lgdn
+  name: retApprovalRequest
+  path: emscom/approvalNav/retApprovalRequest.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/approvalNav/retApprovalRequest.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 05_approval_workflow
+  functional_title_vi: 05. Quy trình Phê duyệt Điện tử
+  subsystem: emscom
+  submodule: approvalNav
+  controller: retApprovalRequest.lgdn
+  category: QUERY
+  business_domain: Electronic Approval Workflow
+  business_domain_vi: Quy trình Phê duyệt Điện tử
+  summary_vi: Gửi yêu cầu phê duyệt điện tử chính thức vào hệ thống ký duyệt.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 2
+    avg_duration_ms: 900.0
+    min_duration_ms: 887
+    max_duration_ms: 913
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - prv_requests
+  dependencies:
+    upstream:
+    - retApprovalLine
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '17967067'
+        - WOP
+        - '16001'
+        - SP134_P
+        - SP134_P
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - N
+        - N
+        - Y
+        - ''
+        - ''
+        - REQUESTOR
+        - '10'
+        - '28753'
+        - '658359'
+        - EMS
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - UPDATE
+        - '28'
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_requestActor:
+      description: Dataset kết quả ds_requestActor
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - REQUESTOR
+        - '40'
+        - '0'
+        - '0'
+    ds_requestInformation:
+      description: Dataset kết quả ds_requestInformation
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '17967067'
+        - '28753'
+        - WOP-17967067
+        - EMS
+        - WOP
+        - '16001'
+        - CREATE
+        - '40'
+        - '28'
+        - ''
+        - SP134_P
+        - SP134_P
+        - 'Request for Purchase Spare parts in Sep - PO Module Technology Team 2.
+
+          #1'
+        - ''
+        - ''
+        - '658359'
+        - '20260910093920000'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - N
+        - Pham Duc Long
+        - NY SW PO M Technology DB/BD Unit B2
+        - CREATE
+        - Approved
+        - '• Budget Team: PO Module Technology Team 2
+
+
+
+
+          • Purchasing Budget in Aug (100% SG / 100% TDR Target):  90,329 USD /
+
+          63,230 USD
+
+
+
+
+          • 발주 금액 / Số tiền đã lên đơn: 0  USD
+
+
+
+
+          • 추가 발주 금액 / Số tiền mua đơn này: 48,658 USD
+
+
+
+
+          • 추가 발주 후 총액 / Tổng chi phí sau mua: 48,658 USD
+
+
+
+
+          • Rate purchase (vs SG Target): 53.87%
+
+
+
+
+          • Over SG: No
+
+
+
+
+          [Request Details]
+
+
+
+
+          1. 요청 사유 / Mục đích yêu cầu (Reason):
+
+
+
+
+          • Expedite the diaphragm replacement and issue an urgent PO because the
+
+          actual lifespan is only 60k–80k pcs, well below the 110k pcs standard.
+
+          [Model D19x - #209, #210, #601, #602]
+
+
+
+
+          • Replace the Cover PCB working stage to reduce attach head vacuum errors.
+
+          [Model D19x - #602]'
+        - 26-09-10 09:39:20
+        - VH081996
+        - VH081996
+        - Technician

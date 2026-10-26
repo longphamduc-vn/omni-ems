@@ -1,0 +1,101 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+# Endpoint: emsspareparts/sp101/sp110Nav/RetAuthEmergencyPo.lgdn
+# Action: RetAuthEmergencyPo
+# Subsystem: emsspareparts
+# Category: SECURITY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp101_sp110Nav_RetAuthEmergencyPo_lgdn
+  name: RetAuthEmergencyPo
+  path: emsspareparts/sp101/sp110Nav/RetAuthEmergencyPo.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp101/sp110Nav/RetAuthEmergencyPo.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emsspareparts
+  submodule: sp101
+  controller: sp110Nav
+  category: SECURITY
+  business_domain: Common Master & Security
+  business_domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  summary_vi: Kiểm tra quyền phê duyệt đơn hàng mua khẩn cấp.
+  program_ids:
+  - SP101
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 179.0
+    min_duration_ms: 179
+    max_duration_ms: 179
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream: []
+    downstream:
+    - EmergencyPoList
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_rtn:
+      description: Dataset kết quả ds_rtn
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - N

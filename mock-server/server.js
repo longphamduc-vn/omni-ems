@@ -3,6 +3,7 @@ const cors = require('cors');
 const db = require('./db/database');
 const { parseNexacroXml } = require('./utils/nexacro-parser');
 const { buildNexacroResponse } = require('./utils/nexacro-builder');
+const catalog = require('./utils/analyzed-catalog');
 
 const app = express();
 const PORT = process.env.PORT || 9000;
@@ -17,12 +18,20 @@ function nexacroHandler(dispatcher) {
     try {
       const raw = typeof req.body === 'string' ? req.body : '';
       const parsed = parseNexacroXml(raw);
-      const datasets = dispatcher(parsed);
+      const resData = dispatcher(parsed, req);
+
+      let datasets = resData;
+      let parameters = parsed.parameters || {};
+
+      if (resData && (resData.datasets !== undefined || resData.parameters !== undefined)) {
+        datasets = resData.datasets || {};
+        parameters = { ...parameters, ...(resData.parameters || {}) };
+      }
 
       const xml = buildNexacroResponse({
         errorCode: 1,
         errorMsg: '',
-        parameters: parsed.parameters || {},
+        parameters: parameters,
         datasets: datasets || {}
       });
 
@@ -336,6 +345,7 @@ app.post('/emscom/popupNav/retrieveItem.lgdn', nexacroHandler((req) => {
       i.po_type as poType, i.po_type_code as poTypeCode,
       i.item_category_code as itemCategoryCode, i.item_category_desc as itemCategoryDesc,
       i.item_catalog_group_id as itemCatalogGroupId,
+      i.fdm_url as fdmUrl, i.fdm_flag as fdmFlag,
       i.timely_purchase_date as timelyPurchaseDate,
       inv.organization_id as organizationId, inv.inventory_item_id as inventoryItemId,
       inv.buy_item_type as buyItemType, inv.buy_item_type_code as buyItemTypeCode,
@@ -390,7 +400,9 @@ app.post('/emscom/popupNav/retrieveItem.lgdn', nexacroHandler((req) => {
     itemCategoryDesc: r.itemCategoryDesc || 'Q4.Joint/Connector',
     itemCatalogGroupId: String(r.itemCatalogGroupId || '504'),
     modelName: r.modelName || '',
-    makerName: r.makerName || ''
+    makerName: r.makerName || '',
+    fdmUrl: r.fdmUrl || '',
+    fdmFlag: r.fdmFlag || 'Y'
   }));
 
   return { ds_List: dsList };
@@ -449,6 +461,179 @@ app.post('/emswonew/wn90/wn900Nav/retFactoryList.lgdn', nexacroHandler(() => {
   return { ds_cbo_factory: rows };
 }));
 
+// ==============================================================
+// Additional Business & Operational Endpoints Calibrated from A1.txt / ems-api-analyzer
+// ==============================================================
+
+// 10. Purchase Request Creation (MUTATE - CreInsertItemPrvRequest.lgdn)
+app.post('/emsspareparts/sp101/sp110Nav/CreInsertItemPrvRequest.lgdn', nexacroHandler((req) => {
+  const s = req.datasets.ds_search?.[0] || {};
+  const txnGroupId = s.txnGroupId || String(Date.now());
+  const inventoryItemId = s.inventoryItemId || '3890752';
+  const orgId = s.organizationId || '28753';
+  const prvType = s.prvType || 'NEW';
+  const userId = s.userId || '658359';
+  const prvNo = s.prvNo || `Q2610-${Math.floor(1000000 + Math.random() * 9000000)}`;
+
+  try {
+    db.run(
+      'INSERT INTO prv_requests (txn_group_id, inventory_item_id, organization_id, prv_type, prv_no, user_id, status, err_code, err_msg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [txnGroupId, inventoryItemId, orgId, prvType, prvNo, userId, 'OK', '0', '']
+    );
+  } catch (e) {
+    console.warn('[CreInsertItemPrvRequest] Note:', e.message);
+  }
+
+  return {
+    ds_list: [
+      { result: 'OK', errCode: '0', errMsg: '' }
+    ]
+  };
+}));
+
+// 11. Repair Interlock Check (retWaitRepairItemInterlock.lgdn)
+app.post('/emsspareparts/sp102/sp131Nav/retWaitRepairItemInterlock.lgdn', nexacroHandler(() => {
+  return { ds_result: [{ applyFlag: 'N' }] };
+}));
+
+// 12. Engineering Change Flag (retEcFlag.lgdn)
+app.post('/emsspareparts/sp102/sp137Nav/retEcFlag.lgdn', nexacroHandler(() => {
+  return { ds_ec: [{ ecCode: 'EC001', ecCodeDesc: 'EC 대상' }] };
+}));
+
+// 13. Work Order Save Init (WO230WoSaveInit.lgdn)
+app.post('/emsworkorder/wo20/wo230Nav/WO230WoSaveInit.lgdn', nexacroHandler((req) => {
+  const info = req.datasets.ds_info?.[0] || {};
+  const wipId = info.wipEntityId || '314805734';
+  const wo = db.get('SELECT * FROM work_orders WHERE wip_entity_id = ?', [wipId]) || {
+    wip_entity_id: wipId, organization_id: '28753', asset_number: 'M1412-4844558', instance_number: 'HWBMTL21BP0101'
+  };
+
+  return {
+    ds_init: [{ safetyFlag: 'N', emrgIssueFlag: 'N', useAllocationFlag: 'N', useQCodeFlag: 'Y', checkMessage: '', activityTotManCnt: '', wipEntityId: wo.wip_entity_id, organizationId: wo.organization_id }],
+    ds_oplist: [{ operationSeqNum: '10', wipEntityId: wo.wip_entity_id, organizationId: wo.organization_id, standardOperationId: '', standardOperationCode: '', departmentId: '1201617', departmentCode: '87254', description: 'Operation 10' }],
+    ds_mtlist: [{ wipEntityId: wo.wip_entity_id, organizationId: wo.organization_id, operationSeqNum: '10', operationDesc: '', opDept: '87254', itemType: '1', inventoryItemId: '3772493', directItemSeqId: '', itemName: 'QCAC23840', itemDesc: 'Needle Valve ** MARCO SYSTEMANALYSE', quantity: '0', uom: 'EA', onHandQty: '20', availableQty: '20', commonFlag: 'Y' }],
+    ds_poChangeFlag: [{ poChangeFlag: 'N' }],
+    ds_poInfoFlag: [{ poInfoFlag: 'N' }],
+    ds_spAttachFile: [{ attachFileCnt: '0' }]
+  };
+}));
+
+// 14. Work Order Status History (statusHistory.lgdn)
+app.post('/emsworkorder/wo50/wo580Nav/statusHistory.lgdn', nexacroHandler((req) => {
+  const info = req.datasets.ds_info?.[0] || {};
+  const wipId = info.wipEntityId || '314805734';
+  return {
+    ds_list: [
+      { wipEntityId: wipId, historyId: '139544072', organizationId: '28753', commentText: 'PR Return에 따른 WO 취소 처리', createdBy: '1102', creationDate: '20250915130713000' },
+      { wipEntityId: wipId, historyId: '147566170', organizationId: '28753', commentText: 'WO Khởi tạo ban đầu', createdBy: 'VH081996', creationDate: '20250915110713000' }
+    ],
+    ds_input: [{ historyId: '147566170' }]
+  };
+}));
+
+// 15. Purchase Request Items List (retrievePurchaseRequest.lgdn)
+app.post('/emsspareparts/sp102/sp134Nav/retrievePurchaseRequest.lgdn', nexacroHandler(() => {
+  const ep = catalog.getEndpoint('/emsspareparts/sp102/sp134Nav/retrievePurchaseRequest.lgdn');
+  if (ep && ep.datasets && ep.datasets.ds_Item) {
+    return { ds_Item: ep.datasets.ds_Item };
+  }
+  return { ds_Item: [] };
+}));
+
+// 16. Item Request Detail (retrieveItemRequestDetail.lgdn)
+app.post('/emsspareparts/sp102/sp132Nav/retrieveItemRequestDetail.lgdn', nexacroHandler(() => {
+  const ep = catalog.getEndpoint('/emsspareparts/sp102/sp132Nav/retrieveItemRequestDetail.lgdn');
+  if (ep && ep.datasets && ep.datasets.ds_Item) {
+    return { ds_Item: ep.datasets.ds_Item };
+  }
+  return { ds_Item: [] };
+}));
+
+// 17. Realtime Spareparts Status (retSparepartsStatus.lgdn)
+app.post('/emsspareparts/sp201/sp220Nav/retSparepartsStatus.lgdn', nexacroHandler(() => {
+  return {
+    ds_RealtimeReviewreq: [{ recordCount: '3', amount: '2' }],
+    ds_RealReviewreqConfirm: [{ recordCount: '0', amount: '0' }],
+    ds_RealPRreq: [{ recordCount: '0', amount: '0' }],
+    ds_RealPOStandby: [{ recordCount: '0', amount: '0' }],
+    ds_RealSupplierUncheck: [{ recordCount: '0', amount: '0' }],
+    ds_RealPORemainQty: [{ recordCount: '2', amount: '1' }],
+    ds_CumDeliveryInfo: [{ recordCount: '0', amount: '0' }]
+  };
+}));
+
+// 18. Approval Line & Request (retApprovalLine.lgdn & retApprovalRequest.lgdn)
+app.post('/emscom/approvalNav/retApprovalLine.lgdn', nexacroHandler(() => {
+  return {
+    ds_requestActor: [{ actor: 'REQUESTOR', statusCode: '40', managerTypeRender: '' }],
+    ds_approvalInsert: [],
+    ds_approvalList: [
+      { organizationId: '28753', requestMasterId: '18026951', approvalOrdinalSeq: '1st', approvalSeqNo: '1', systemCode: 'EMS', approverName: 'Pham Duc Long', approvalStatus: 'APPROVED' },
+      { organizationId: '28753', requestMasterId: '18026951', approvalOrdinalSeq: '2nd', approvalSeqNo: '2', systemCode: 'EMS', approverName: 'Nguyen Thi Hue', approvalStatus: 'PENDING' }
+    ],
+    ds_copyToList: [],
+    ds_inspectionList: [],
+    ds_transferList: [],
+    ds_settingReferenceAuto: []
+  };
+}));
+
+app.post('/emscom/approvalNav/retApprovalRequest.lgdn', nexacroHandler(() => {
+  return {
+    ds_requestActor: [{ actor: 'REQUESTOR', statusCode: '40', managerTypeRender: '' }],
+    ds_requestInformation: [{ requestMasterId: '18026951', requestCode: 'PRV', status: 'In-Progress' }]
+  };
+}));
+
+// 19. Security, Auth, Logging & UI Grid Format
+app.post('/emsspareparts/sp302/sp330Nav/CheckMasterAuth.lgdn', nexacroHandler(() => ({ ds_auth: [{ masterYn: 'N' }] })));
+app.post('/emsspareparts/sp302/sp330Nav/GetSpPrivFlag.lgdn', nexacroHandler(() => ({ ds_result: [{ privFlag: 'N' }] })));
+app.post('/emscom/authButtonNav/getAuthButton.lgdn', nexacroHandler(() => ({ ds_auth: [{ authSearch: 'Y', authSave: 'Y', authDelete: 'N', authPrint: 'Y' }] })));
+app.post('/emscom/gridFormatNav/retrieveGridFormat.lgdn', nexacroHandler(() => ({ ds_list: [] })));
+app.post('/emscom/connLogNav/insertStartLog.lgdn', nexacroHandler(() => ({})));
+app.post('/emscom/connLogNav/updateEndLog.lgdn', nexacroHandler(() => ({})));
+app.all('/Servlet/MenuPermit.document', nexacroHandler(() => ({})));
+
+// ==============================================================
+// Universal Dynamic Dispatcher for ALL 50 Analyzed Endpoints
+// Automatically captures and responds with authentic Nexacro XML
+// ==============================================================
+app.all('*', (req, res, next) => {
+  const pathname = req.path;
+  if (!pathname.endsWith('.lgdn') && !pathname.endsWith('.document')) {
+    return next();
+  }
+
+  const ep = catalog.getEndpoint(pathname);
+  if (ep) {
+    try {
+      const raw = typeof req.body === 'string' ? req.body : '';
+      const parsed = parseNexacroXml(raw);
+      const params = { ...parsed.parameters, ...(ep.parameters || {}) };
+      const xml = buildNexacroResponse({
+        errorCode: 1,
+        errorMsg: '',
+        parameters: params,
+        datasets: ep.datasets || {}
+      });
+      res.setHeader('Content-Type', 'text/xml; charset=UTF-8');
+      return res.status(200).send(xml);
+    } catch (e) {
+      console.error(`[Catalog Dispatcher Error ${pathname}]`, e.message);
+    }
+  }
+
+  // Generic fallback if unknown Nexacro endpoint requested
+  const xml = buildNexacroResponse({ errorCode: 1, errorMsg: '', parameters: {}, datasets: {} });
+  res.setHeader('Content-Type', 'text/xml; charset=UTF-8');
+  return res.status(200).send(xml);
+});
+
+// ==============================================================
+// Management REST APIs
+// ==============================================================
+
 // REST API for translations lookup
 app.get('/api/translations', (req, res) => {
   try {
@@ -459,13 +644,51 @@ app.get('/api/translations', (req, res) => {
   }
 });
 
+// REST API for all 50 analyzed endpoints
+app.get('/api/endpoints', (req, res) => {
+  try {
+    const all = catalog.getAllEndpoints();
+    res.json({
+      total: all.length,
+      endpoints: all.map(e => ({
+        id: e.id,
+        path: e.path,
+        action: e.action,
+        category: e.category,
+        programIds: e.programIds,
+        totalCalls: e.totalCalls,
+        datasets: Object.keys(e.datasets || {})
+      }))
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.get('/api/endpoints/:action', (req, res) => {
+  const ep = catalog.getEndpoint(`action:${req.params.action}`);
+  if (!ep) return res.status(404).json({ error: 'Endpoint not found in catalog' });
+  res.json(ep);
+});
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ONLINE', service: 'LG Display EMS Core Data Mock Server', port: PORT });
+  const all = catalog.getAllEndpoints();
+  const itemCount = db.get('SELECT count(*) as count FROM items')?.count || 0;
+  const woCount = db.get('SELECT count(*) as count FROM work_orders')?.count || 0;
+  res.json({
+    status: 'ONLINE',
+    service: 'LG Display EMS Core Data Mock Server (50 Endpoints Universal Engine)',
+    port: PORT,
+    analyzedEndpointsCount: all.length,
+    database: {
+      items: itemCount,
+      workOrders: woCount
+    }
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`[EMS Mock Server] Listening on http://localhost:${PORT}`);
-  console.log(`[EMS Mock Server] Production Data APIs Active from t1.txt, Database: db/ems.db`);
+  console.log(`[EMS Mock Server] Universal Nexacro Engine Active: 50/50 Endpoints Supported from ems-api-analyzer`);
 });

@@ -1,0 +1,616 @@
+version: 1.1.0
+system: LG Display EMS Nexacro API Catalog (Grouped by Business Function)
+total_endpoints: 50
+exported_at: '2026-10-25T07:25:00+07:00'
+functional_groups:
+  Inventory & Spare Parts Core:
+    directory: 01_inventory_spareparts
+    title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+    description_vi: Tra cứu tồn kho thực tế, tồn khả dụng, quy cách kỹ thuật, MTBF
+      và lịch sử xuất dùng linh kiện.
+    endpoint_count: 8
+  Target Stock Optimization:
+    directory: 02_target_stock_optimization
+    title_vi: 02. Tối ưu hóa Định mức Tồn kho An toàn
+    description_vi: Tính toán 93 thông số tồn kho mục tiêu, lead time, hệ số đệm buffer
+      days và gợi ý mua bù tồn kho.
+    endpoint_count: 4
+  Procurement, RFQ & Orders:
+    directory: 03_procurement_orders
+    title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+    description_vi: Lập phiếu PRV, báo giá RFQ, quản lý đơn PO, đơn khẩn cấp Emergency
+      PO và tra cứu đơn giá các site.
+    endpoint_count: 14
+  Work Orders & Maintenance:
+    directory: 04_work_orders
+    title_vi: 04. Bảo trì Thiết bị & Lệnh công tác
+    description_vi: Khởi tạo form công tác WO, xuất dùng vật tư cho bảo trì, lịch
+      sử trạng thái WO và mã thực thể WIP.
+    endpoint_count: 4
+  Electronic Approval Workflow:
+    directory: 05_approval_workflow
+    title_vi: 05. Quy trình Phê duyệt Điện tử
+    description_vi: Tính toán luồng duyệt, kiểm tra cờ vượt mức phê duyệt (PLOverFlag)
+      và gửi duyệt điện tử.
+    endpoint_count: 5
+  Common Master & Security:
+    directory: 06_common_master_security
+    title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+    description_vi: Từ điển mã combobox, popup tìm kiếm linh kiện, danh bạ nhân viên,
+      phân quyền nút và phân quyền menu.
+    endpoint_count: 13
+  Audit Logging:
+    directory: 07_audit_logging
+    title_vi: 07. Nhật ký Hệ thống
+    description_vi: Ghi nhận thời điểm bắt đầu thao tác màn hình (insertStartLog)
+      và kết thúc phiên làm việc (updateEndLog).
+    endpoint_count: 2
+endpoints:
+- action: retrieveGridFormat
+  path: emscom/gridFormatNav/retrieveGridFormat.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: QUERY
+  file: 06_common_master_security/retrieveGridFormat.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Tải cấu hình ẩn/hiện cột, độ rộng cột của các bảng theo user.
+- action: insertStartLog
+  path: emscom/connLogNav/insertStartLog.lgdn
+  functional_group: 07_audit_logging
+  functional_title_vi: 07. Nhật ký Hệ thống
+  subsystem: emscom
+  domain: Audit Logging
+  domain_vi: Nhật ký Hệ thống
+  category: LOGGING
+  file: 07_audit_logging/insertStartLog.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Ghi nhận thời điểm bắt đầu thao tác trên màn hình.
+- action: retComCodeList
+  path: emscom/codeNav/retComCodeList.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: QUERY
+  file: 06_common_master_security/retComCodeList.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: 'Từ điển mã dùng chung: Lấy đồng thời 9 nhóm mã combobox toàn hệ thống.'
+- action: updateEndLog
+  path: emscom/connLogNav/updateEndLog.lgdn
+  functional_group: 07_audit_logging
+  functional_title_vi: 07. Nhật ký Hệ thống
+  subsystem: emscom
+  domain: Audit Logging
+  domain_vi: Nhật ký Hệ thống
+  category: LOGGING
+  file: 07_audit_logging/updateEndLog.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Cập nhật thời điểm kết thúc phiên thao tác và tính thời lượng thực hiện.
+- action: retWaitRepairItemInterlock
+  path: emsspareparts/sp102/sp131Nav/retWaitRepairItemInterlock.lgdn
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  domain: Inventory & Spare Parts Core
+  domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  category: QUERY
+  file: 01_inventory_spareparts/retWaitRepairItemInterlock.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Kiểm tra ràng buộc interlock đối với linh kiện chờ sửa chữa trước khi
+    cấp phát mới.
+- action: CheckMasterAuth
+  path: emsspareparts/sp302/sp330Nav/CheckMasterAuth.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emsspareparts
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: SECURITY
+  file: 06_common_master_security/CheckMasterAuth.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Kiểm tra quyền quản trị tối cao đối với phân hệ phụ tùng.
+- action: RetStockStatusList
+  path: emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  domain: Inventory & Spare Parts Core
+  domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  category: QUERY
+  file: 01_inventory_spareparts/RetStockStatusList.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Tra cứu danh sách tồn kho phụ tùng thực tế, tồn kho khả dụng, giá vốn,
+    cờ bản vẽ FDM CAD và cảnh báo Red Flag.
+- action: retrieveCheckAppLine
+  path: emsspareparts/sp103/sp161Nav/retrieveCheckAppLine.lgdn
+  functional_group: 05_approval_workflow
+  functional_title_vi: 05. Quy trình Phê duyệt Điện tử
+  subsystem: emsspareparts
+  domain: Electronic Approval Workflow
+  domain_vi: Quy trình Phê duyệt Điện tử
+  category: QUERY
+  file: 05_approval_workflow/retrieveCheckAppLine.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Kiểm tra tính hợp lệ của luồng phê duyệt trước khi ký duyệt.
+- action: retrievePurchaseRequest
+  path: emsspareparts/sp102/sp134Nav/retrievePurchaseRequest.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/retrievePurchaseRequest.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Tra cứu thông tin chi tiết của một yêu cầu mua sắm đã lập trong hệ thống.
+- action: getEmrgPoFlag
+  path: emsspareparts/sp102/sp134Nav/getEmrgPoFlag.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/getEmrgPoFlag.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Kiểm tra cờ cho phép đặt mua khẩn cấp (Emergency PO Flag).
+- action: retrieveUserOrgList
+  path: emscom/loginNav/retrieveUserOrgList.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: QUERY
+  file: 06_common_master_security/retrieveUserOrgList.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Lấy danh sách phòng ban và vai trò trách nhiệm của người dùng.
+- action: GetSpPrivFlag
+  path: emsspareparts/sp302/sp330Nav/GetSpPrivFlag.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emsspareparts
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: SECURITY
+  file: 06_common_master_security/GetSpPrivFlag.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Kiểm tra cờ đặc quyền thao tác dữ liệu tồn kho đặc biệt.
+- action: RetEstimateRequestList
+  path: emsspareparts/sp101/sp120Nav/RetEstimateRequestList.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/RetEstimateRequestList.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Tra cứu danh sách yêu cầu báo giá nhà cung cấp (RFQ list, trạng thái
+    giá, Work Order).
+- action: WoMasterRetInit
+  path: emscom/woMasterNav/WoMasterRetInit.lgdn
+  functional_group: 04_work_orders
+  functional_title_vi: 04. Bảo trì Thiết bị & Lệnh công tác
+  subsystem: emscom
+  domain: Work Orders & Maintenance
+  domain_vi: Bảo trì Thiết bị & Lệnh công tác
+  category: OTHER
+  file: 04_work_orders/WoMasterRetInit.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Tải dữ liệu master của một phiếu công tác bảo trì định kỳ.
+- action: retrieveItemBuyMainList
+  path: emsspareparts/sp102/sp130Nav/retrieveItemBuyMainList.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/retrieveItemBuyMainList.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Danh mục tổng hợp tình hình mua sắm phụ tùng theo mã đơn hàng PO/RV.
+- action: retrieveItemTargetQtyInfo
+  path: emscom/prvNoNav/retrieveItemTargetQtyInfo.lgdn
+  functional_group: 02_target_stock_optimization
+  functional_title_vi: 02. Tối ưu hóa Định mức Tồn kho An toàn
+  subsystem: emscom
+  domain: Target Stock Optimization
+  domain_vi: Tối ưu hóa Định mức Tồn kho An toàn
+  category: QUERY
+  file: 02_target_stock_optimization/retrieveItemTargetQtyInfo.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Tra cứu thông tin định mức mục tiêu khi lập phiếu đề nghị mua sắm.
+- action: retApprovalRequest
+  path: emscom/approvalNav/retApprovalRequest.lgdn
+  functional_group: 05_approval_workflow
+  functional_title_vi: 05. Quy trình Phê duyệt Điện tử
+  subsystem: emscom
+  domain: Electronic Approval Workflow
+  domain_vi: Quy trình Phê duyệt Điện tử
+  category: QUERY
+  file: 05_approval_workflow/retApprovalRequest.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Gửi yêu cầu phê duyệt điện tử chính thức vào hệ thống ký duyệt.
+- action: getAuthButton
+  path: emscom/authButtonNav/getAuthButton.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: SECURITY
+  file: 06_common_master_security/getAuthButton.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Lấy cấu hình phân quyền nút bấm theo form (Ẩn/Hiện nút Thêm, Sửa, Xóa,
+    Export).
+- action: retEcFlag
+  path: emsspareparts/sp102/sp137Nav/retEcFlag.lgdn
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  domain: Inventory & Spare Parts Core
+  domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  category: QUERY
+  file: 01_inventory_spareparts/retEcFlag.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Kiểm tra cờ thay đổi kỹ thuật (Engineering Change - EC) của phụ tùng.
+- action: retrieveEmployeeNumber
+  path: emscom/loginNav/retrieveEmployeeNumber.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: QUERY
+  file: 06_common_master_security/retrieveEmployeeNumber.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Xác thực thông tin mã nhân viên đăng nhập.
+- action: retrieveLowestEmNo
+  path: emscom/popupNav/retrieveLowestEmNo.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: QUERY
+  file: 06_common_master_security/retrieveLowestEmNo.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Popup tra cứu danh bạ nhân viên nội bộ cấp dưới.
+- action: retSiteManagerInfo
+  path: emsspareparts/sp102/sp130Nav/retSiteManagerInfo.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emsspareparts
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: QUERY
+  file: 06_common_master_security/retSiteManagerInfo.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Lấy thông tin người phụ trách kho/site tương ứng.
+- action: retrieveItemInfoPopList
+  path: emsspareparts/sp102/sp131Nav/retrieveItemInfoPopList.lgdn
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  domain: Inventory & Spare Parts Core
+  domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  category: QUERY
+  file: 01_inventory_spareparts/retrieveItemInfoPopList.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Danh mục popup danh sách phụ tùng thay thế liên kết của máy móc.
+- action: retrieveItemUseDate
+  path: emsspareparts/sp102/sp131Nav/retrieveItemUseDate.lgdn
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  domain: Inventory & Spare Parts Core
+  domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  category: QUERY
+  file: 01_inventory_spareparts/retrieveItemUseDate.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Lấy ngày xuất dùng phụ tùng gần nhất để dự báo hao mòn và chu kỳ thay
+    thế định kỳ.
+- action: RetSpPartsTxnGroupIdS
+  path: emscom/seqNav/RetSpPartsTxnGroupIdS.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emscom
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/RetSpPartsTxnGroupIdS.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Sinh mã định danh phiên giao dịch mua sắm (txnGroupId) từ Sequence hệ
+    thống.
+- action: CreInsertItemPrvRequest
+  path: emsspareparts/sp101/sp110Nav/CreInsertItemPrvRequest.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: MUTATE
+  file: 03_procurement_orders/CreInsertItemPrvRequest.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: 'API Đột biến (Mutate) quan trọng: Tạo mới phiếu yêu cầu mua sắm phụ
+    tùng (PRV Request).'
+- action: TargetStockSearchList
+  path: emsspareparts/sp302/sp335Nav/TargetStockSearchList.lgdn
+  functional_group: 02_target_stock_optimization
+  functional_title_vi: 02. Tối ưu hóa Định mức Tồn kho An toàn
+  subsystem: emsspareparts
+  domain: Target Stock Optimization
+  domain_vi: Tối ưu hóa Định mức Tồn kho An toàn
+  category: QUERY
+  file: 02_target_stock_optimization/TargetStockSearchList_sp335.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Truy vấn danh mục định mức tồn kho an toàn với 93 trường dữ liệu tối
+    ưu hóa.
+- action: GetOptimizeInfo
+  path: emsspareparts/sp302/sp330Nav/GetOptimizeInfo.lgdn
+  functional_group: 02_target_stock_optimization
+  functional_title_vi: 02. Tối ưu hóa Định mức Tồn kho An toàn
+  subsystem: emsspareparts
+  domain: Target Stock Optimization
+  domain_vi: Tối ưu hóa Định mức Tồn kho An toàn
+  category: QUERY
+  file: 02_target_stock_optimization/GetOptimizeInfo.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Lấy thông số tối ưu hóa (Lead time cơ sở, ngày đệm đặt hàng, mức tồn
+    an toàn khuyến nghị).
+- action: TargetStockSearchList
+  path: emsspareparts/sp302/sp330Nav/TargetStockSearchList.lgdn
+  functional_group: 02_target_stock_optimization
+  functional_title_vi: 02. Tối ưu hóa Định mức Tồn kho An toàn
+  subsystem: emsspareparts
+  domain: Target Stock Optimization
+  domain_vi: Tối ưu hóa Định mức Tồn kho An toàn
+  category: QUERY
+  file: 02_target_stock_optimization/TargetStockSearchList_sp330.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Truy vấn danh mục định mức tồn kho an toàn với 93 trường dữ liệu tối
+    ưu hóa.
+- action: retPoUnitPriceBySiteList
+  path: emsspareparts/sp40/sp403Nav/retPoUnitPriceBySiteList.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/retPoUnitPriceBySiteList.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Tra cứu lịch sử đơn giá mua PO của phụ tùng theo từng nhà máy sản xuất.
+- action: retrieveItemPoStatusList
+  path: emscom/popupNav/retrieveItemPoStatusList.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emscom
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/retrieveItemPoStatusList.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Tra cứu tiến độ thực hiện đơn hàng PO (ngày đặt, nhà cung cấp, số lượng
+    còn lại).
+- action: retrieveItemInfoDetail
+  path: emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  domain: Inventory & Spare Parts Core
+  domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  category: QUERY
+  file: 01_inventory_spareparts/retrieveItemInfoDetail.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Chi tiết kỹ thuật linh kiện, đơn vị tính, chỉ số độ tin cậy MTBF và
+    lịch sử xuất dùng bình quân 3M/1Y/2Y.
+- action: WO230WoSaveInit
+  path: emsworkorder/wo20/wo230Nav/WO230WoSaveInit.lgdn
+  functional_group: 04_work_orders
+  functional_title_vi: 04. Bảo trì Thiết bị & Lệnh công tác
+  subsystem: emsworkorder
+  domain: Work Orders & Maintenance
+  domain_vi: Bảo trì Thiết bị & Lệnh công tác
+  category: OTHER
+  file: 04_work_orders/WO230WoSaveInit.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Khởi tạo form lưu phiếu công tác WO (công đoạn, vật tư phụ tùng xuất
+    dùng, file đính kèm).
+- action: statusHistory
+  path: emsworkorder/wo50/wo580Nav/statusHistory.lgdn
+  functional_group: 04_work_orders
+  functional_title_vi: 04. Bảo trì Thiết bị & Lệnh công tác
+  subsystem: emsworkorder
+  domain: Work Orders & Maintenance
+  domain_vi: Bảo trì Thiết bị & Lệnh công tác
+  category: OTHER
+  file: 04_work_orders/statusHistory.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Truy vấn lịch sử thay đổi trạng thái của phiếu công tác bảo trì.
+- action: retrieveWipEntity
+  path: emscom/woSearchNav/retrieveWipEntity.lgdn
+  functional_group: 04_work_orders
+  functional_title_vi: 04. Bảo trì Thiết bị & Lệnh công tác
+  subsystem: emscom
+  domain: Work Orders & Maintenance
+  domain_vi: Bảo trì Thiết bị & Lệnh công tác
+  category: QUERY
+  file: 04_work_orders/retrieveWipEntity.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Tìm kiếm mã định danh thực thể WIP gắn với thiết bị/chuyền sản xuất.
+- action: RetAllocationQuantity
+  path: emsspareparts/sp101/sp110Nav/RetAllocationQuantity.lgdn
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  domain: Inventory & Spare Parts Core
+  domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  category: QUERY
+  file: 01_inventory_spareparts/RetAllocationQuantity.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Kiểm tra lượng hàng đã phân bổ cho các chuyền/phân xưởng khác trong
+    nhà máy.
+- action: retSparepartsStatus
+  path: emsspareparts/sp201/sp220Nav/retSparepartsStatus.lgdn
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  domain: Inventory & Spare Parts Core
+  domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  category: QUERY
+  file: 01_inventory_spareparts/retSparepartsStatus.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Giám sát trạng thái toàn chuỗi cung ứng linh kiện theo thời gian thực
+    (đang duyệt, đã duyệt, đã lên PR, chờ PO, giao lũy kế).
+- action: MenuPermit
+  path: Servlet/MenuPermit.document
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: Servlet
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: SECURITY
+  file: 06_common_master_security/MenuPermit.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Xác thực quyền mở form/menu của người dùng.
+- action: retrieveItemRequestDetail
+  path: emsspareparts/sp102/sp132Nav/retrieveItemRequestDetail.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/retrieveItemRequestDetail.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Chi tiết mặt hàng được yêu cầu trong phiếu mua sắm.
+- action: retApprovalLine
+  path: emscom/approvalNav/retApprovalLine.lgdn
+  functional_group: 05_approval_workflow
+  functional_title_vi: 05. Quy trình Phê duyệt Điện tử
+  subsystem: emscom
+  domain: Electronic Approval Workflow
+  domain_vi: Quy trình Phê duyệt Điện tử
+  category: QUERY
+  file: 05_approval_workflow/retApprovalLine.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Tự động tính toán tuyến duyệt hồ sơ theo ngân sách, phòng ban, loại
+    mua sắm.
+- action: retrievePrvNoInfo
+  path: emscom/prvNoNav/retrievePrvNoInfo.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emscom
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/retrievePrvNoInfo.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Tra cứu thông tin và tính hợp lệ của số phiếu PRV.
+- action: retrieveAuthCommPartsManager
+  path: emscom/prvNoNav/retrieveAuthCommPartsManager.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: SECURITY
+  file: 06_common_master_security/retrieveAuthCommPartsManager.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Quyền duyệt phụ tùng dùng chung liên xưởng.
+- action: retPLOverFlag
+  path: emscom/approvalNav/retPLOverFlag.lgdn
+  functional_group: 05_approval_workflow
+  functional_title_vi: 05. Quy trình Phê duyệt Điện tử
+  subsystem: emscom
+  domain: Electronic Approval Workflow
+  domain_vi: Quy trình Phê duyệt Điện tử
+  category: QUERY
+  file: 05_approval_workflow/retPLOverFlag.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Kiểm tra cờ vượt hạn mức phê duyệt (Price Level Over Flag) để bổ sung
+    cấp duyệt cao hơn.
+- action: getCurrencyCode
+  path: emsspareparts/sp102/sp134Nav/getCurrencyCode.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/getCurrencyCode.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Lấy mã loại tiền tệ thanh toán theo nhà cung cấp (USD, VND, KRW).
+- action: EmergencyPoList
+  path: emsspareparts/sp105/sp180Nav/EmergencyPoList.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: OTHER
+  file: 03_procurement_orders/EmergencyPoList.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Danh sách các đơn đặt hàng mua khẩn cấp được phê duyệt đặc cách.
+- action: getPoMasterReturnUrl
+  path: emsspareparts/sp103/sp160Nav/getPoMasterReturnUrl.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/getPoMasterReturnUrl.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Lấy liên kết điều hướng sang hệ thống Quản lý mua hàng tập trung (G-ERP
+    / SRM).
+- action: RetAuthEmergencyPo
+  path: emsspareparts/sp101/sp110Nav/RetAuthEmergencyPo.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emsspareparts
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: SECURITY
+  file: 06_common_master_security/RetAuthEmergencyPo.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Kiểm tra quyền phê duyệt đơn hàng mua khẩn cấp.
+- action: retrievePrvNoData
+  path: emsspareparts/sp102/sp136Nav/retrievePrvNoData.lgdn
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  domain: Procurement, RFQ & Orders
+  domain_vi: Mua sắm, Báo giá & Đơn hàng
+  category: QUERY
+  file: 03_procurement_orders/retrievePrvNoData.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Trích xuất toàn bộ dữ liệu cấu thành của một mã phiếu PRV.
+- action: retMethodPop
+  path: emscom/approvalNav/retMethodPop.lgdn
+  functional_group: 05_approval_workflow
+  functional_title_vi: 05. Quy trình Phê duyệt Điện tử
+  subsystem: emscom
+  domain: Electronic Approval Workflow
+  domain_vi: Quy trình Phê duyệt Điện tử
+  category: QUERY
+  file: 05_approval_workflow/retMethodPop.yml
+  tier: Tier 2 - Universal Catalog Dispatcher
+  summary_vi: Lựa chọn phương thức phê duyệt (Trực tiếp, Ủy quyền, Ký song song).
+- action: retrieveItem
+  path: emscom/popupNav/retrieveItem.lgdn
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  domain: Common Master & Security
+  domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  category: QUERY
+  file: 06_common_master_security/retrieveItem.yml
+  tier: Tier 1 - Database-Backed SQLite Core
+  summary_vi: Popup tra cứu tìm kiếm linh kiện chuẩn toàn hệ thống.

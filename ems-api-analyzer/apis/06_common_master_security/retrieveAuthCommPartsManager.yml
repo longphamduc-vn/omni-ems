@@ -1,0 +1,78 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+# Endpoint: emscom/prvNoNav/retrieveAuthCommPartsManager.lgdn
+# Action: retrieveAuthCommPartsManager
+# Subsystem: emscom
+# Category: SECURITY
+# ==============================================================================
+
+info:
+  id: emscom_prvNoNav_retrieveAuthCommPartsManager_lgdn
+  name: retrieveAuthCommPartsManager
+  path: emscom/prvNoNav/retrieveAuthCommPartsManager.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/prvNoNav/retrieveAuthCommPartsManager.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  submodule: prvNoNav
+  controller: retrieveAuthCommPartsManager.lgdn
+  category: SECURITY
+  business_domain: Common Master & Security
+  business_domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  summary_vi: Quyền duyệt phụ tùng dùng chung liên xưởng.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 107.0
+    min_duration_ms: 107
+    max_duration_ms: 107
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream: []
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - Q2609-3081292
+        - ''
+        - '658359'
+        - '28753'
+        - ''
+        - ''
+        - REV_CONFIRM_Q
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_auth:
+      description: Dataset kết quả ds_auth
+      column_count: 0
+      columns: []
+      sample_rows: []

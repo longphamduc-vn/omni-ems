@@ -1,0 +1,94 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emscom/popupNav/retrieveItemPoStatusList.lgdn
+# Action: retrieveItemPoStatusList
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_popupNav_retrieveItemPoStatusList_lgdn
+  name: retrieveItemPoStatusList
+  path: emscom/popupNav/retrieveItemPoStatusList.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/popupNav/retrieveItemPoStatusList.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emscom
+  submodule: popupNav
+  controller: retrieveItemPoStatusList.lgdn
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Tra cứu tiến độ thực hiện đơn hàng PO (ngày đặt, nhà cung cấp, số lượng
+    còn lại).
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 291.0
+    min_duration_ms: 291
+    max_duration_ms: 291
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - item_po_history
+  dependencies:
+    upstream:
+    - retrieveItem
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_Search:
+      description: Dataset đầu vào ds_Search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - ''
+        - '28753'
+        - ''
+        - ''
+        - '3890752'
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_Rtn:
+      description: Dataset kết quả ds_Rtn
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAK93067
+        - N
+        - Active
+        - N
+        - UP001
+        - '877778'
+        - N
+        - N
+        - '0'
+        - N
+        - N
+        - '0'
+        - N
+        - N
+        - N

@@ -1,0 +1,120 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emsspareparts/sp102/sp134Nav/getEmrgPoFlag.lgdn
+# Action: getEmrgPoFlag
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp102_sp134Nav_getEmrgPoFlag_lgdn
+  name: getEmrgPoFlag
+  path: emsspareparts/sp102/sp134Nav/getEmrgPoFlag.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp134Nav/getEmrgPoFlag.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  submodule: sp102
+  controller: sp134Nav
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Kiểm tra cờ cho phép đặt mua khẩn cấp (Emergency PO Flag).
+  program_ids:
+  - SP102
+  metrics:
+    total_calls: 3
+    avg_duration_ms: 261.7
+    min_duration_ms: 179
+    max_duration_ms: 383
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - common_codes
+  dependencies:
+    upstream:
+    - CreInsertItemPrvRequest
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '18033023'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '28753'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '658359'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Q
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_rtn:
+      description: Dataset kết quả ds_rtn
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - N
+    ds_orgProcessApply:
+      description: Dataset kết quả ds_orgProcessApply
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - N
+        - Y

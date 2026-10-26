@@ -1,0 +1,149 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+# Endpoint: emsspareparts/sp102/sp131Nav/retrieveItemInfoPopList.lgdn
+# Action: retrieveItemInfoPopList
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp102_sp131Nav_retrieveItemInfoPopList_lgdn
+  name: retrieveItemInfoPopList
+  path: emsspareparts/sp102/sp131Nav/retrieveItemInfoPopList.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp131Nav/retrieveItemInfoPopList.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  submodule: sp102
+  controller: sp131Nav
+  category: QUERY
+  business_domain: Inventory & Spare Parts Core
+  business_domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  summary_vi: Danh mục popup danh sách phụ tùng thay thế liên kết của máy móc.
+  program_ids:
+  - SP102
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 691.0
+    min_duration_ms: 691
+    max_duration_ms: 691
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - items
+  dependencies:
+    upstream:
+    - retrieveItem
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_param:
+      description: Dataset đầu vào ds_param
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '421996047'
+        - '28753'
+        - '658359'
+        - ''
+        - ''
+        - PO_REV_REQ_Q
+        - Y
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_list:
+      description: Dataset kết quả ds_list
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'
+        - QCAK93067
+        - 'Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,
+
+          Material:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,
+
+          Remark:'
+        - 비통합 관리
+        - N001
+        - ''
+        - ''
+        - ''
+        - '14'
+        - '14'
+        - '544.67'
+        - '544.67'
+        - ''
+        - Pham Duc Long
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - LGDVN_(주) 서브원_KR017765
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - N
+        - ''
+        - ''
+        - '863381'
+        - ''
+        - '658359'
+        - '87479'
+        - '3890752'
+        - '28753'
+        - '421996047'
+        - Q2610-3107549
+        - N
+        - ''
+        - '0'
+        - '0'
+        - ''
+        - N
+        - N
+        - ''
+        - '20261002'
+        - ''
+        - '48'
+        - ''
+        - Y
+        - ''
+        - ''
+        - '0'
+        - '0'
+        - N
+        - N
+        - '1'
+        - 원 법인 구매
+        - PT003
+        - N
+        - N

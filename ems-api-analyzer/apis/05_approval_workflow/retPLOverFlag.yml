@@ -1,0 +1,80 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 05. Quy trình Phê duyệt Điện tử
+# Endpoint: emscom/approvalNav/retPLOverFlag.lgdn
+# Action: retPLOverFlag
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_approvalNav_retPLOverFlag_lgdn
+  name: retPLOverFlag
+  path: emscom/approvalNav/retPLOverFlag.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/approvalNav/retPLOverFlag.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 05_approval_workflow
+  functional_title_vi: 05. Quy trình Phê duyệt Điện tử
+  subsystem: emscom
+  submodule: approvalNav
+  controller: retPLOverFlag.lgdn
+  category: QUERY
+  business_domain: Electronic Approval Workflow
+  business_domain_vi: Quy trình Phê duyệt Điện tử
+  summary_vi: Kiểm tra cờ vượt hạn mức phê duyệt (Price Level Over Flag) để bổ sung
+    cấp duyệt cao hơn.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 596.0
+    min_duration_ms: 596
+    max_duration_ms: 596
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - common_codes
+  dependencies:
+    upstream:
+    - retApprovalLine
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - ''
+        - '658359'
+        - ''
+        - '16001'
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_plOverFlag:
+      description: Dataset kết quả ds_plOverFlag
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '16001'
+        - Y

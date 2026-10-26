@@ -1,0 +1,46 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+# Endpoint: Servlet/MenuPermit.document
+# Action: MenuPermit
+# Subsystem: Servlet
+# Category: SECURITY
+# ==============================================================================
+
+info:
+  id: Servlet_MenuPermit_document
+  name: MenuPermit
+  path: Servlet/MenuPermit.document
+  url: /Servlet/MenuPermit.document
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: Servlet
+  submodule: MenuPermit.document
+  controller: MenuPermit.document
+  category: SECURITY
+  business_domain: Common Master & Security
+  business_domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  summary_vi: Xác thực quyền mở form/menu của người dùng.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 143.0
+    min_duration_ms: 143
+    max_duration_ms: 143
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream: []
+    downstream: []
+request:
+  parameters: {}
+  datasets: {}
+response:
+  parameters: {}
+  datasets: {}

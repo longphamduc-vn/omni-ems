@@ -1,0 +1,248 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 05. Quy trình Phê duyệt Điện tử
+# Endpoint: emscom/approvalNav/retApprovalLine.lgdn
+# Action: retApprovalLine
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_approvalNav_retApprovalLine_lgdn
+  name: retApprovalLine
+  path: emscom/approvalNav/retApprovalLine.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/approvalNav/retApprovalLine.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 05_approval_workflow
+  functional_title_vi: 05. Quy trình Phê duyệt Điện tử
+  subsystem: emscom
+  submodule: approvalNav
+  controller: retApprovalLine.lgdn
+  category: QUERY
+  business_domain: Electronic Approval Workflow
+  business_domain_vi: Quy trình Phê duyệt Điện tử
+  summary_vi: Tự động tính toán tuyến duyệt hồ sơ theo ngân sách, phòng ban, loại
+    mua sắm.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 595.0
+    min_duration_ms: 595
+    max_duration_ms: 595
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - common_codes
+  dependencies:
+    upstream:
+    - CreInsertItemPrvRequest
+    downstream:
+    - retApprovalRequest
+    - retPLOverFlag
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '18026951'
+        - WOP
+        - '16026'
+        - XXEMSWOP034REQ
+        - XXEMSWOP034APPR
+        - Y
+        - WOP-16797
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - ''
+        - ''
+        - REQUESTOR
+        - '10'
+        - '28753'
+        - '658359'
+        - EMS
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - UPDATE
+        - N
+        - '28'
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_requestActor:
+      description: Dataset kết quả ds_requestActor
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - REQUESTOR
+        - '40'
+        - ''
+    ds_approvalInsert:
+      description: Dataset kết quả ds_approvalInsert
+      column_count: 0
+      columns: []
+      sample_rows: []
+    ds_approvalList:
+      description: Dataset kết quả ds_approvalList
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - '18026951'
+        - 1st
+        - '1'
+        - EMS
+        - WOP
+        - '16026'
+        - '20'
+        - '0002'
+        - '[Approved]Approval of Demand Dept.'
+        - VH000189
+        - Nguyen Van Duc
+        - 'Nguyen Van Duc / NY SW PO M Technology TAB/DIP Part / Leader of Part
+
+          / 8888-206-0469 / 0971070191
+
+
+
+
+          [OPINION]OK'
+        - VH000189
+        - Nguyen Van Duc
+        - 'Nguyen Van Duc / NY SW PO M Technology TAB/DIP Part / Leader of Part /
+
+          8888-206-0469 / 0971070191'
+        - '3'
+        - '20260928165620000'
+        - ''
+        - ''
+        - APPROVAL
+        - '0001'
+        - Approval
+        - OK
+        - ''
+        - ''
+        - N
+      - - '28753'
+        - '18026951'
+        - 2nd
+        - '2'
+        - EMS
+        - WOP
+        - '16026'
+        - '22'
+        - '0002'
+        - '[Approved]Approval of Demand Dept.'
+        - VH000757
+        - Phi Minh Duc
+        - 'Phi Minh Duc / NY SW PO M Technology Lami/Laser Part / Leader of Part
+
+          /  / 0395808328
+
+
+
+
+          [OPINION]OK'
+        - VH000757
+        - Phi Minh Duc
+        - 'Phi Minh Duc / NY SW PO M Technology Lami/Laser Part / Leader of Part
+
+          /  / 0395808328'
+        - '3'
+        - '20260928173852000'
+        - ''
+        - ''
+        - APPROVAL
+        - '0001'
+        - Approval
+        - OK
+        - ''
+        - ''
+        - N
+      - - '28753'
+        - '18026951'
+        - 3rd
+        - '3'
+        - EMS
+        - WOP
+        - '16026'
+        - '23'
+        - '0002'
+        - '[Approved]Approval of Demand Dept.'
+        - VH011864
+        - Le Khac Ninh
+        - 'Le Khac Ninh / NY SW PO M Advanced CP/LT Part / Leader of Part / 0493
+
+          / 0964139272
+
+
+
+
+          [OPINION]OK'
+        - VH011864
+        - Le Khac Ninh
+        - 'Le Khac Ninh / NY SW PO M Advanced CP/LT Part / Leader of Part / 0493
+
+          / 0964139272'
+        - '3'
+        - '20260928201527000'
+        - ''
+        - ''
+        - APPROVAL
+        - '0001'
+        - Approval
+        - OK
+        - ''
+        - ''
+        - N
+    ds_copyToList:
+      description: Dataset kết quả ds_copyToList
+      column_count: 0
+      columns: []
+      sample_rows: []
+    ds_inspectionList:
+      description: Dataset kết quả ds_inspectionList
+      column_count: 0
+      columns: []
+      sample_rows: []
+    ds_transferList:
+      description: Dataset kết quả ds_transferList
+      column_count: 0
+      columns: []
+      sample_rows: []
+    ds_settingReferenceAuto:
+      description: Dataset kết quả ds_settingReferenceAuto
+      column_count: 0
+      columns: []
+      sample_rows: []

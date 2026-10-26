@@ -1,0 +1,75 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+# Endpoint: emscom/loginNav/retrieveEmployeeNumber.lgdn
+# Action: retrieveEmployeeNumber
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_loginNav_retrieveEmployeeNumber_lgdn
+  name: retrieveEmployeeNumber
+  path: emscom/loginNav/retrieveEmployeeNumber.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/loginNav/retrieveEmployeeNumber.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  submodule: loginNav
+  controller: retrieveEmployeeNumber.lgdn
+  category: QUERY
+  business_domain: Common Master & Security
+  business_domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  summary_vi: Xác thực thông tin mã nhân viên đăng nhập.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 88.0
+    min_duration_ms: 88
+    max_duration_ms: 88
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream: []
+    downstream:
+    - retrieveUserOrgList
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_input:
+      description: Dataset đầu vào ds_input
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - phamduclong04
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_output:
+      description: Dataset kết quả ds_output
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '658359'
+        - VH081996

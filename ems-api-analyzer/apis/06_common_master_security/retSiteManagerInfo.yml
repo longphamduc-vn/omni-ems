@@ -1,0 +1,82 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+# Endpoint: emsspareparts/sp102/sp130Nav/retSiteManagerInfo.lgdn
+# Action: retSiteManagerInfo
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp102_sp130Nav_retSiteManagerInfo_lgdn
+  name: retSiteManagerInfo
+  path: emsspareparts/sp102/sp130Nav/retSiteManagerInfo.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp130Nav/retSiteManagerInfo.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emsspareparts
+  submodule: sp102
+  controller: sp130Nav
+  category: QUERY
+  business_domain: Common Master & Security
+  business_domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  summary_vi: Lấy thông tin người phụ trách kho/site tương ứng.
+  program_ids:
+  - SP102
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 290.0
+    min_duration_ms: 290
+    max_duration_ms: 290
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream: []
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_param:
+      description: Dataset đầu vào ds_param
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '421996047'
+        - '28753'
+        - '658359'
+        - ''
+        - ''
+        - PO_REV_REQ_Q
+        - Y
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_rtn:
+      description: Dataset kết quả ds_rtn
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - Vu Thi Thom(Warehouse Operation Unit)

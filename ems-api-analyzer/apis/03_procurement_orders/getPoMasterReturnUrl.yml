@@ -1,0 +1,102 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emsspareparts/sp103/sp160Nav/getPoMasterReturnUrl.lgdn
+# Action: getPoMasterReturnUrl
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp103_sp160Nav_getPoMasterReturnUrl_lgdn
+  name: getPoMasterReturnUrl
+  path: emsspareparts/sp103/sp160Nav/getPoMasterReturnUrl.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp103/sp160Nav/getPoMasterReturnUrl.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  submodule: sp103
+  controller: sp160Nav
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Lấy liên kết điều hướng sang hệ thống Quản lý mua hàng tập trung (G-ERP
+    / SRM).
+  program_ids:
+  - SP103
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 382.0
+    min_duration_ms: 382
+    max_duration_ms: 382
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream: []
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - '658359'
+        - '17967067'
+        - '20170101'
+        - '20261024'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - ''
+        - '17967067'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_result:
+      description: Dataset kết quả ds_result
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - SP134_P
+        - '17967067'

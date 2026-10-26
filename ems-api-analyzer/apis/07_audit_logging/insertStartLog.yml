@@ -1,0 +1,85 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 07. Nhật ký Hệ thống
+# Endpoint: emscom/connLogNav/insertStartLog.lgdn
+# Action: insertStartLog
+# Subsystem: emscom
+# Category: LOGGING
+# ==============================================================================
+
+info:
+  id: emscom_connLogNav_insertStartLog_lgdn
+  name: insertStartLog
+  path: emscom/connLogNav/insertStartLog.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/connLogNav/insertStartLog.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 07_audit_logging
+  functional_title_vi: 07. Nhật ký Hệ thống
+  subsystem: emscom
+  submodule: connLogNav
+  controller: insertStartLog.lgdn
+  category: LOGGING
+  business_domain: Audit Logging
+  business_domain_vi: Nhật ký Hệ thống
+  summary_vi: Ghi nhận thời điểm bắt đầu thao tác trên màn hình.
+  program_ids:
+  - CM313_P
+  - Organization
+  - SP120
+  - SP130
+  - SP131_P
+  - SP132_P
+  - SP134_P
+  - SP135_P
+  - SP136_P
+  - SP138_P
+  - SP140_P
+  - SP180
+  - SP220
+  - SP332
+  - SP335
+  - SP353
+  - SP403
+  - WO230
+  metrics:
+    total_calls: 21
+    avg_duration_ms: 123.8
+    min_duration_ms: 83
+    max_duration_ms: 348
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream: []
+    downstream:
+    - updateEndLog
+request:
+  parameters:
+    userId:
+      sample_value: '658359'
+      type: str
+    programId:
+      sample_value: Organization
+      type: str
+    objectName:
+      sample_value: Organization
+      type: str
+    type:
+      sample_value: S
+      type: str
+    organizationId:
+      sample_value: '28753'
+      type: str
+  datasets: {}
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets: {}

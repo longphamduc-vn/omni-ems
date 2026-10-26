@@ -1,0 +1,347 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emsspareparts/sp102/sp130Nav/retrieveItemBuyMainList.lgdn
+# Action: retrieveItemBuyMainList
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp102_sp130Nav_retrieveItemBuyMainList_lgdn
+  name: retrieveItemBuyMainList
+  path: emsspareparts/sp102/sp130Nav/retrieveItemBuyMainList.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp130Nav/retrieveItemBuyMainList.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  submodule: sp102
+  controller: sp130Nav
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Danh mục tổng hợp tình hình mua sắm phụ tùng theo mã đơn hàng PO/RV.
+  program_ids:
+  - SP102
+  metrics:
+    total_calls: 2
+    avg_duration_ms: 6656.0
+    min_duration_ms: 693
+    max_duration_ms: 12619
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - item_po_history
+  dependencies:
+    upstream:
+    - RetStockStatusList
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '20260101'
+        - '20261024'
+        - ''
+        - ''
+        - '28753'
+        - ''
+        - Y
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '658359'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - REQUEST
+        - ''
+        - ''
+        - ''
+        - REV_CONFIRM_Q
+    ds_ItemInfo:
+      description: Dataset đầu vào ds_ItemInfo
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAD19169
+        - ''
+        - ''
+        - ''
+    ds_PoRvNo:
+      description: Dataset đầu vào ds_PoRvNo
+      column_count: 0
+      columns: []
+      sample_rows: []
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_list:
+      description: Dataset kết quả ds_list
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'
+        - Q2608-3045583
+        - N
+        - N
+        - Y
+        - PO(Remained)
+        - Invidual Management
+        - QCAD19169
+        - 'Idle Roller ** SRDVN-2604-MD08-A, SYSTEM R&D, Type:, Total Outer Diameter(㎜):11㎜,
+
+          Width(㎜):20㎜, Inside Diameter(㎜):5㎜, Material:STAINLESS303+CONDUCTIVITY
+
+          URETHANE COATING, Remark:, Outside Diameter(㎜):'
+        - '1'
+        - '151'
+        - '151'
+        - Tran Huu Tao
+        - PO M Technology Competency Development Unit
+        - '20260826085839000'
+        - Tran Huu Tao
+        - HNBCGA31100109
+        - PO Module Technology Team 1
+        - Hàng Sample TDR SP
+        - ''
+        - PO Module Technology Team 1
+        - '20260930000000000'
+        - 즉사용(Ready-to-use)
+        - PO Module Technology Team 1
+        - ''
+        - ''
+        - ''
+        - ''
+        - Price Registration
+        - '1.Ngo Van Thang[20260902 13:13], 2.Nguyen Van Hieu[20260902 13:47], 3.Kyeong
+
+          Rok Jung[20260903 07:33], 4.Bui Van Duy[20260903 09:12], 5.Nguyen Thi
+
+          Hue[20260905 12:01], 6.김형락[20260907 17:01], 7.허진호[20260908 10:56]'
+        - WO-247223910
+        - 912797-1-2
+        - '20260914193347000'
+        - '1'
+        - '0'
+        - ''
+        - '20260826000000000'
+        - QP011
+        - N001
+        - UP001
+        - '537049'
+        - '5549937'
+        - '537049'
+        - '84821'
+        - '3979799'
+        - '28753'
+        - '334833224'
+        - '21870374'
+        - '416419443'
+        - '43029225'
+        - '17938405'
+        - T001
+        - '1940823'
+        - '537049'
+        - '975538'
+        - '1'
+        - ''
+        - ''
+        - N
+        - N
+        - CGA
+        - N
+        - '20261025'
+        - R001
+        - '0'
+        - N002
+      - - '0'
+        - Q2609-3081292
+        - N
+        - N
+        - Y
+        - PO(Remained)
+        - Total Management
+        - QCAD19169
+        - 'Idle Roller ** SRDVN-2604-MD08-A, SYSTEM R&D, Type:, Total Outer Diameter(㎜):11㎜,
+
+          Width(㎜):20㎜, Inside Diameter(㎜):5㎜, Material:STAINLESS303+CONDUCTIVITY
+
+          URETHANE COATING, Remark:, Outside Diameter(㎜):'
+        - '8'
+        - '151'
+        - '1208'
+        - Dao Duy Thanh
+        - NY SW PO M Technology Lami/Laser Part
+        - '20260928163944000'
+        - Tran Thi Huong
+        - HWBMTL6120
+        - PO Module Technology Team 2
+        - 2609B08_PO Module Technology Team 2
+        - ''
+        - PO Module Technology Team 2
+        - '20261106000000000'
+        - 즉사용(Ready-to-use)
+        - NY SW PO M Technology DB/BD Unit B1
+        - ''
+        - ''
+        - ''
+        - ''
+        - Price Registration
+        - ''
+        - ''
+        - 912797-2-1
+        - '20261002124019000'
+        - '8'
+        - '0'
+        - ''
+        - '20260929000000000'
+        - QP011
+        - N002
+        - UP001
+        - '708440'
+        - '8287508'
+        - '725436'
+        - '87254'
+        - '3979799'
+        - '28753'
+        - ''
+        - '21914316'
+        - '419519565'
+        - '43116754'
+        - ''
+        - T001
+        - '1940823'
+        - '708440'
+        - '1299584'
+        - '8'
+        - ''
+        - ''
+        - N
+        - N
+        - MTL
+        - N
+        - '20261127'
+        - R001
+        - '0'
+        - N002
+      - - '0'
+        - Q2610-3100909
+        - Y
+        - Y
+        - ''
+        - Request Review PO
+        - Total Management
+        - QCAD19169
+        - 'Idle Roller ** SRDVN-2604-MD08-A, SYSTEM R&D, Type:, Total Outer Diameter(㎜):11㎜,
+
+          Width(㎜):20㎜, Inside Diameter(㎜):5㎜, Material:STAINLESS303+CONDUCTIVITY
+
+          URETHANE COATING, Remark:, Outside Diameter(㎜):'
+        - '16'
+        - '151'
+        - '2416'
+        - Do Van Toan
+        - NY SW PO M Technology Lami/Laser Part
+        - '20261019164121000'
+        - Tran Thi Huong
+        - HWBMTL2A10
+        - PO Module Technology Team 2
+        - "Name: Urthethan\nRequestor: Do Van Toan\n1. Lý do: Thay thế phụ tùng\n\
+          \ hỏng\n2. Line: #209, #210, Công đoạn: POL\n3. Vấn đề: Urtethan vỡ, phát\n\
+          \ sinh vụn \n4. Hiện trạng( line): Urtethan vỡ, phát sinh vụn \n5. Logic:\n\
+          \ 8ea/1line * 2line\n6. PO remaind & Stock: PO remained( #205)"
+        - ''
+        - PO Module Technology Team 2
+        - '20261124000000000'
+        - 즉사용(Ready-to-use)
+        - NY SW PO M Technology DB/BD Unit B1
+        - ''
+        - ''
+        - ''
+        - ''
+        - Price Registration
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - QP001
+        - N002
+        - UP001
+        - '708440'
+        - '6065099'
+        - '720193'
+        - '87254'
+        - '3979799'
+        - '28753'
+        - ''
+        - ''
+        - '421510797'
+        - ''
+        - ''
+        - T001
+        - '1940823'
+        - ''
+        - '1299584'
+        - '16'
+        - ''
+        - MP
+        - N
+        - N
+        - MTL
+        - N
+        - '20261218'
+        - R001
+        - '0'
+        - N002

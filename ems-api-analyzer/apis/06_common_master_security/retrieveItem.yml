@@ -1,0 +1,132 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+# Endpoint: emscom/popupNav/retrieveItem.lgdn
+# Action: retrieveItem
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_popupNav_retrieveItem_lgdn
+  name: retrieveItem
+  path: emscom/popupNav/retrieveItem.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/popupNav/retrieveItem.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  submodule: popupNav
+  controller: retrieveItem.lgdn
+  category: QUERY
+  business_domain: Common Master & Security
+  business_domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  summary_vi: Popup tra cứu tìm kiếm linh kiện chuẩn toàn hệ thống.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 593.0
+    min_duration_ms: 593
+    max_duration_ms: 593
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - items
+  dependencies:
+    upstream: []
+    downstream:
+    - RetStockStatusList
+    - retrieveItemInfoDetail
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_Search:
+      description: Dataset đầu vào ds_Search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAK93067
+        - ''
+        - ''
+        - Q
+        - ''
+        - ''
+        - ''
+        - '28753'
+        - Y
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_List:
+      description: Dataset kết quả ds_List
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '354'
+        - SP
+        - QCAK93067
+        - 'Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,
+
+          Material:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,
+
+          Remark:'
+        - EA
+        - '544.67'
+        - Thi Ngoc Mai, Nguyen
+        - Active
+        - Q4.Bracket
+        - 'Size:110*45*11, Material:ALUMINUM6061+ANODIZING(BLACK), Application:,
+
+          Addition Specification:, Remark:'
+        - N
+        - SERVEONE
+        - N
+        - 비통합 관리
+        - N001
+        - '3890752'
+        - '28753'
+        - '877778'
+        - '16'
+        - '16'
+        - N
+        - ''
+        - '20261002'
+        - '16'
+        - '16'
+        - '0'
+        - '0'
+        - N
+        - '0'
+        - N
+        - '1'
+        - N
+        - N
+        - 원 법인 구매
+        - PT003
+        - QCAK0106
+        - Q4.Bracket
+        - '881'
+        - PC2512005-001-00021-0
+        - TOP ENGINEERING CO.,LTD

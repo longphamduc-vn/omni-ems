@@ -1,0 +1,378 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emsspareparts/sp102/sp132Nav/retrieveItemRequestDetail.lgdn
+# Action: retrieveItemRequestDetail
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp102_sp132Nav_retrieveItemRequestDetail_lgdn
+  name: retrieveItemRequestDetail
+  path: emsspareparts/sp102/sp132Nav/retrieveItemRequestDetail.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp132Nav/retrieveItemRequestDetail.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  submodule: sp102
+  controller: sp132Nav
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Chi tiết mặt hàng được yêu cầu trong phiếu mua sắm.
+  program_ids:
+  - SP102
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 7567.0
+    min_duration_ms: 7567
+    max_duration_ms: 7567
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - prv_requests
+  dependencies:
+    upstream:
+    - retrievePurchaseRequest
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '18026951'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '28753'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '658359'
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_Item:
+      description: Dataset kết quả ds_Item
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAA26672
+        - 'Brake Motor ** S9I60GTH-E, SPG CO.,LTD, Voltage Rating:200~230VAC, Current
+
+          Rating:800㎃, A Rated Power(W):60W, Rating Torque(Kg.m):0.44N.M, Speed
+
+          Rating:1001~1500RPM, Remark:'
+        - HWBLTL61KD
+        - HWBLTL61-SPOT INSPECTION C/V
+        - '2'
+        - '1'
+        - ''
+        - ''
+        - '0'
+        - Tran Thi Huong
+        - Cao Hong Luong
+        - PO Module Technology Team 2
+        - NY SW PO M Technology DB/BD Unit B1
+        - ''
+        - 즉사용
+        - '20261022000000000'
+        - 'Name: Động cơ CV
+
+
+
+
+          Requestor: Cao Hong Luong
+
+
+
+
+          1. Lý do: Thay thế phụ tùng hỏng có dấu hiệu hỏng
+
+
+
+
+          2. Line: #601, Công đoạn: LT
+
+
+
+
+          3. Vấn đề: Issue CV không hoạt động  do động cơ NG
+
+
+
+
+          4. Hiện trạng( line): Issue CV không hoạt động  do động cơ NG
+
+
+
+
+          5. Logic: Broken 2ea
+
+
+
+
+          6. PO remaind & Stock:'
+        - ''
+        - '0'
+        - '0'
+        - '925226'
+        - '28753'
+        - '18026951'
+        - '66677'
+        - Q2609-3081329
+        - '87321'
+        - '87301'
+        - '1299584'
+        - ''
+        - '0'
+        - '0'
+        - Y
+        - ''
+        - ''
+        - ''
+        - '658359'
+      - - QCAB10076
+        - 'Ball Bearing ** 6902ZZ(NSK), NSK LTD, Face Width:7㎜, Diameter:28㎜, Inner
+
+          Diameter:15㎜, Material Of Sidewheel:SUJ2, Material Of Retainer:SPCC, Ball
+
+          Bearing  Model:DEEPLY GAP BALL BEARING, Material Of Ball:SUJ2, Symbol
+
+          Of Shield:ZZ, Rem'
+        - HWBLTL63KD
+        - HWBLTL63-SPOT INSPECTION C/V
+        - '10'
+        - '218'
+        - '2.56'
+        - '2.56'
+        - '25.6'
+        - Nguyen Thi Hue
+        - Dinh Khac Tuan
+        - PO Module Technology Team 2
+        - NY SW PO M Technology DB/BD Unit B1
+        - LGDVN_(주) 서브원_KR017765
+        - 즉사용
+        - '20261012000000000'
+        - 'Name: Bearing
+
+
+
+
+          Requestor: Dinh Khac Tuan
+
+
+
+
+          1. Lý do: Setup X410X
+
+
+
+
+          2. Line: #603,#604, Công đoạn: LT
+
+
+
+
+          3. Vấn đề: Mua 4ea thay thế cho 603 và 6ea làm spare
+
+
+
+
+          4. Hiện trạng( line): Mua 4ea thay thế cho 603 và 6ea làm spare
+
+
+
+
+          5. Logic: Broken 4ea + 6ea spare
+
+
+
+
+          6. PO remaind & Stock:'
+        - ''
+        - '0'
+        - '0'
+        - '387131'
+        - '28753'
+        - '18026951'
+        - '66808'
+        - Q2609-3081319
+        - '87321'
+        - '87301'
+        - '1299584'
+        - ''
+        - '0'
+        - '0'
+        - Y
+        - ''
+        - ''
+        - ''
+        - '658359'
+      - - QCAB17587
+        - 'Joint/Connector ** YTS-S-12-AL, YTS, Material:ALUMINUM, Length:163.5㎜,
+
+          Connection Method:, Remark:ROTARY JOINT(12PORTS), Application Tube Outside
+
+          Diameter:, Spiral(Inch):'
+        - HWBMTL2710
+        - HW CP CLN 207
+        - '9'
+        - '18'
+        - '2985.55'
+        - '2985.55'
+        - '26869.95'
+        - Nguyen Thi Hue
+        - Nguyen Ngoc Tan
+        - PO Module Technology Team 2
+        - NY SW PO M Technology DB/BD Unit B1
+        - LGDVN_(주)와이티에스_KR017796
+        - 즉사용
+        - '20261221000000000'
+        - 'Name: Rotary joint
+
+
+
+
+          Requestor: Nguyen Ngoc Tan
+
+
+
+
+          1. Lý do: Setup X410X
+
+
+
+
+          2. Line: #207,#208, Công đoạn: POL
+
+
+
+
+          3. Vấn đề: Chuẩn bị setup X1407
+
+
+
+
+          4. Hiện trạng( line): Part chuyển về từ YT bị hỏng
+
+
+
+
+          5. Logic: 2ea/1line * 2line
+
+
+
+
+          6. PO remaind & Stock: PO( MP line)
+
+
+
+
+          ---
+
+
+
+
+          Name: Rotary joint
+
+
+
+
+          Requestor: Do Van Toan
+
+
+
+
+          1. Lý do: Thay thế phụ tùng hỏng
+
+
+
+
+          2. Line: #207,208,209,210,601,602, Công đoạn: POL
+
+
+
+
+          3. Vấn đề: sử dụng lâu ngày bị mòn, dò khí
+
+
+
+
+          4. Hiện trạng( line): sử dụng lâu ngày bị mòn, dò khí
+
+
+
+
+          5. Logic: Broken 5ea
+
+
+
+
+          6. PO remaind & Stock: Request 5ea + PO 4ea = 2ea/line[#210, #601, #202)
+
+          + 1ea #209 + 2ea spare( lead time 3 tháng)'
+        - ''
+        - '0'
+        - '0'
+        - '3042180'
+        - '28753'
+        - '18026951'
+        - '66680'
+        - Q2609-3081284
+        - '87321'
+        - '87301'
+        - '1299584'
+        - ''
+        - '0'
+        - '0'
+        - Y
+        - ''
+        - ''
+        - ''
+        - '658359'

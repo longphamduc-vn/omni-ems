@@ -1,0 +1,219 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emsspareparts/sp102/sp136Nav/retrievePrvNoData.lgdn
+# Action: retrievePrvNoData
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp102_sp136Nav_retrievePrvNoData_lgdn
+  name: retrievePrvNoData
+  path: emsspareparts/sp102/sp136Nav/retrievePrvNoData.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp136Nav/retrievePrvNoData.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  submodule: sp102
+  controller: sp136Nav
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Trích xuất toàn bộ dữ liệu cấu thành của một mã phiếu PRV.
+  program_ids:
+  - SP102
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 278.0
+    min_duration_ms: 278
+    max_duration_ms: 278
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - prv_requests
+  dependencies:
+    upstream:
+    - retrievePrvNoInfo
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - Q2608-3043631
+        - ''
+        - '658359'
+        - '28753'
+        - ''
+        - ''
+        - REV_CONFIRM_Q
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_prvNoInfo:
+      description: Dataset kết quả ds_prvNoInfo
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'
+        - Q2608-3043631
+        - N
+        - N
+        - Y
+        - Receiving Completed
+        - Invidual Management
+        - QCAK93067
+        - 'Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,
+
+          Material:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,
+
+          Remark:'
+        - Active
+        - '16'
+        - '544.67'
+        - '8714.72'
+        - Hoang Duc Hao
+        - NY SW PO M Technology DB/BD Part
+        - '20260824180033000'
+        - Pham Duc Long
+        - HWBUDB61AF
+        - 'HWBUDB61-LAMINATOR #1'
+        - PO Module Technology Team 2
+        - 'Name: Lower Diaphragm D191
+
+
+
+
+          Requestor: Hoang Duc Hao
+
+
+
+
+          1. Lý do: Thay thế định kỳ theo tiêu chuẩn
+
+
+
+
+          2. Line: #601, Công đoạn: DB
+
+
+
+
+          3. Vấn đề: Tiêu chuẩn: 1760kpcs/times
+
+
+
+
+          4. Hiện trạng( line): Kế hoạch thay thế vào tháng 11
+
+
+
+
+          5. Logic: 16ea/1line/1times
+
+
+
+
+          6. PO remaind & Stock:'
+        - ''
+        - PO Module Technology Team 2
+        - '20261111000000000'
+        - 즉사용(Ready-to-use)
+        - NY SW PO M Technology DB/BD Unit B1
+        - B-C-87321
+        - EM-MFG-003
+        - 'Manuf Exp_Spare Parts_Production(Replacement),Manuf Exp_Repair_Facility
+
+          Maintenance(Machinery)'
+        - LGDVN_(주) 서브원_KR017765
+        - '53'
+        - ''
+        - ''
+        - ''
+        - Price Registration
+        - WOP-17908203
+        - '1.Nguyen Van Duc[20260824 18:59], 2.Le Khac Ninh[20260824 19:34], 3.Hoang
+
+          Trung Kien[20260825 10:32], 4.Yeong-Jin Jung[20260826 13:29], 5.Bui Van
+
+          Duy[20260826 20:24], 6.Nguyen Thi Hue[20260827 10:43], 7.김형락[20260828
+
+          10:33], 8.허진호[20260828 12:56]'
+        - WO-246744581
+        - '[Q2608-3043631][Q2608-3043631][QCAK93067]PO:Name: Lower Diaphragm D191Requestor:
+
+          Hoang Duc Hao1. Lý do: Thay thế định kỳ theo tiêu chuẩn2. Line: #601,
+
+          Công đoạn: DB3. Vấn đề: Tiêu chuẩn: 1760kpcs/times4. Hiện t'
+        - PA01H010056
+        - '20260831175610000'
+        - '16'
+        - '544.67'
+        - '8714.72'
+        - '16'
+        - '20261023000000000'
+        - N
+        - '20260824000000000'
+        - Pham Duc Long
+        - '0'
+        - '0'
+        - QP012
+        - N001
+        - UP001
+        - '658359'
+        - '8782590'
+        - '639403'
+        - '87276'
+        - '3890752'
+        - '28753'
+        - '334199202'
+        - '21839946'
+        - '416062880'
+        - '42955491'
+        - '17908203'
+        - '87321'
+        - T001
+        - '863381'
+        - '658359'
+        - '1299584'
+        - '87301'
+        - '16'
+        - ''
+        - N
+        - Nguyen Thi Ngoc Mai
+        - SERVEONE
+        - ''
+        - SP_UP_VH
+        - '60'
+        - ''
+        - N
+        - N
+        - ''
+        - '20261026'
+        - R001
+        - '0'
+        - '0'
+        - N001

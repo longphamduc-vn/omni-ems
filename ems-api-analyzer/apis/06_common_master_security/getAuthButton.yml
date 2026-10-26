@@ -1,0 +1,106 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+# Endpoint: emscom/authButtonNav/getAuthButton.lgdn
+# Action: getAuthButton
+# Subsystem: emscom
+# Category: SECURITY
+# ==============================================================================
+
+info:
+  id: emscom_authButtonNav_getAuthButton_lgdn
+  name: getAuthButton
+  path: emscom/authButtonNav/getAuthButton.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/authButtonNav/getAuthButton.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  submodule: authButtonNav
+  controller: getAuthButton.lgdn
+  category: SECURITY
+  business_domain: Common Master & Security
+  business_domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  summary_vi: Lấy cấu hình phân quyền nút bấm theo form (Ẩn/Hiện nút Thêm, Sửa, Xóa,
+    Export).
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 2
+    avg_duration_ms: 242.5
+    min_duration_ms: 186
+    max_duration_ms: 299
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream:
+    - retrieveUserOrgList
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_auth:
+      description: Dataset kết quả ds_auth
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - Y
+        - N
+        - Y
+        - N
+        - N

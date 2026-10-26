@@ -1,0 +1,148 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+# Endpoint: emsspareparts/sp201/sp220Nav/retSparepartsStatus.lgdn
+# Action: retSparepartsStatus
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp201_sp220Nav_retSparepartsStatus_lgdn
+  name: retSparepartsStatus
+  path: emsspareparts/sp201/sp220Nav/retSparepartsStatus.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp201/sp220Nav/retSparepartsStatus.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  submodule: sp201
+  controller: sp220Nav
+  category: QUERY
+  business_domain: Inventory & Spare Parts Core
+  business_domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  summary_vi: Giám sát trạng thái toàn chuỗi cung ứng linh kiện theo thời gian thực
+    (đang duyệt, đã duyệt, đã lên PR, chờ PO, giao lũy kế).
+  program_ids:
+  - SP201
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 176.0
+    min_duration_ms: 176
+    max_duration_ms: 176
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - inventory
+  - item_po_history
+  dependencies:
+    upstream:
+    - RetStockStatusList
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_Search:
+      description: Dataset đầu vào ds_Search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - '20170101'
+        - '20261024'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '658359'
+    ds_ItemInfo:
+      description: Dataset đầu vào ds_ItemInfo
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAD19169
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_RealtimeReviewreq:
+      description: Dataset kết quả ds_RealtimeReviewreq
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '3'
+        - '2'
+    ds_RealReviewreqConfirm:
+      description: Dataset kết quả ds_RealReviewreqConfirm
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'
+        - '0'
+    ds_RealPRreq:
+      description: Dataset kết quả ds_RealPRreq
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'
+        - '0'
+    ds_RealPOStandby:
+      description: Dataset kết quả ds_RealPOStandby
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'
+        - '0'
+    ds_RealSupplierUncheck:
+      description: Dataset kết quả ds_RealSupplierUncheck
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'
+        - '0'
+    ds_RealPORemainQty:
+      description: Dataset kết quả ds_RealPORemainQty
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '2'
+        - '1'
+    ds_CumDeliveryInfo:
+      description: Dataset kết quả ds_CumDeliveryInfo
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'
+        - '0'

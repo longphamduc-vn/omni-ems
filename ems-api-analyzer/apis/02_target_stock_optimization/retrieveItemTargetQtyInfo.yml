@@ -1,0 +1,125 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 02. Tối ưu hóa Định mức Tồn kho An toàn
+# Endpoint: emscom/prvNoNav/retrieveItemTargetQtyInfo.lgdn
+# Action: retrieveItemTargetQtyInfo
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_prvNoNav_retrieveItemTargetQtyInfo_lgdn
+  name: retrieveItemTargetQtyInfo
+  path: emscom/prvNoNav/retrieveItemTargetQtyInfo.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/prvNoNav/retrieveItemTargetQtyInfo.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 02_target_stock_optimization
+  functional_title_vi: 02. Tối ưu hóa Định mức Tồn kho An toàn
+  subsystem: emscom
+  submodule: prvNoNav
+  controller: retrieveItemTargetQtyInfo.lgdn
+  category: QUERY
+  business_domain: Target Stock Optimization
+  business_domain_vi: Tối ưu hóa Định mức Tồn kho An toàn
+  summary_vi: Tra cứu thông tin định mức mục tiêu khi lập phiếu đề nghị mua sắm.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 2
+    avg_duration_ms: 289.5
+    min_duration_ms: 272
+    max_duration_ms: 307
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - target_stock
+  - inventory
+  dependencies:
+    upstream:
+    - retrievePrvNoInfo
+    downstream:
+    - CreInsertItemPrvRequest
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - ''
+        - '28753'
+        - '658359'
+        - '3979799'
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_inv:
+      description: Dataset kết quả ds_inv
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - Total Management
+        - Price Registration
+        - ''
+        - '1'
+        - ''
+        - '0'
+        - '0'
+        - N
+        - ''
+        - '0'
+        - '9'
+        - Y
+        - '8'
+        - '0'
+        - ''
+        - N
+        - ''
+        - '45'
+        - '1'
+        - '1'
+        - '9'
+        - ''
+        - ''
+        - OPTIMIZATION_NON_PERIOD
+        - Optimized(Unplanned)
+        - Current
+        - 2026-10-24 22:05
+        - N
+        - ''
+        - Available
+        - ''
+        - ''
+        - ''
+    ds_summary:
+      description: Dataset kết quả ds_summary
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''

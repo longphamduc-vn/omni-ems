@@ -1,0 +1,186 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emsspareparts/sp101/sp120Nav/RetEstimateRequestList.lgdn
+# Action: RetEstimateRequestList
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp101_sp120Nav_RetEstimateRequestList_lgdn
+  name: RetEstimateRequestList
+  path: emsspareparts/sp101/sp120Nav/RetEstimateRequestList.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp101/sp120Nav/RetEstimateRequestList.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  submodule: sp101
+  controller: sp120Nav
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Tra cứu danh sách yêu cầu báo giá nhà cung cấp (RFQ list, trạng thái
+    giá, Work Order).
+  program_ids:
+  - SP101
+  metrics:
+    total_calls: 2
+    avg_duration_ms: 1586.5
+    min_duration_ms: 889
+    max_duration_ms: 2284
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - estimate_requests
+  dependencies:
+    upstream:
+    - CreInsertItemPrvRequest
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_Search:
+      description: Dataset đầu vào ds_Search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - ''
+        - Q
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '20260101'
+        - '20261024'
+        - ''
+        - ''
+        - ''
+        - '658359'
+        - Y
+        - ''
+        - ''
+        - ''
+        - ''
+    ds_ItemInfo:
+      description: Dataset đầu vào ds_ItemInfo
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAK93067
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_list:
+      description: Dataset kết quả ds_list
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'
+        - ''
+        - Q2601-2813096
+        - '20260121000000000'
+        - LGDVH
+        - HW
+        - HWBDBN61AB
+        - HWBDBN61-CG LOADER
+        - PO Module Technology Team 2
+        - '87321'
+        - WO-237620166
+        - PR
+        - 'Dear Sir,
+
+
+
+
+          I need a price quote for the parts to place an order for setup H3-6F DB/BD
+
+
+
+
+          Please approve for me
+
+
+
+
+          Thanks Sir.'
+        - QCAK93067
+        - 'Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,
+
+          Material:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,
+
+          Remark:'
+        - ''
+        - ''
+        - LGD
+        - '1'
+        - WOP-17227247
+        - Nguyen Hoang Min(nguyenhoangmin)
+        - Cancelled
+        - '126936.1'
+        - ''
+        - ''
+        - '20260223172515000'
+        - ''
+        - '570.29'
+        - ''
+        - ''
+        - '1'
+        - '570.29'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '322057217'
+        - '17227247'
+        - ''
+        - '8287490'
+        - '20260121113822000'
+        - '[QCAK93067][PRE-RFQ]I need a price quote for the parts to place an order
+
+          for setup H3-6F DB/BD'
+        - Cancelled
+        - ''
+        - ''
+        - Q
+        - P006
+        - '3890752'
+        - '10'
+        - '0'
+        - '0'
+        - USD
+        - '570.29'
+        - Quotation Cancelled
+        - Nguyen Thi Hong Ngoc
+        - 한만진

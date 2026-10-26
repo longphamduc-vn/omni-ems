@@ -206,3 +206,37 @@ CREATE TABLE IF NOT EXISTS translations (
     UNIQUE(domain, source_text, target_lang)
 );
 
+-- 10. Phiếu công tác bảo trì Work Orders (Trích xuất từ WO230WoSaveInit / statusHistory)
+CREATE TABLE IF NOT EXISTS work_orders (
+    wip_entity_id TEXT PRIMARY KEY,
+    wip_entity_name TEXT,
+    organization_id TEXT DEFAULT '28753',
+    description TEXT,
+    asset_number TEXT,
+    instance_number TEXT,
+    status_type TEXT DEFAULT '7',
+    status_type_disp TEXT DEFAULT 'Cancelled',
+    scheduled_start_date TEXT,
+    scheduled_completion_date TEXT,
+    owning_department TEXT,
+    created_by TEXT,
+    plant TEXT DEFAULT 'HW',
+    line_code TEXT DEFAULT 'MTL'
+);
+
+-- 11. Yêu cầu mua sắm linh kiện PRV Requests (Trích xuất từ CreInsertItemPrvRequest)
+CREATE TABLE IF NOT EXISTS prv_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    txn_group_id TEXT,
+    inventory_item_id TEXT,
+    organization_id TEXT DEFAULT '28753',
+    prv_type TEXT DEFAULT 'NEW',
+    prv_no TEXT,
+    user_id TEXT,
+    status TEXT DEFAULT 'OK',
+    err_code TEXT DEFAULT '0',
+    err_msg TEXT DEFAULT '',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+

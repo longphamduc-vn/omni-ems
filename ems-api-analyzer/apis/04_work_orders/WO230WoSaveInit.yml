@@ -1,0 +1,320 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 04. Bảo trì Thiết bị & Lệnh công tác
+# Endpoint: emsworkorder/wo20/wo230Nav/WO230WoSaveInit.lgdn
+# Action: WO230WoSaveInit
+# Subsystem: emsworkorder
+# Category: OTHER
+# ==============================================================================
+
+info:
+  id: emsworkorder_wo20_wo230Nav_WO230WoSaveInit_lgdn
+  name: WO230WoSaveInit
+  path: emsworkorder/wo20/wo230Nav/WO230WoSaveInit.lgdn
+  url: http://ems.lgdisplay.com:9000/emsworkorder/wo20/wo230Nav/WO230WoSaveInit.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 04_work_orders
+  functional_title_vi: 04. Bảo trì Thiết bị & Lệnh công tác
+  subsystem: emsworkorder
+  submodule: wo20
+  controller: wo230Nav
+  category: OTHER
+  business_domain: Work Orders & Maintenance
+  business_domain_vi: Bảo trì Thiết bị & Lệnh công tác
+  summary_vi: Khởi tạo form lưu phiếu công tác WO (công đoạn, vật tư phụ tùng xuất
+    dùng, file đính kèm).
+  program_ids:
+  - WO230
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 531.0
+    min_duration_ms: 531
+    max_duration_ms: 531
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - work_orders
+  dependencies:
+    upstream:
+    - retrieveWipEntity
+    downstream:
+    - statusHistory
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_info:
+      description: Dataset đầu vào ds_info
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '314805734'
+        - '28753'
+        - '658359'
+        - WoInit
+        - ''
+        - XXEMS_YN_I
+        - '69972'
+        - ViewWO
+        - ''
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_init:
+      description: Dataset kết quả ds_init
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - N
+        - N
+        - N
+        - Y
+        - ''
+        - ''
+        - '314805734'
+        - '28753'
+    ds_oplist:
+      description: Dataset kết quả ds_oplist
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '10'
+        - '314805734'
+        - '28753'
+        - ''
+        - ''
+        - '1201617'
+        - '87254'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '20250915110713000'
+        - '20260403110713000'
+        - '4800'
+        - ''
+        - Y
+        - N
+        - ''
+        - ''
+        - N
+        - N
+        - N
+        - N
+        - '20250915110713000'
+        - '20260403110713000'
+        - ''
+        - ''
+        - ''
+        - ''
+        - '20250915110713000'
+        - '20260403110713000'
+        - '4800'
+        - ''
+        - N
+        - UpdateOpSummaryEnabled
+        - ''
+        - ''
+        - '0'
+        - ''
+        - ''
+        - eAM Information
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '4800'
+        - Y
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '0'
+        - ''
+        - '0'
+        - ''
+    ds_mtlist:
+      description: Dataset kết quả ds_mtlist
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '314805734'
+        - '28753'
+        - '10'
+        - ''
+        - '87254'
+        - '1'
+        - '3772493'
+        - ''
+        - QCAC23840
+        - 'Needle Valve ** MTV/VSM/SBB21(MV-100-3.0S-F0-E08), MARCO SYSTEMANALYSE
+
+          UND ENTWICKLUNG GMBH, Valve Connection Diameter:72*60*14, Material:N/A,
+
+          Applicable Pressure:2~4㎏F/㎠, Remark:MV-100-3.0S-F0-E08'
+        - '0'
+        - EA
+        - '20250915110713000'
+        - ''
+        - ''
+        - ''
+        - '1'
+        - true
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '0'
+        - '1'
+        - '1'
+        - '1201617'
+        - '0'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - Y
+        - '1'
+        - '0'
+        - N
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '10'
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - MaterialFlexEnabled
+        - ''
+        - ''
+        - '2'
+        - '2'
+        - ''
+        - Y
+        - ''
+        - SERVEONE
+        - Active
+        - ''
+        - ''
+        - ''
+        - ''
+        - N
+        - '3772493'
+        - ''
+        - ''
+        - ''
+        - '20'
+        - '20'
+        - Y
+        - http://fdm.lgdisplay.com:8008/Windchill/extcore/jsp/lgdfdm/drawing/qcodeDrawing.jsp?oid=VR:wt.part.WTPart:251475133
+        - FdmUrlEnabledH
+        - '0'
+        - '0'
+        - '20'
+        - '0'
+        - 'true'
+        - ''
+    ds_poChangeFlag:
+      description: Dataset kết quả ds_poChangeFlag
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - N
+    ds_poInfoFlag:
+      description: Dataset kết quả ds_poInfoFlag
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - N
+    ds_spAttachFile:
+      description: Dataset kết quả ds_spAttachFile
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'

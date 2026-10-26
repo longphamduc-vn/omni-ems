@@ -1,0 +1,80 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 04. Bảo trì Thiết bị & Lệnh công tác
+# Endpoint: emscom/woSearchNav/retrieveWipEntity.lgdn
+# Action: retrieveWipEntity
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_woSearchNav_retrieveWipEntity_lgdn
+  name: retrieveWipEntity
+  path: emscom/woSearchNav/retrieveWipEntity.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/woSearchNav/retrieveWipEntity.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 04_work_orders
+  functional_title_vi: 04. Bảo trì Thiết bị & Lệnh công tác
+  subsystem: emscom
+  submodule: woSearchNav
+  controller: retrieveWipEntity.lgdn
+  category: QUERY
+  business_domain: Work Orders & Maintenance
+  business_domain_vi: Bảo trì Thiết bị & Lệnh công tác
+  summary_vi: Tìm kiếm mã định danh thực thể WIP gắn với thiết bị/chuyền sản xuất.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 87.0
+    min_duration_ms: 87
+    max_duration_ms: 87
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - work_orders
+  dependencies:
+    upstream: []
+    downstream:
+    - WO230WoSaveInit
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_input:
+      description: Dataset đầu vào ds_input
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '314805734'
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_output:
+      description: Dataset kết quả ds_output
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - WO-232220577
+        - '314805734'
+        - '12'
+        - PR
+        - '7'
+        - Cancelled

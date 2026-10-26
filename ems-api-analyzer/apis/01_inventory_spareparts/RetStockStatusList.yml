@@ -1,0 +1,161 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+# Endpoint: emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn
+# Action: RetStockStatusList
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp101_sp110Nav_RetStockStatusList_lgdn
+  name: RetStockStatusList
+  path: emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp101/sp110Nav/RetStockStatusList.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  submodule: sp101
+  controller: sp110Nav
+  category: QUERY
+  business_domain: Inventory & Spare Parts Core
+  business_domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  summary_vi: Tra cứu danh sách tồn kho phụ tùng thực tế, tồn kho khả dụng, giá vốn,
+    cờ bản vẽ FDM CAD và cảnh báo Red Flag.
+  program_ids:
+  - SP101
+  metrics:
+    total_calls: 3
+    avg_duration_ms: 393.0
+    min_duration_ms: 356
+    max_duration_ms: 427
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - items
+  - inventory
+  dependencies:
+    upstream: []
+    downstream:
+    - retrieveItemInfoDetail
+    - RetAllocationQuantity
+    - CreInsertItemPrvRequest
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - '20210316'
+        - ''
+    ds_ItemInfo:
+      description: Dataset đầu vào ds_ItemInfo
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAK93067
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_result:
+      description: Dataset kết quả ds_result
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAK93067
+        - '28753'
+        - '3890752'
+        - 'Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,
+
+          Material:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,
+
+          Remark:'
+        - Active
+        - EA
+        - TOP ENGINEERING CO.,LTD
+        - Q4.Bracket
+        - 'Size:110*45*11, Material:ALUMINUM6061+ANODIZING(BLACK), Application:,
+
+          Addition Specification:, Remark:'
+        - PC2512005-001-00021-0
+        - '863381'
+        - LGDVN_(주) 서브원_KR017765
+        - '0'
+        - '0'
+        - N
+        - N
+        - N
+        - N
+        - '87321'
+        - PO Module Technology Team 2
+        - Invidual Management
+        - '16'
+        - '0'
+        - '16'
+        - SP_UP_VH
+        - '546.39'
+        - '0'
+        - '0'
+        - http://fdm.lgdisplay.com:8008/Windchill/extcore/jsp/lgdfdm/drawing/qcodeDrawing.jsp?oid=VR:wt.part.WTPart:255345493
+        - Y
+        - '20261002'
+        - '0'
+        - '0'
+        - '빨간색 : 구매 불가 Parts'
+        - 고월령, 장기미사용 등을 고려하여 이관 가능하다고 판단되는 재고
+        - N
+        - '0'
+        - N

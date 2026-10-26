@@ -1,0 +1,85 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 05. Quy trình Phê duyệt Điện tử
+# Endpoint: emscom/approvalNav/retMethodPop.lgdn
+# Action: retMethodPop
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_approvalNav_retMethodPop_lgdn
+  name: retMethodPop
+  path: emscom/approvalNav/retMethodPop.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/approvalNav/retMethodPop.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 05_approval_workflow
+  functional_title_vi: 05. Quy trình Phê duyệt Điện tử
+  subsystem: emscom
+  submodule: approvalNav
+  controller: retMethodPop.lgdn
+  category: QUERY
+  business_domain: Electronic Approval Workflow
+  business_domain_vi: Quy trình Phê duyệt Điện tử
+  summary_vi: Lựa chọn phương thức phê duyệt (Trực tiếp, Ủy quyền, Ký song song).
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 350.0
+    min_duration_ms: 350
+    max_duration_ms: 350
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream:
+    - retApprovalLine
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - ''
+        - '658359'
+        - ''
+        - '16001'
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_methodPop:
+      description: Dataset kết quả ds_methodPop
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0001'
+        - Approval
+        - 작성
+      - - '0002'
+        - Agreement
+        - Approval of Demand Dept.
+      - - '0003'
+        - parallel Agreement
+        - Approval of Manager

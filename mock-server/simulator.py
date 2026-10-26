@@ -1,16 +1,65 @@
 #!/usr/bin/env python3
 # Standalone LG Display EMS Mock Server (Python 3 zero-dependency)
 # Serves core business data retrieval APIs against SQLite database (db/ems.db).
-# Updated with production traces from t1.txt
+# Universal 50-Endpoint Engine synchronized with ems-api-analyzer
 
 import os
 import re
+import json
 import sqlite3
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
 
 PORT = int(os.environ.get("PORT", 9000))
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "db", "ems.db")
+
+CATALOG_CANDIDATES = [
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ems-api-analyzer", "data", "analyzed_apis.json"),
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "analyzed_apis.json"),
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "analyzed_apis.json")
+]
+CATALOG = {}
+
+def load_catalog():
+    for p in CATALOG_CANDIDATES:
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    for ep in data.get("endpoints", []):
+                        path_val = ep.get("path", "").strip().strip("/")
+                        sample_res = ep.get("sample_response") or {}
+                        raw_ds = sample_res.get("datasets") or {}
+                        fmt_ds = {}
+                        for ds_name, ds_info in raw_ds.items():
+                            cols = ds_info.get("cols") or []
+                            rows = ds_info.get("rows") or []
+                            fmt_rows = []
+                            for r in rows:
+                                if isinstance(r, list):
+                                    fmt_rows.append({cols[i]: str(r[i]) if i < len(r) and r[i] is not None else "" for i in range(len(cols))})
+                                elif isinstance(r, dict):
+                                    fmt_rows.append(r)
+                            fmt_ds[ds_name] = fmt_rows
+                        entry = {
+                            "id": ep.get("id"),
+                            "path": path_val,
+                            "action": ep.get("action"),
+                            "category": ep.get("category"),
+                            "program_ids": ep.get("program_ids", []),
+                            "total_calls": ep.get("total_calls", 0),
+                            "parameters": sample_res.get("params") or {"errorCode": "1", "errorMsg": ""},
+                            "datasets": fmt_ds
+                        }
+                        CATALOG[path_val] = entry
+                        if ep.get("action"):
+                            CATALOG[f"action:{ep.get('action')}"] = entry
+                    print(f"[EMS Simulator] Loaded {len(CATALOG)//2} analyzed endpoints from {os.path.basename(p)}")
+                    return
+            except Exception as e:
+                print(f"[EMS Simulator] Error loading catalog: {e}")
+
+load_catalog()
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
@@ -302,6 +351,7 @@ class NexacroHandler(BaseHTTPRequestHandler):
                     i.po_type as poType, i.po_type_code as poTypeCode,
                     i.item_category_code as itemCategoryCode, i.item_category_desc as itemCategoryDesc,
                     i.item_catalog_group_id as itemCatalogGroupId,
+                    i.fdm_url as fdmUrl, i.fdm_flag as fdmFlag,
                     i.timely_purchase_date as timelyPurchaseDate,
                     inv.organization_id as organizationId, inv.inventory_item_id as inventoryItemId,
                     inv.buy_item_type as buyItemType, inv.buy_item_type_code as buyItemTypeCode,
@@ -342,7 +392,8 @@ class NexacroHandler(BaseHTTPRequestHandler):
                 "itemCategoryCode": r["itemCategoryCode"] or "QCAB1301",
                 "itemCategoryDesc": r["itemCategoryDesc"] or "Q4.Joint/Connector",
                 "itemCatalogGroupId": str(r["itemCatalogGroupId"] or "504"),
-                "modelName": r["modelName"] or "", "makerName": r["makerName"] or ""
+                "modelName": r["modelName"] or "", "makerName": r["makerName"] or "",
+                "fdmUrl": r["fdmUrl"] or "", "fdmFlag": r["fdmFlag"] or "Y"
             } for idx, r in enumerate(rows)]
             
         # 7. Item PO History Popup
@@ -376,11 +427,94 @@ class NexacroHandler(BaseHTTPRequestHandler):
         elif path == "/emswonew/wn90/wn900Nav/retFactoryList.lgdn":
             cur.execute("SELECT com_code as comCode, com_code_desc as comCodeDesc, description, factory_type as factoryType, city, area_code as areaCode, organization_id as organizationId, seq_no as seqNo FROM factories ORDER BY seq_no ASC")
             datasets["ds_cbo_factory"] = [dict(r) for r in cur.fetchall()]
-            
+
+        # 10. Purchase Request Creation (MUTATE - CreInsertItemPrvRequest.lgdn)
+        elif path == "/emsspareparts/sp101/sp110Nav/CreInsertItemPrvRequest.lgdn":
+            s = (parsed["datasets"].get("ds_search") or [{}])[0]
+            txn_group_id = s.get("txnGroupId", "421996047")
+            inv_item_id = s.get("inventoryItemId", "3890752")
+            org_id = s.get("organizationId", "28753")
+            prv_type = s.get("prvType", "NEW")
+            user_id = s.get("userId", "658359")
+            prv_no = s.get("prvNo") or "Q2610-3890752"
+            try:
+                cur.execute(
+                    "INSERT INTO prv_requests (txn_group_id, inventory_item_id, organization_id, prv_type, prv_no, user_id, status, err_code, err_msg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (txn_group_id, inv_item_id, org_id, prv_type, prv_no, user_id, "OK", "0", "")
+                )
+                conn.commit()
+            except Exception as e:
+                pass
+            datasets["ds_list"] = [{"result": "OK", "errCode": "0", "errMsg": ""}]
+
+        # 11. Repair Interlock Check (retWaitRepairItemInterlock.lgdn)
+        elif path == "/emsspareparts/sp102/sp131Nav/retWaitRepairItemInterlock.lgdn":
+            datasets["ds_result"] = [{"applyFlag": "N"}]
+
+        # 12. Engineering Change Flag (retEcFlag.lgdn)
+        elif path == "/emsspareparts/sp102/sp137Nav/retEcFlag.lgdn":
+            datasets["ds_ec"] = [{"ecCode": "EC001", "ecCodeDesc": "EC 대상"}]
+
+        # 13. Work Order Save Init (WO230WoSaveInit.lgdn)
+        elif path == "/emsworkorder/wo20/wo230Nav/WO230WoSaveInit.lgdn":
+            info = (parsed["datasets"].get("ds_info") or [{}])[0]
+            wip_id = info.get("wipEntityId", "314805734")
+            cur.execute("SELECT * FROM work_orders WHERE wip_entity_id = ?", (wip_id,))
+            wo = cur.fetchone()
+            wip_entity_id = wo["wip_entity_id"] if wo else wip_id
+            org_id = wo["organization_id"] if wo else "28753"
+            datasets["ds_init"] = [{"safetyFlag": "N", "emrgIssueFlag": "N", "useAllocationFlag": "N", "useQCodeFlag": "Y", "checkMessage": "", "activityTotManCnt": "", "wipEntityId": wip_entity_id, "organizationId": org_id}]
+            datasets["ds_oplist"] = [{"operationSeqNum": "10", "wipEntityId": wip_entity_id, "organizationId": org_id, "standardOperationId": "", "standardOperationCode": "", "departmentId": "1201617", "departmentCode": "87254", "description": "Operation 10"}]
+            datasets["ds_mtlist"] = [{"wipEntityId": wip_entity_id, "organizationId": org_id, "operationSeqNum": "10", "operationDesc": "", "opDept": "87254", "itemType": "1", "inventoryItemId": "3772493", "directItemSeqId": "", "itemName": "QCAC23840", "itemDesc": "Needle Valve ** MARCO SYSTEMANALYSE", "quantity": "0", "uom": "EA", "onHandQty": "20", "availableQty": "20", "commonFlag": "Y"}]
+            datasets["ds_poChangeFlag"] = [{"poChangeFlag": "N"}]
+            datasets["ds_poInfoFlag"] = [{"poInfoFlag": "N"}]
+            datasets["ds_spAttachFile"] = [{"attachFileCnt": "0"}]
+
+        # 14. Work Order Status History (statusHistory.lgdn)
+        elif path == "/emsworkorder/wo50/wo580Nav/statusHistory.lgdn":
+            info = (parsed["datasets"].get("ds_info") or [{}])[0]
+            wip_id = info.get("wipEntityId", "314805734")
+            datasets["ds_list"] = [
+                {"wipEntityId": wip_id, "historyId": "139544072", "organizationId": "28753", "commentText": "PR Return에 따른 WO 취소 처리", "createdBy": "1102", "creationDate": "20250915130713000"},
+                {"wipEntityId": wip_id, "historyId": "147566170", "organizationId": "28753", "commentText": "WO Khởi tạo ban đầu", "createdBy": "VH081996", "creationDate": "20250915110713000"}
+            ]
+            datasets["ds_input"] = [{"historyId": "147566170"}]
+
+        # 15. Realtime Spareparts Status (retSparepartsStatus.lgdn)
+        elif path == "/emsspareparts/sp201/sp220Nav/retSparepartsStatus.lgdn":
+            datasets["ds_RealtimeReviewreq"] = [{"recordCount": "3", "amount": "2"}]
+            datasets["ds_RealReviewreqConfirm"] = [{"recordCount": "0", "amount": "0"}]
+            datasets["ds_RealPRreq"] = [{"recordCount": "0", "amount": "0"}]
+            datasets["ds_RealPOStandby"] = [{"recordCount": "0", "amount": "0"}]
+            datasets["ds_RealSupplierUncheck"] = [{"recordCount": "0", "amount": "0"}]
+            datasets["ds_RealPORemainQty"] = [{"recordCount": "2", "amount": "1"}]
+            datasets["ds_CumDeliveryInfo"] = [{"recordCount": "0", "amount": "0"}]
+
+        # 16. Security & UI Grid Formats
+        elif path == "/emsspareparts/sp302/sp330Nav/CheckMasterAuth.lgdn":
+            datasets["ds_auth"] = [{"masterYn": "N"}]
+        elif path == "/emsspareparts/sp302/sp330Nav/GetSpPrivFlag.lgdn":
+            datasets["ds_result"] = [{"privFlag": "N"}]
+        elif path == "/emscom/authButtonNav/getAuthButton.lgdn":
+            datasets["ds_auth"] = [{"authSearch": "Y", "authSave": "Y", "authDelete": "N", "authPrint": "Y"}]
+        elif path == "/emscom/gridFormatNav/retrieveGridFormat.lgdn":
+            datasets["ds_list"] = []
+        elif path in ("/emscom/connLogNav/insertStartLog.lgdn", "/emscom/connLogNav/updateEndLog.lgdn", "/Servlet/MenuPermit.document"):
+            pass
+
+        # Universal Catalog Dispatcher Fallback
         else:
-            self.send_error(404, "Endpoint not simulated or removed")
-            conn.close()
-            return
+            clean_path = path.strip("/")
+            cat_entry = CATALOG.get(clean_path) or CATALOG.get(f"action:{clean_path.split('/')[-1].replace('.lgdn','').replace('.document','')}")
+            if cat_entry:
+                datasets = cat_entry.get("datasets", {})
+                parameters.update(cat_entry.get("parameters", {}))
+            elif path.endswith(".lgdn") or path.endswith(".document"):
+                datasets = {}
+            else:
+                self.send_error(404, "Endpoint not simulated or removed")
+                conn.close()
+                return
             
         conn.close()
         
@@ -396,10 +530,57 @@ class NexacroHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/api/health":
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute("SELECT count(*) as c FROM items")
+            item_cnt = cur.fetchone()["c"]
+            cur.execute("SELECT count(*) as c FROM work_orders")
+            wo_cnt = cur.fetchone()["c"]
+            conn.close()
+            payload = json.dumps({
+                "status": "ONLINE",
+                "runtime": "python",
+                "port": PORT,
+                "endpoints_supported": len(CATALOG) // 2,
+                "database": {"items": item_cnt, "work_orders": wo_cnt}
+            }).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(payload)))
             self.end_headers()
-            self.wfile.write(b'{"status":"ONLINE","runtime":"python","port":' + str(PORT).encode() + b',"apis":9}')
+            self.wfile.write(payload)
+        elif self.path == "/api/translations":
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM translations")
+            rows = [dict(r) for r in cur.fetchall()]
+            conn.close()
+            payload = json.dumps(rows).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(payload)))
+            self.end_headers()
+            self.wfile.write(payload)
+        elif self.path == "/api/endpoints":
+            endpoints_list = []
+            seen = set()
+            for k, ep in CATALOG.items():
+                if not k.startswith("action:") and ep["id"] not in seen:
+                    seen.add(ep["id"])
+                    endpoints_list.append({
+                        "id": ep["id"],
+                        "path": ep["path"],
+                        "action": ep["action"],
+                        "category": ep["category"],
+                        "total_calls": ep["total_calls"],
+                        "datasets": list(ep.get("datasets", {}).keys())
+                    })
+            payload = json.dumps({"total": len(endpoints_list), "endpoints": endpoints_list}).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(payload)))
+            self.end_headers()
+            self.wfile.write(payload)
         else:
             self.send_error(404)
 

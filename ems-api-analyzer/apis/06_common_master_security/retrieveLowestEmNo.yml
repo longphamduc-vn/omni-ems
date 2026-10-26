@@ -1,0 +1,125 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+# Endpoint: emscom/popupNav/retrieveLowestEmNo.lgdn
+# Action: retrieveLowestEmNo
+# Subsystem: emscom
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emscom_popupNav_retrieveLowestEmNo_lgdn
+  name: retrieveLowestEmNo
+  path: emscom/popupNav/retrieveLowestEmNo.lgdn
+  url: http://ems.lgdisplay.com:9000/emscom/popupNav/retrieveLowestEmNo.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 06_common_master_security
+  functional_title_vi: 06. Dữ liệu Dùng chung & Bảo mật Phân quyền
+  subsystem: emscom
+  submodule: popupNav
+  controller: retrieveLowestEmNo.lgdn
+  category: QUERY
+  business_domain: Common Master & Security
+  business_domain_vi: Dữ liệu Dùng chung & Bảo mật Phân quyền
+  summary_vi: Popup tra cứu danh bạ nhân viên nội bộ cấp dưới.
+  program_ids:
+  - COMMON
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 325.0
+    min_duration_ms: 325
+    max_duration_ms: 325
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables: []
+  dependencies:
+    upstream: []
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_Search:
+      description: Dataset đầu vào ds_Search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - HWBMTL21EC
+        - ''
+        - ''
+        - ''
+        - ''
+        - '28753'
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_List:
+      description: Dataset kết quả ds_List
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - HWBMTL21EC0101
+        - HW CP LASER MARKING 201-STAGE UNIT-ALIGN STAGE
+        - A
+        - '87473'
+        - NY SW PO M Technology TAB/DIP Part
+        - '5789850'
+        - ''
+        - '2078629'
+        - '87473'
+        - NY SW PO M Technology TAB/DIP Part
+        - ''
+        - MODULE
+        - Y
+        - ''
+        - MTL
+      - - HWBMTL21EC0102
+        - HW CP LASER MARKING 201-STAGE UNIT-BONDER STAGE
+        - A
+        - '87473'
+        - NY SW PO M Technology TAB/DIP Part
+        - '5789845'
+        - ''
+        - '2078629'
+        - '87473'
+        - NY SW PO M Technology TAB/DIP Part
+        - ''
+        - MODULE
+        - Y
+        - ''
+        - MTL
+      - - HWBMTL21EC0103
+        - HW CP LASER MARKING 201-STAGE UNIT-BUFFER STAGE
+        - A
+        - '87473'
+        - NY SW PO M Technology TAB/DIP Part
+        - '5789840'
+        - ''
+        - '2078629'
+        - '87473'
+        - NY SW PO M Technology TAB/DIP Part
+        - ''
+        - MODULE
+        - Y
+        - ''
+        - MTL

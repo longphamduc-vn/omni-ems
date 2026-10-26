@@ -1,0 +1,380 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emsspareparts/sp102/sp134Nav/retrievePurchaseRequest.lgdn
+# Action: retrievePurchaseRequest
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp102_sp134Nav_retrievePurchaseRequest_lgdn
+  name: retrievePurchaseRequest
+  path: emsspareparts/sp102/sp134Nav/retrievePurchaseRequest.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp134Nav/retrievePurchaseRequest.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  submodule: sp102
+  controller: sp134Nav
+  category: QUERY
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Tra cứu thông tin chi tiết của một yêu cầu mua sắm đã lập trong hệ thống.
+  program_ids:
+  - SP102
+  metrics:
+    total_calls: 3
+    avg_duration_ms: 949.0
+    min_duration_ms: 316
+    max_duration_ms: 1396
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - prv_requests
+  dependencies:
+    upstream:
+    - CreInsertItemPrvRequest
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '18033023'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '28753'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - '658359'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Q
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_Item:
+      description: Dataset kết quả ds_Item
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '0'
+        - QCAB09035
+        - 'Ball Bearing ** 6002ZZ(NSK), NSK LTD, Face Width:9㎜, Diameter:32㎜, Inner
+
+          Diameter:15㎜, Material Of Sidewheel:SUJ2, Material Of Retainer:SPCC, Ball
+
+          Bearing  Model:DEEPLY GAP BALL BEARING, Material Of Ball:SUJ2, Symbol
+
+          Of Shield:ZZ, Rem'
+        - HWBUDB6250
+        - '8782391'
+        - LGDVN_(주) 서브원_KR017765
+        - KR017765
+        - '370008'
+        - '14'
+        - N
+        - '-114'
+        - '-128'
+        - '1.42'
+        - '1.42'
+        - '19.88'
+        - USD
+        - '1'
+        - '19.88'
+        - Hoang Duc Hao
+        - NY SW PO M Technology DB/BD Part
+        - '639403'
+        - PO Module Technology Team 2
+        - NY SW PO M Technology DB/BD Unit B1
+        - B-C-87321
+        - EM-MFG-003
+        - 'Manuf Exp_Spare Parts_Production(Replacement),Manuf Exp_Repair_Facility
+
+          Maintenance(Machinery)'
+        - 즉사용
+        - '20261106000000000'
+        - 2609B08_PO Module Technology Team 2
+        - HWBUDB62-AUTO CLAVE
+        - EA
+        - ''
+        - ''
+        - '18033023'
+        - ''
+        - CheckFlagFalse
+        - N
+        - '20260930000000000'
+        - '50'
+        - '366466'
+        - '28753'
+        - '5682078'
+        - SP_UP_VH
+        - SERVEONE
+        - N
+        - CpartFlagY
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Q2609-3081019
+        - '5682078'
+        - '0'
+        - '0'
+        - T001
+        - '87321'
+        - '1299584'
+        - '87301'
+        - N
+        - ''
+        - ''
+        - '1'
+        - '0'
+        - Y
+        - ''
+        - ''
+        - ''
+        - '658359'
+        - '0000000000000'
+        - Common Project
+        - '00000000'
+        - Common
+        - '20260731'
+        - ''
+        - '44'
+        - 미대상
+        - EC005
+        - '10'
+        - '0'
+        - N002
+        - N
+      - - '0'
+        - QCAB23355
+        - 'Ball Screw ** LMKE1602A2-C5A-155LSF, TONGIL INDUSTRIES CO.,LTD, Screw
+
+          Direction:, Outside Diameter Of Screw Shaft:16㎜, A Species Of Nut:, The
+
+          Number Of Screw Thread:, Screw Unit Length:83㎜, Precision Mark:C5, D'
+        - HBBMTL32100304
+        - '7456537'
+        - LGDVN_(주)AVACO_KR021301
+        - KR021301
+        - '691633'
+        - '3'
+        - N
+        - '0'
+        - '-3'
+        - '994.82'
+        - '994.82'
+        - '2984.46'
+        - USD
+        - '1'
+        - '2984.46'
+        - Pham Thi Thao
+        - Auto M Technology DB Unit A
+        - '507474'
+        - Auto Technology DB Part
+        - Auto Technology DB Part
+        - B-C-86752
+        - EM-MFG-008
+        - '★★★[Unused]Manuf Exp_Spare Parts_Production(Replacement),Manuf Exp_Repair_Machinery
+
+          & Tools(Machinery)'
+        - 안전재고확보
+        - '20261021000000000'
+        - 2609B08_PO Module Technology Team 3
+        - HB CLEAN 302-BOTTOM CLEAN-OUT TRANSFER
+        - EA
+        - ''
+        - ''
+        - '18033023'
+        - ''
+        - CheckFlagFalse
+        - N
+        - '20260930000000000'
+        - '90'
+        - '3387036'
+        - '28753'
+        - '5682076'
+        - SP_UP_VH
+        - LGD
+        - N
+        - CpartFlagY
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Q2609-3080111
+        - '5682076'
+        - '0'
+        - '0'
+        - T003
+        - '86752'
+        - '1049577'
+        - '86752'
+        - N
+        - ''
+        - ''
+        - '1'
+        - '0'
+        - Y
+        - ''
+        - ''
+        - ''
+        - '658359'
+        - '0000000000000'
+        - Common Project
+        - '00000000'
+        - Common
+        - '20260517'
+        - ''
+        - '75'
+        - 미대상
+        - EC005
+        - '0'
+        - '0'
+        - N002
+        - N
+      - - '0'
+        - QCAB27124
+        - 'Ball Bearing ** 7002A5(NSK), NSK LTD, Face Width:9㎜, Diameter:32㎜, Inner
+
+          Diameter:15㎜, Material Of Sidewheel:SUJ2, Material Of Retainer:SPCC, Ball
+
+          Bearing  Model:ANGULAR CONTACT BALL BEARING, Material Of Ball:SUJ2, Symbol
+
+          Of Shield:,'
+        - HWBLTL6350
+        - '8700247'
+        - LGDVN_(주) 서브원_KR017765
+        - KR017765
+        - '370008'
+        - '24'
+        - N
+        - '0'
+        - '-24'
+        - '17.77'
+        - '17.77'
+        - '426.48'
+        - USD
+        - '1'
+        - '426.48'
+        - Nguyen Ngoc Tan
+        - NY SW PO M Advanced CP/LT Part
+        - '736342'
+        - PO Module Technology Team 2
+        - NY SW PO M Technology DB/BD Unit B1
+        - B-C-87321
+        - EM-MFG-003
+        - 'Manuf Exp_Spare Parts_Production(Replacement),Manuf Exp_Repair_Facility
+
+          Maintenance(Machinery)'
+        - 즉사용
+        - '20261101000000000'
+        - 2609B08_PO Module Technology Team 2
+        - HWBLTL63-L2 AUTOCLAVE
+        - EA
+        - ''
+        - ''
+        - '18033023'
+        - ''
+        - CheckFlagFalse
+        - N
+        - '20260930000000000'
+        - '40'
+        - '599083'
+        - '28753'
+        - '5682096'
+        - SP_UP_VH
+        - SERVEONE
+        - N
+        - CpartFlagY
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Q2609-3081289
+        - '5682096'
+        - '0'
+        - '0'
+        - T001
+        - '87321'
+        - '1299584'
+        - '87301'
+        - N
+        - ''
+        - ''
+        - '1'
+        - '0'
+        - Y
+        - ''
+        - ''
+        - ''
+        - '658359'
+        - '0000000000000'
+        - Common Project
+        - '00000000'
+        - Common
+        - ''
+        - ''
+        - '0'
+        - 미대상
+        - EC005
+        - '0'
+        - '0'
+        - N002
+        - N

@@ -1,0 +1,107 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+# Endpoint: emsspareparts/sp101/sp110Nav/RetAllocationQuantity.lgdn
+# Action: RetAllocationQuantity
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp101_sp110Nav_RetAllocationQuantity_lgdn
+  name: RetAllocationQuantity
+  path: emsspareparts/sp101/sp110Nav/RetAllocationQuantity.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp101/sp110Nav/RetAllocationQuantity.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  submodule: sp101
+  controller: sp110Nav
+  category: QUERY
+  business_domain: Inventory & Spare Parts Core
+  business_domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  summary_vi: Kiểm tra lượng hàng đã phân bổ cho các chuyền/phân xưởng khác trong
+    nhà máy.
+  program_ids:
+  - SP101
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 110.0
+    min_duration_ms: 110
+    max_duration_ms: 110
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - inventory
+  dependencies:
+    upstream:
+    - RetStockStatusList
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '2922383'
+        - '28753'
+        - QCAE02537
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_result:
+      description: Dataset kết quả ds_result
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - A13
+        - SP
+        - NEW
+        - WO-242156793
+        - '328108346'
+        - '28753'
+        - SP-C-NEW
+        - Hoang Duc Hao
+        - '20260522120913000'
+        - '20260512000000000'
+        - '20260512000000000'
+        - '68'
+        - '32'
+        - ''
+        - '2922383'
+      - - A13
+        - SP
+        - NEW
+        - WO-246048601
+        - '333278245'
+        - '28753'
+        - SP-C-NEW
+        - Ngo Quang Chung
+        - '20260812153135000'
+        - '20260812000000000'
+        - '20260812000000000'
+        - '68'
+        - '36'
+        - ''
+        - '2922383'

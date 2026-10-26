@@ -1,0 +1,210 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 02. Tối ưu hóa Định mức Tồn kho An toàn
+# Endpoint: emsspareparts/sp302/sp335Nav/TargetStockSearchList.lgdn
+# Action: TargetStockSearchList
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp302_sp335Nav_TargetStockSearchList_lgdn
+  name: TargetStockSearchList
+  path: emsspareparts/sp302/sp335Nav/TargetStockSearchList.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp302/sp335Nav/TargetStockSearchList.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 02_target_stock_optimization
+  functional_title_vi: 02. Tối ưu hóa Định mức Tồn kho An toàn
+  subsystem: emsspareparts
+  submodule: sp302
+  controller: sp335Nav
+  category: QUERY
+  business_domain: Target Stock Optimization
+  business_domain_vi: Tối ưu hóa Định mức Tồn kho An toàn
+  summary_vi: Truy vấn danh mục định mức tồn kho an toàn với 93 trường dữ liệu tối
+    ưu hóa.
+  program_ids:
+  - SP302
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 297.0
+    min_duration_ms: 297
+    max_duration_ms: 297
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - target_stock
+  dependencies:
+    upstream:
+    - RetStockStatusList
+    downstream:
+    - GetOptimizeInfo
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - '658359'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - N
+        - ''
+        - ''
+        - ''
+        - Y
+        - ''
+        - A13
+        - ''
+    ds_ItemInfo:
+      description: Dataset đầu vào ds_ItemInfo
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAK93067
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_StockInfomation:
+      description: Dataset kết quả ds_StockInfomation
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - ''
+        - ''
+        - ''
+        - ''
+        - N
+        - QCAK93067
+        - 'Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,
+
+          Material:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,
+
+          Remark:'
+        - PC2512005-001-00021-0
+        - TOP ENGINEERING CO.,LTD
+        - '0'
+        - '545.40389'
+        - Y
+        - '36'
+        - '4'
+        - '16'
+        - '18'
+        - '18'
+        - '18'
+        - '1'
+        - '1'
+        - '20261002'
+        - '20261002'
+        - '99999999'
+        - '20261002'
+        - '7'
+        - '0'
+        - '0'
+        - OPTIMIZATION_NON_PERIOD
+        - Optimized(Unplanned)
+        - '32'
+        - '32'
+        - ''
+        - ''
+        - N
+        - ''
+        - ''
+        - ''
+        - N
+        - Y
+        - N
+        - ''
+        - ''
+        - '60'
+        - '150'
+        - Y
+        - '20260121085847000'
+        - EA
+        - '8726.46224'
+        - Y
+        - Active
+        - '20260121090058000'
+        - '20261019105619000'
+        - Pham Duc Long
+        - '28753'
+        - '3890752'
+        - '0'
+        - N
+        - N
+        - 20261019_Pham Duc Long
+        - ''
+        - N
+        - ''
+        - '0'
+        - '0'
+        - P
+        - ''
+        - N001
+        - '32'
+        - Progressing
+        - ''
+        - ''
+        - ''
+        - ''
+        - '48'
+        - '0'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - A13
+        - ''
+        - ''
+        - ''
+        - ''

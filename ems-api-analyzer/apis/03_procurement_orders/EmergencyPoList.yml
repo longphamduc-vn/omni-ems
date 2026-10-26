@@ -1,0 +1,148 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 03. Mua sắm, Báo giá & Đơn hàng PO
+# Endpoint: emsspareparts/sp105/sp180Nav/EmergencyPoList.lgdn
+# Action: EmergencyPoList
+# Subsystem: emsspareparts
+# Category: OTHER
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp105_sp180Nav_EmergencyPoList_lgdn
+  name: EmergencyPoList
+  path: emsspareparts/sp105/sp180Nav/EmergencyPoList.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp105/sp180Nav/EmergencyPoList.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 03_procurement_orders
+  functional_title_vi: 03. Mua sắm, Báo giá & Đơn hàng PO
+  subsystem: emsspareparts
+  submodule: sp105
+  controller: sp180Nav
+  category: OTHER
+  business_domain: Procurement, RFQ & Orders
+  business_domain_vi: Mua sắm, Báo giá & Đơn hàng
+  summary_vi: Danh sách các đơn đặt hàng mua khẩn cấp được phê duyệt đặc cách.
+  program_ids:
+  - SP105
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 210.0
+    min_duration_ms: 210
+    max_duration_ms: 210
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 2 - Universal Catalog Dispatcher
+  database_tables:
+  - item_po_history
+  dependencies:
+    upstream:
+    - RetAuthEmergencyPo
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - '658359'
+        - ''
+        - '20170101'
+        - '20261024'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - Y
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+    ds_ItemInfo:
+      description: Dataset đầu vào ds_ItemInfo
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAK93067
+        - ''
+        - ''
+        - ''
+    ds_PoRvNo:
+      description: Dataset đầu vào ds_PoRvNo
+      column_count: 0
+      columns: []
+      sample_rows: []
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_result:
+      description: Dataset kết quả ds_result
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - EMERGENCY PO
+        - WO-247310272
+        - WOP-17967067
+        - '17967067'
+        - QCAK93067
+        - 'Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,
+
+          Material:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,
+
+          Remark:'
+        - '32'
+        - PA01H010520
+        - '0'
+        - ''
+        - N
+        - '20260910092420000'
+        - Pham Duc Long
+        - LGDVN_(주) 서브원_KR017765
+        - TOP ENGINEERING CO.,LTD
+        - Q4.Bracket
+        - PC2512005-001-00021-0
+        - '863381'
+        - '881'
+        - '3890752'
+        - '334947732'
+        - N
+        - N
+        - '0'
+        - '0'
+        - ''
+        - ''
+        - NY SW PO M Technology DB/BD Unit B2
+        - PO Module Technology Team 2

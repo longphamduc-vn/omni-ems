@@ -1,0 +1,159 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+# Endpoint: emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn
+# Action: retrieveItemInfoDetail
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp102_sp135Nav_retrieveItemInfoDetail_lgdn
+  name: retrieveItemInfoDetail
+  path: emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp102/sp135Nav/retrieveItemInfoDetail.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 01_inventory_spareparts
+  functional_title_vi: 01. Quản lý Tồn kho & Chi tiết Phụ tùng
+  subsystem: emsspareparts
+  submodule: sp102
+  controller: sp135Nav
+  category: QUERY
+  business_domain: Inventory & Spare Parts Core
+  business_domain_vi: Quản lý Tồn kho & Chi tiết Phụ tùng
+  summary_vi: Chi tiết kỹ thuật linh kiện, đơn vị tính, chỉ số độ tin cậy MTBF và
+    lịch sử xuất dùng bình quân 3M/1Y/2Y.
+  program_ids:
+  - SP102
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 318.0
+    min_duration_ms: 318
+    max_duration_ms: 318
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - items
+  - inventory
+  - item_usage_summary
+  dependencies:
+    upstream:
+    - RetStockStatusList
+    - retrieveItem
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_Input:
+      description: Dataset đầu vào ds_Input
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - '3890752'
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_Item:
+      description: Dataset kết quả ds_Item
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - QCAK93067
+        - 'Bracket ** PC2512005-001-00021-0, TOP ENGINEERING CO.,LTD, Size:110*45*11,
+
+          Material:ALUMINUM6061+ANODIZING(BLACK), Application:, Addition Specification:,
+
+          Remark:'
+        - EA
+        - TOP ENGINEERING CO.,LTD
+        - Q4.Bracket
+        - PC2512005-001-00021-0
+        - '16'
+        - '0'
+        - '16'
+        - LGDVN_(주) 서브원_KR017765
+        - '544.67'
+        - '546.38875'
+        - '0'
+        - Active
+        - http://fdm.lgdisplay.com:8008/Windchill/extcore/jsp/lgdfdm/drawing/qcodeDrawing.jsp?oid=VR:wt.part.WTPart:255345493
+        - ''
+        - ''
+        - ''
+        - '20260121085847000'
+        - ''
+        - ''
+        - '0'
+    ds_Inv:
+      description: Dataset kết quả ds_Inv
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - Invidual Management
+        - Đăng kí đơn giá
+        - ''
+        - '18'
+        - '7'
+        - '0'
+        - '0'
+        - N
+        - '16'
+        - '16'
+        - '0'
+        - Y
+        - '14'
+        - '16'
+        - '0'
+        - N
+        - '69'
+        - '60'
+        - '18'
+        - '18'
+        - '32'
+        - ''
+        - ''
+        - OPTIMIZATION_NON_PERIOD
+        - Optimized(Unplanned)
+        - Current
+        - 2026-10-24 21:50
+        - P
+        - ''
+        - Progressing
+        - ''
+        - ''
+        - ''
+    ds_Summary:
+      description: Dataset kết quả ds_Summary
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '2'
+        - '3'
+        - '12'
+        - '18'
+        - '0'
+        - '9'
+        - '9'
+        - '9'

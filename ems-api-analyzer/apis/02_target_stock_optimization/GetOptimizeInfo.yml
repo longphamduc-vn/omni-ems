@@ -1,0 +1,105 @@
+# ==============================================================================
+# EMS Nexacro API Definition
+# Chức năng: 02. Tối ưu hóa Định mức Tồn kho An toàn
+# Endpoint: emsspareparts/sp302/sp330Nav/GetOptimizeInfo.lgdn
+# Action: GetOptimizeInfo
+# Subsystem: emsspareparts
+# Category: QUERY
+# ==============================================================================
+
+info:
+  id: emsspareparts_sp302_sp330Nav_GetOptimizeInfo_lgdn
+  name: GetOptimizeInfo
+  path: emsspareparts/sp302/sp330Nav/GetOptimizeInfo.lgdn
+  url: http://ems.lgdisplay.com:9000/emsspareparts/sp302/sp330Nav/GetOptimizeInfo.lgdn
+  method: POST
+  protocol: Nexacro XML / HTTP POST
+  functional_group: 02_target_stock_optimization
+  functional_title_vi: 02. Tối ưu hóa Định mức Tồn kho An toàn
+  subsystem: emsspareparts
+  submodule: sp302
+  controller: sp330Nav
+  category: QUERY
+  business_domain: Target Stock Optimization
+  business_domain_vi: Tối ưu hóa Định mức Tồn kho An toàn
+  summary_vi: Lấy thông số tối ưu hóa (Lead time cơ sở, ngày đệm đặt hàng, mức tồn
+    an toàn khuyến nghị).
+  program_ids:
+  - SP302
+  metrics:
+    total_calls: 1
+    avg_duration_ms: 105.0
+    min_duration_ms: 105
+    max_duration_ms: 105
+    statuses:
+    - '200'
+architecture:
+  tier: Tier 1 - Database-Backed SQLite Core
+  database_tables:
+  - target_stock
+  dependencies:
+    upstream:
+    - TargetStockSearchList
+    downstream: []
+request:
+  parameters:
+    _ems_userId:
+      sample_value: '658359'
+      type: str
+    _ems_organizationId:
+      sample_value: '28753'
+      type: str
+    _ems_language:
+      sample_value: EN
+      type: str
+  datasets:
+    ds_search:
+      description: Dataset đầu vào ds_search
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - '28753'
+        - '658359'
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - ''
+        - N
+        - ''
+        - ''
+        - ''
+        - Y
+        - ''
+        - ''
+        - ''
+response:
+  parameters:
+    errorCode:
+      sample_value: '1'
+      type: str
+    errorMsg:
+      sample_value: ''
+      type: str
+  datasets:
+    ds_rtn:
+      description: Dataset kết quả ds_rtn
+      column_count: 0
+      columns: []
+      sample_rows:
+      - - Y
+        - '20210316'
